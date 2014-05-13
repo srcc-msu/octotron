@@ -1,32 +1,33 @@
-# Octotron project: Active Control and Efficient Autonomous Functioning of Supercomputers
+### Octotron framewrok: modeling and operational control of complex computer systems
 
-## Overview
-This is a distributive for Octotron system, it contains required binaries to create and run a basic model.
+#### Overview
+This is a distributive for Octotron framework, it contains required binaries and scripts to create and run a basic model.
+If you are interested in full source code - visit http://github.com/srcc-msu/octotron_core
 
-## Requirements:
-#### To run a model:
+#### Requirements:
+###### To run a model:
 - jre 1.7
 - lockfile(from procmail) - for default mailinig script
 
-#### To create a model:
+###### To create a model:
 - jdk 1.7
-- jython (tested on 2.5.3)
 - jre 1.7
+- jython (tested on 2.5.3)
 
-#### Optional
+###### Optional
 - make/bash/cmd
 
-## Model description
+#### Model description
 Every model is described by user-provided json configuration file and automatically generated files to store marks, reactions, rules and neo4j database folder.
 
-## Creating a model
-A model is created from one or more Jython files, written using 'octopy' module (see sample_src/sample.py)
+#### Creating a model
+A model is created from one or more Jython files, written using 'octopy' module (see [sample_src/sample.py](sample_src/sample.py))
 
 To create a model, run Jython on your main model file, providing the path to octotron.jar and config file as a parameter.
 
 `jython -J-cp bin/octotron.jar sample_src/sample.py sample_src/config.json`
 
-#### Creating a model with Makefile
+###### Creating a model with Makefile
 Replace next variables in Makefile.config:
 
 - MODEL_FILE - path to the main Jython file
@@ -34,7 +35,7 @@ Replace next variables in Makefile.config:
 
 Run `make model`
 
-## Configuration file layout desciption
+#### Configuration file layout desciption
 
 Example of configuration:
 
@@ -98,18 +99,18 @@ If default script key is missing - the action will not be executed.
 - http.modify.{user,password} - user and password for http access to modify operations, may be empty
 - http.control.{user,password} - user and password for http access to control operations, may be empty
 
-## Start procedure
+#### Start procedure
 `java -Dsun.net.httpserver.nodelay=true -cp bin/octotron.jar main.java.ru.parallel.octotron.exec.StartOctotron sample_src/config.json`
 
 The command calls the start procedure `main.java.ru.parallel.octotron.exec.StartOctotron` from main jar and passes the json configuration file.
 It requires a param `-Dsun.net.httpserver.nodelay=true` to prevent the http component from slowing down (thank creators for inability to do it inside..)
 
-#### Start procedure with a Makefile
+###### Start procedure with a Makefile
 
 `make run`
 
 ## Test if it works
 
-1) Copy above commands to create sample DB or execute command: `make model run`
+1) Copy above commands to create sample database or run command: `make model run`
 
-2) Check [127.0.0.1:4448/control/stat](127.0.0.1:4448/control/stat) in your browser.
+2) Go to http://127.0.0.1:4448/control/stat in your browser.
