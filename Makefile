@@ -15,4 +15,4 @@ run: $(OCTO_LIB) $(MODEL_CFG)
 
 # staff to keep distro up-to-date, ignore it
 renew:
-	cp ~/workspace/octotron/bin/octotron.jar $(OCTO_LIB)
+	cp ../octotron_core/bin/octotron.jar $(OCTO_LIB)
