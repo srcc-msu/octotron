@@ -68,7 +68,7 @@ then
 		INFO=`cat $OUT_FILE | grep $SUBJ_STR | grep INFO | wc -l`
 		RECOVER=`cat $OUT_FILE | grep $SUBJ_STR | grep RECOVER | wc -l`
 
-		cat $OUT_FILE | bash ./single_mail.sh "Octotron($COUNT): CRITICAL: $CRITICAL DANGER: $DANGER WARNING: $WARNING INFO: $INFO RECOVER: $RECOVER" "$1"
+		cat $OUT_FILE | bash ./single_mail.sh "$1" "Octotron($COUNT): CRITICAL: $CRITICAL DANGER: $DANGER WARNING: $WARNING INFO: $INFO RECOVER: $RECOVER"
 		rm $OUT_FILE
 	fi
 		rm -rf $SEND_DIR
