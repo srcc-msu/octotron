@@ -1,8 +1,8 @@
-import main.java.ru.parallel.octotron as octotron
+import ru.parallel.octotron as octotron
 import java.lang
 import jarray
 
-OCTO_PACKAGE = "main.java.ru.parallel.octotron"
+OCTO_PACKAGE = "ru.parallel.octotron"
 
 class Rule(object):
 	def __init__(self, args):

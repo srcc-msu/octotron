@@ -5,7 +5,7 @@ import inspect
 
 from optparse import OptionParser
 
-import main.java.ru.parallel.octotron as octotron
+import ru.parallel.octotron as octotron
 
 class SystemCtx(object):
 	creator = None

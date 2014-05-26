@@ -1,10 +1,10 @@
 from octopy.system import SystemCtx
 from utils import *
 
-import main.java.ru.parallel.octotron as octotron
+import ru.parallel.octotron as octotron
 
 def GetLinkFactory(attributes):
-	return octotron.impl.generators \
+	return octotron.generators \
 		.LinkFactory(SystemCtx.GetGraphService()) \
 		.Attributes(FromNested(attributes, AttributesFromDict))
 
@@ -85,4 +85,4 @@ def EveryToChunks_Guided(obj1, obj2, guide, *attributes):
 		size = GetLinkFactory(attribute).EveryToChunks_Guided(obj1, obj2, guide).size()
 		SystemCtx.Debug("created " + str(size) + " links")
 
-Enumerator = octotron.impl.generators.Enumerator
+Enumerator = octotron.generators.Enumerator

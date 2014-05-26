@@ -2,7 +2,7 @@ from octopy.system import SystemCtx
 
 from utils import *
 
-import main.java.ru.parallel.octotron as octotron
+import ru.parallel.octotron as octotron
 
 class Reaction(object):
 	def __init__(self, response, recover = None, delay = 0):
@@ -23,7 +23,7 @@ def CreateObjects(attributes = {}, rules = {}, reactions = {}, count = 1):
 
 	graph_service = SystemCtx.GetGraphService()
 
-	factory = octotron.impl.generators.ObjectFactory(graph_service)
+	factory = octotron.generators.ObjectFactory(graph_service)
 
 	factory = factory.Attributes(FromNested(attributes, AttributesFromDict))
 	factory = factory.Rules(FromNested(rules, RulesFromDict))

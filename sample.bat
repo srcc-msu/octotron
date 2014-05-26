@@ -12,4 +12,4 @@ set model_name=sample
 %python% bin\dsl_to_java.py -I%src_dir%\ -d %src_dir%\%model_name%.dsl -o %src_dir%\%model_name%.java
 %javac% -cp bin\octotron.jar %src_dir%\%model_name%.java -d %src_dir%
 %java% -cp bin\octotron.jar octotron.exec.CreateDB %src_dir%\config.json
-%java% -Dsun.net.httpserver.nodelay=true -cp bin\octotron.jar main.java.ru.parallel.octotron.exec.StartOctotron %src_dir%\config.json
+%java% -Dsun.net.httpserver.nodelay=true -cp bin\octotron.jar ru.parallel.octotron.exec.StartOctotron %src_dir%\config.json

@@ -100,9 +100,9 @@ If default script key is missing - the action will not be executed.
 - http.control.{user,password} - user and password for http access to control operations, may be empty
 
 #### Start procedure
-`java -Dsun.net.httpserver.nodelay=true -cp bin/octotron.jar main.java.ru.parallel.octotron.exec.StartOctotron sample_src/config.json`
+`java -Dsun.net.httpserver.nodelay=true -cp bin/octotron.jar ru.parallel.octotron.exec.StartOctotron sample_src/config.json`
 
-The command calls the start procedure `main.java.ru.parallel.octotron.exec.StartOctotron` from main jar and passes the json configuration file.
+The command calls the start procedure `ru.parallel.octotron.exec.StartOctotron` from main jar and passes the json configuration file.
 It requires a param `-Dsun.net.httpserver.nodelay=true` to prevent the http component from slowing down (thank creators for inability to do it inside..)
 
 ###### Start procedure with a Makefile

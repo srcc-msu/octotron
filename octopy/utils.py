@@ -1,4 +1,4 @@
-import main.java.ru.parallel.octotron as octotron
+import ru.parallel.octotron as octotron
 
 def AttributesFromDict(attr_dict):
 	res = []
