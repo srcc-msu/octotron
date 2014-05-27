@@ -49,6 +49,22 @@ class CalcSpeed(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
+class MirrorString(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MirrorBoolean(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MirrorDouble(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MirrorLong(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 class CheckBoolRules(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
