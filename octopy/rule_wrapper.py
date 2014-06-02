@@ -53,6 +53,10 @@ class Changed(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
+class ContainsString(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 class MirrorString(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
