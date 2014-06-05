@@ -1,5 +1,5 @@
 from octopy.system import SystemCtx
-from utils import *
+from octopy.utils import *
 
 import ru.parallel.octotron as octotron
 

@@ -15,11 +15,12 @@ class Rule(object):
 	def GetOcto(self):
 		params = (self.arg_name,) + self.args
 
-		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__);
-		cons = c.getConstructors()[0];
+		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__)
+		cons = c.getConstructors()[0]
 
-		return cons.newInstance(*params);
-		#return octotron.rules.__getattr__(type(self).__name__).__call__(*params)
+		return cons.newInstance(*params)
+
+	#return octotron.rules.__getattr__(type(self).__name__).__call__(*params)
 
 class AggregateDoubleSum(Rule):
 	def __init__(self, *args):
@@ -57,6 +58,14 @@ class ContainsString(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
+class LogicalOr(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LogicalAnd(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 class MirrorString(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
@@ -80,10 +89,11 @@ class CheckBoolRules(Rule):
 	def GetOcto(self):
 		params = (self.arg_name, jarray.array(self.args, java.lang.String))
 
-		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__);
-		cons = c.getConstructors()[0];
+		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__)
+		cons = c.getConstructors()[0]
 
-		return cons.newInstance(params);
+		return cons.newInstance(params)
+
 
 class LocalErrors(Rule):
 	def __init__(self, *args):

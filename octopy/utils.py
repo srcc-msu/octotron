@@ -48,3 +48,12 @@ def FromNested(attributes, func):
 		raise RuntimeError("requires a dictionary or list of dictionaries")
 
 	return res
+
+def ConvertAttributes(attributes):
+	return FromNested(attributes, AttributesFromDict)
+
+def ConvertRules(rules):
+	return FromNested(rules, RulesFromDict)
+
+def ConvertReactions(reactions):
+	return FromNested(reactions, ReactionsFromDict)
