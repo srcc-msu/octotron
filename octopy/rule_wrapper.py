@@ -20,21 +20,19 @@ class Rule(object):
 
 		return cons.newInstance(*params)
 
-	#return octotron.rules.__getattr__(type(self).__name__).__call__(*params)
-
 class AggregateDoubleSum(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class AggregateIntSum(Rule):
+class AggregateLongSum(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class AggregateMatch(Rule):
+class AggregateMatchCount(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class AggregateNotMatch(Rule):
+class AggregateNotMatchCount(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
@@ -58,44 +56,11 @@ class ContainsString(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class LogicalOr(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
 class LogicalAnd(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class MirrorString(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class MirrorBoolean(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class MirrorDouble(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class MirrorLong(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class CheckBoolRules(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-	def GetOcto(self):
-		params = (self.arg_name, jarray.array(self.args, java.lang.String))
-
-		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__)
-		cons = c.getConstructors()[0]
-
-		return cons.newInstance(params)
-
-
-class LocalErrors(Rule):
+class LogicalOr(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
@@ -115,7 +80,27 @@ class Match(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
+class MirrorBoolean(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MirrorDouble(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MirrorLong(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MirrorString(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 class NotMatch(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class UpdatedRecently(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
@@ -124,5 +109,13 @@ class UpperArgThreshold(Rule):
 		Rule.__init__(self, args)
 
 class UpperThreshold(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class VarArgMatchAprx(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class VarArgMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
