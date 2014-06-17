@@ -8,7 +8,8 @@
 # $2 - subject
 # $3 - msg
 set -u
-cd "$(dirname "$0")"
+script_loc=$(readlink -f "$0")
+cd "$(dirname "$script_loc")"
 
 MTIME_LIMIT=30
 SEP_LIMIT=3
@@ -26,13 +27,18 @@ MAIL_DIR=/tmp/octo_$HASH
 # assuming dir exists
 function add_mail
 {
-	echo -e "$SUBJ_STR: $2\n$3" > `mktemp --tmpdir=$MAIL_DIR`
+	until echo -e "$SUBJ_STR: $2\n$3" > `mktemp --tmpdir=$MAIL_DIR`
+	do
+		echo "failed to add mail, retrying" >&2
+		sleep 1
+		exec $script_loc "$1" "$2" "$3"
+	done
 }
 
 SUBJ_STR="Subject"
 
 # if i am the owner
-if mkdir $MAIL_DIR
+if mkdir $MAIL_DIR &> /dev/null
 then
 	add_mail "$1" "$2" "$3"
 
