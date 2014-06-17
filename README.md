@@ -7,7 +7,6 @@ If you are interested in full source code - visit http://github.com/srcc-msu/oct
 #### Requirements:
 ###### To run a model:
 - jre 1.7
-- lockfile(from procmail) - for default mailinig script
 
 ###### To create a model:
 - jdk 1.7
@@ -113,4 +112,4 @@ It requires a param `-Dsun.net.httpserver.nodelay=true` to prevent the http comp
 
 1) Copy above commands to create sample database or run command: `make model run`
 
-2) Go to http://127.0.0.1:4448/control/stat in your browser.
+2) Go to http://127.0.0.1:4448/control/selftest in your browser.
