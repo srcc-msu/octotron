@@ -14,27 +14,26 @@ class Rule(object):
 
 	def GetOcto(self):
 		params = (self.arg_name,) + self.args
-
 		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__)
 		cons = c.getConstructors()[0]
 
 		return cons.newInstance(*params)
 
 class AggregateDoubleSum(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
+	def __init__(self, arg1, *arg2):
+		Rule.__init__(self, (arg1, jarray.array(arg2, java.lang.String)))
 
 class AggregateLongSum(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
+	def __init__(self, arg1, *arg2):
+		Rule.__init__(self, (arg1, jarray.array(arg2, java.lang.String)))
 
 class AggregateMatchCount(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
+	def __init__(self, arg1, arg2, *arg3):
+		Rule.__init__(self, (arg1, arg2, jarray.array(arg3, java.lang.String)))
 
 class AggregateNotMatchCount(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
+	def __init__(self, arg1, arg2, *arg3):
+		Rule.__init__(self, (arg1, arg2, jarray.array(arg3, java.lang.String)))
 
 class ArgMatchAprx(Rule):
 	def __init__(self, *args):
@@ -57,12 +56,12 @@ class ContainsString(Rule):
 		Rule.__init__(self, args)
 
 class LogicalAnd(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
+	def __init__(self, *arg1):
+		Rule.__init__(self, (jarray.array(arg1, java.lang.String),))
 
 class LogicalOr(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
+	def __init__(self, *arg1):
+		Rule.__init__(self, (jarray.array(arg1, java.lang.String),))
 
 class LowerArgThreshold(Rule):
 	def __init__(self, *args):
