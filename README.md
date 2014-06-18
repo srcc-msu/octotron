@@ -15,7 +15,7 @@ If you are interested in full source code - visit http://github.com/srcc-msu/oct
 
 ###### Optional
 - make
-- the system can be runned on a windows system, but bash scripts will not work unless you provide some kind of linux-like environment (not tested)
+- the system can be created and started on a windows system, but bash scripts will not work, unless you provide some kind of linux-like environment (not tested)
 
 #### Model description
 Every model is described by a python script, written using 'octopy' module (see [sample_src/sample.py](sample_src/sample.py)) and a user-provided json configuration file.
@@ -44,7 +44,7 @@ It requires a param `-Dsun.net.httpserver.nodelay=true` to prevent the http comp
 
 `make run`
 
-## Test if it works
+### Test if it works
 
 1) Copy above commands to create sample database or run command: `make model run`
 
