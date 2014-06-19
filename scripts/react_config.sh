@@ -4,9 +4,9 @@ set -u
 #
 # parameteres from octotron system will look like:
 # $1 - timestamp
-# $2 - event ta
-# $3 - mesagge
-# $4 - object aatributes
+# $2 - event type
+# $3 - event description
+# $4 - object attributes
 # $5 - parent attributes or empty string
 #
 
@@ -14,7 +14,13 @@ set -u
 if [ "$#" -eq 5 ]
 then
 	event_time=`date -d @$1`
-	MSG="event: $2\nmessage: $3\ntime: $event_time\nattributes: $4\nparent attributes: $5"
+
+	if [ -z "$5" ]
+	then
+		MSG="event: $2\ndescription: $3\ntime: $event_time\nattributes: $4"
+	else
+		MSG="event: $2\ndescription: $3\ntime: $event_time\nattributes: $4\nparent attributes: $5"
+	fi
 else
 	echo "wrong number of parameteres, can not form the info message"
 	exit -1

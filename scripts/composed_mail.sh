@@ -1,13 +1,14 @@
 #!/bin/bash
 #
 # aggregates mails to send them in big chunks
-# sends the mail if the time threshold is reached (MTIME_LIMIT)
-# or if mail threshold is reached (MAIL_LIMIT)
+# sends the mail if the time threshold is reached ($MTIME_LIMIT)
+# if aggregated count is low (less than $SEP_LIMIT) - sends them separately
 #
 # $1 - recipient
 # $2 - subject
 # $3 - msg
 set -u
+
 script_loc=$(readlink -f "$0")
 cd "$(dirname "$script_loc")"
 
