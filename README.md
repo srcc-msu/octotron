@@ -36,14 +36,17 @@ make model
 ```
 
 #### Start procedure with a Makefile
-Assuming you have set required variables in Makefile.config on last step, run:
+Assuming you have set the required variables in Makefile.config on last step, run:
 ```bash
 make run
 ```
 
 ### Test if it works
 
-1) Copy above commands to create sample database or run command: `make model run`
+1) Copy above commands to create sample database or run:
+```bash
+make model run
+```
 
 2) Go to http://127.0.0.1:4448/control/selftest in your browser. Press enter if you are promted for credentials - empty username and password are set for a sample model.
 
@@ -64,4 +67,4 @@ java -Dsun.net.httpserver.nodelay=true -cp lib/octotron.jar ru.parallel.octotron
 ```
 
 #### Alternative - windows systems
-sample.bat will create and run the model (untested)
+sample.bat will create and run the model (not tested)
