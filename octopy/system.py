@@ -68,7 +68,6 @@ class SystemCtx(object):
 
 		print filename + ":" + str(line_number), msg
 
-
 parser = OptionParser()
 parser.add_option("-c", "--config", dest="config",
                   help="[REQUIRED] configuration file")
