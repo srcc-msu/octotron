@@ -22,4 +22,4 @@ cpus = CreateObjects([{"type" : "cpu"}, cpu_attributes], cpu_rules, cpu_reaction
 Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 
 # connect every node with 2 cpus
-EveryToChunks(nodes, cpus, {"type" : "contain"})
+EveryToChunks(nodes, cpus, "contain", "chill")

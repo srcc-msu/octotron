@@ -3,86 +3,81 @@ from octopy.utils import *
 
 import ru.parallel.octotron as octotron
 
-def GetLinkFactory(attributes):
-	return octotron.generators \
-		.LinkFactory(SystemCtx.GetGraphService()) \
-		.Attributes(FromNested(attributes, AttributesFromDict))
+def GetLinkFactory(attributes, rules, reactions, type):
+	factory = octotron.generators.LinkFactory(SystemCtx.GetGraphService())
 
-def OneToOne(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		GetLinkFactory(attribute).OneToOne(obj1, obj2)
-		SystemCtx.Debug("created 1 link")
+	factory = factory.Attributes(ConvertAttributes(attributes))
+	factory = factory.Rules(ConvertRules(rules))
+	factory = factory.Reactions(ConvertReactions(reactions))
 
-def OneToEvery(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).OneToEvery(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	return factory.Attributes(octotron.primitive.SimpleAttribute("type", type))
 
-def EveryToOne(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).EveryToOne(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+def CallFactoryMethod(factory, name, args):
+	arg_types = map(lambda x: x.class, args)
 
-def AllToAll(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).AllToAll(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	method = factory.getClass().getMethod(name, arg_types)
 
-def EveryToEvery(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).EveryToEvery(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	return method.invoke(factory, args)
 
-def ChunksToEvery(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).ChunksToEvery(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+def Call(name, types, kwargs, *args):
+	if len(types) == 0:
+		raise RuntimeError("specify some types for link")
 
-def EveryToChunks(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).EveryToChunks(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	keywords = ["attributes", "rules", "reactions"]
 
-def ChunksToEvery_LastLess(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).ChunksToEvery_LastLess(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	attributes = kwargs.get(keywords[0], {})
+	rules      = kwargs.get(keywords[1], {})
+	reactions  = kwargs.get(keywords[2], {})
 
-def EveryToChunks_LastLess(obj1, obj2, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).EveryToChunks_LastLess(obj1, obj2).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	for key in kwargs:
+		if key not in keywords:
+			raise RuntimeError("unknown keyword: " + key)
 
-def ChunksToEvery_Guided(obj1, obj2, guide, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).ChunksToEvery_Guided(obj1, obj2, guide).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	result = octotron.utils.OctoLinkList()
 
-def EveryToChunks_Guided(obj1, obj2, guide, *attributes):
-	if len(attributes) == 0:
-		raise RuntimeError("specify some attributes for link")
-	for attribute in attributes:
-		size = GetLinkFactory(attribute).EveryToChunks_Guided(obj1, obj2, guide).size()
-		SystemCtx.Debug("created " + str(size) + " links")
+	for type in types:
+		factory = GetLinkFactory(attributes, rules, reactions, type)
+
+		links = CallFactoryMethod(factory, name, args)
+		SystemCtx.Debug("created " + str(links.size()) + " links")
+		result.append(links)
+
+	return result
+
+def OneToOne(obj1, obj2, *types, **kwargs):
+	result = Call(OneToOne.__name__, types, kwargs, obj1, obj2)
+
+	if len(types) == 1:
+		return result.get(0) # return the single object, if is the only
+
+def OneToEvery(obj1, obj2, *types, **kwargs):
+	Call(OneToEvery.__name__, types, kwargs, obj1, obj2)
+
+def EveryToOne(obj1, obj2, *types, **kwargs):
+	Call(EveryToOne.__name__, types, kwargs, obj1, obj2)
+
+def AllToAll(obj1, obj2, *types, **kwargs):
+	Call(AllToAll.__name__, types, kwargs, obj1, obj2)
+
+def EveryToEvery(obj1, obj2, *types, **kwargs):
+	Call(EveryToEvery.__name__, types, kwargs, obj1, obj2)
+
+def ChunksToEvery(obj1, obj2, *types, **kwargs):
+	Call(ChunksToEvery.__name__, types, kwargs, obj1, obj2)
+
+def EveryToChunks(obj1, obj2, *types, **kwargs):
+	Call(EveryToChunks.__name__, types, kwargs, obj1, obj2)
+
+def ChunksToEvery_LastLess(obj1, obj2, *types, **kwargs):
+	Call(ChunksToEvery_LastLess.__name__, types, kwargs, obj1, obj2)
+
+def EveryToChunks_LastLess(obj1, obj2, *types, **kwargs):
+	Call(EveryToChunks_LastLess.__name__, types, kwargs, obj1, obj2)
+
+def ChunksToEvery_Guided(obj1, obj2, guide, *types, **kwargs):
+	Call(ChunksToEvery_Guided.__name__, types, kwargs, obj1, obj2, guide)
+
+def EveryToChunks_Guided(obj1, obj2, guide, *types, **kwargs):
+	Call(EveryToChunks_Guided.__name__, types, kwargs, obj1, obj2, guide)
 
 Enumerator = octotron.generators.Enumerator

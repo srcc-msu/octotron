@@ -118,3 +118,5 @@ class VarArgMatchAprx(Rule):
 class VarArgMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
+
+import ru.parallel.octotron.primitive.EDependencyType as EDependencyType
