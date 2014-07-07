@@ -1,6 +1,9 @@
 from octopy.system import SystemCtx
 from octopy.utils import *
 
+import java.lang
+import jarray
+
 import ru.parallel.octotron as octotron
 
 def GetLinkFactory(attributes, rules, reactions, type):
@@ -13,21 +16,31 @@ def GetLinkFactory(attributes, rules, reactions, type):
 	return factory.Attributes(octotron.primitive.SimpleAttribute("type", type))
 
 def CallFactoryMethod(factory, name, args):
-	arg_types = map(lambda x: x.class, args)
+	arg_types = []
+
+# TODO rethink
+	args = list(args)
+	for i in range(len(args)):
+		if isinstance(args[i], list): # only int arrays here
+			arg_types.append(java.lang.Class.forName("[I"))
+			args[i] = jarray.array(args[i], 'i')
+		else:
+			arg_types.append(args[i].class)
 
 	method = factory.getClass().getMethod(name, arg_types)
 
-	return method.invoke(factory, args)
+	return method.invoke(factory, *args)
 
 def Call(name, types, kwargs, *args):
 	if len(types) == 0:
 		raise RuntimeError("specify some types for link")
 
-	keywords = ["attributes", "rules", "reactions"]
+	keywords = ["attributes", "rules", "reactions", "single"]
 
 	attributes = kwargs.get(keywords[0], {})
 	rules      = kwargs.get(keywords[1], {})
 	reactions  = kwargs.get(keywords[2], {})
+	single     = kwargs.get(keywords[3], False)
 
 	for key in kwargs:
 		if key not in keywords:
@@ -39,12 +52,18 @@ def Call(name, types, kwargs, *args):
 		factory = GetLinkFactory(attributes, rules, reactions, type)
 
 		links = CallFactoryMethod(factory, name, args)
-		SystemCtx.Debug("created " + str(links.size()) + " links")
-		result.append(links)
+
+		if single:
+			SystemCtx.Debug("created 1 link")
+			result.add(links)
+		else:
+			SystemCtx.Debug("created " + str(links.size()) + " links")
+			result.append(links)
 
 	return result
 
 def OneToOne(obj1, obj2, *types, **kwargs):
+	kwargs["single"] = True
 	result = Call(OneToOne.__name__, types, kwargs, obj1, obj2)
 
 	if len(types) == 1:
