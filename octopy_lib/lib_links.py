@@ -1,11 +1,11 @@
-link_contain = {"type" : "contain"}
-link_include = {"type" : "include"}
+link_contain = "contain"
+link_include = "include"
 
-link_cooling = {"type" : "cooling"}
-link_power    = {"type" : "power"}
+link_cooling = "cooling"
+link_power    = "power"
 
-link_ib  = {"type" : "ib"}
-link_eth = {"type" : "eth"}
+link_ib  = "ib"
+link_eth = "eth"
 
-link_serv_eth    = {"type" : "serv_eth"}
-link_panasas_eth = {"type" : "panasas_eth"}
+link_serv_eth    = "serv_eth"
+link_panasas_eth = "panasas_eth"

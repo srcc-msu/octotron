@@ -1,6 +1,9 @@
 # include all system wrappers
 from octopy import *
 
+# include all standard library files
+from octopy_lib import *
+
 # include our sample library
 from sample_lib import *
 
@@ -8,7 +11,8 @@ NODES = 4
 CPU_PER_NODE = 2
 
 # create 4 objects with "type" = "node"
-nodes = CreateObjects({"type" : "node"}, count = NODES)
+# assigne to them attributes from collectd library module
+nodes = CreateObjects([{"type" : "node"}, cd_node_a], count = NODES)
 
 # assign to every object ip from the file
 nodes.SetAttributesFromCsv("sample_src/ip.csv")
