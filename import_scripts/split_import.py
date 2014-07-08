@@ -11,7 +11,7 @@ import sys
 import os
 import import_url_file
 
-def split_import(ip, port, max_lines, fname):
+def split_import(ip, port, max_lines, fname, name, password):
 	file = None
 	lines = 0
 
@@ -29,7 +29,7 @@ def split_import(ip, port, max_lines, fname):
 			file.close()
 
 			print "importing", lines
-			import_url_file.main(ip, port, fname)
+			import_url_file.import_file(ip, port, fname, name, password)
 
 			lines = 0
 			file = None
@@ -37,11 +37,11 @@ def split_import(ip, port, max_lines, fname):
 	# import leftovers, when stream ends
 	if file is not None:
 		print "importing", lines
-		import_url_file.main(ip, port, fname)
+		import_url_file.import_file(ip, port, fname, name, password)
 
 if __name__ == "__main__":
 	ip = str(sys.argv[1])
 	port = int(sys.argv[2])
 	max_lines = int(sys.argv[3])
 
-	split_import(ip, port, max_lines, "/tmp/octo_split_script")
+	split_import(ip, port, max_lines, "/tmp/octo_split_script", "admin", "admin")

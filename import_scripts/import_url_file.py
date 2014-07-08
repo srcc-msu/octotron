@@ -18,8 +18,7 @@ def import_file(ip, port, fname, name, password):
 	f = open(fname)
 	for line in f.readlines():
 
-		if len(line) < 2:
-			print "error"
+		if len(line) < 1 or line[0] == '#':
 			continue
 
 		line = line.strip()
@@ -33,7 +32,7 @@ def import_file(ip, port, fname, name, password):
 			elif len(parts) == 2:
 				line = parts[0] + '?' + quote(parts[1])
 			else:
-				print "error", line
+				print "error, line:", line
 				continue
 
 			resp = None
@@ -56,4 +55,8 @@ def import_file(ip, port, fname, name, password):
 	f.close()
 
 if __name__ == "__main__":
-	import_file(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), "admin", "admin")
+	ip = str(sys.argv[1])
+	port = int(sys.argv[2])
+	fname = sys.argv[3]
+
+	import_file(ip, port, fname, "admin", "admin")
