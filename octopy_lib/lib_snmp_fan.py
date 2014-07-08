@@ -88,6 +88,8 @@ fan_snmp_trap_a = {
 	"airWarningCondition_39_descr" : "",
 	"airWarningCondition_40" : False,
 	"airWarningCondition_40_descr" : "",
+	"airWarningCondition_54" : False,
+	"airWarningCondition_54_descr" : "",
 
 	"airInformationalCondition_3" : False,
 	"airInformationalCondition_3_descr" : "",
@@ -107,6 +109,8 @@ fan_snmp_trap_r = {
 	"entering_fluid_temp_fault" : ContainsString("airWarningCondition_39_descr", "violation exists"),
 
 	"fluid_temp_sensor_fault" : ContainsString("airWarningCondition_40_descr", "sensor fault exists"),
+
+	"communication_lost" : ContainsString("airWarningCondition_54_descr", "lost"),
 
 	"relay_output_fault" : ContainsString("airInformationalCondition_3_descr", "abnormal state exists")
 }
@@ -138,6 +142,10 @@ fan_snmp_trap_react = {
 	("fluid_temp_sensor_fault", True) :
 		Reaction(Warning("Entering fluid tempereature sensor failed", "type", "ip", "airWarningCondition_40_descr")
 			, Recover("Entering fluid tempereature sensor is ok", "type", "ip", "airWarningCondition_40_descr")),
+
+	("communication_lost", True) :
+		Reaction(Warning("Group communication lost", "type", "ip", "airWarningCondition_54_descr")
+			, Recover("Group communication restored", "type", "ip", "airWarningCondition_54_descr")),
 
 	("relay_output_fault", True) :
 		Reaction(Info("Relay output abnormal state", "type", "ip", "airInformationalCondition_3_descr")

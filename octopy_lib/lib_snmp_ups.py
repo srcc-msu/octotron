@@ -80,24 +80,26 @@ ups_snmp_trap_a = {
 	"badVoltage" : False,
 	"chargerFailure" : False,
 	"batteryOverTemperature" : False,
-	"abnormalCondition" : False,
 
-	"upsOverload" : 0,
-	"upsDiagnosticsFailed" : 0,
-	"upsDischarged" : 0,
-	"upsTurnedOff" : 0,
-	"upsSleeping" : 0,
-	"upsWokeUp" : 0,
-	"upsRebootStarted" : 0,
-	"upsBatteryNeedsReplacement" : 0,
-	"bypassPowerSupplyFailure" : 0,
-	"baseFanFailure" : 0,
-	"batteryPackCommLost" : 0,
-	"calibrationStart" : 0,
-	"upsTurnedOn" : 0,
-	"upsBatteryReplaced" : 0,
-	"powerModuleIncrease" : 0,
-	"powerModuleDecrease" : 0,
+	"abnormalCondition" : False,
+	"abnormalCondition_descr" : "",
+
+	"upsOverload" : False,
+	"upsDiagnosticsFailed" : False,
+	"upsDischarged" : False,
+	"upsTurnedOff" : False,
+	"upsSleeping" : False,
+	"upsWokeUp" : False,
+	"upsRebootStarted" : False,
+	"upsBatteryNeedsReplacement" : False,
+	"bypassPowerSupplyFailure" : False,
+	"baseFanFailure" : False,
+	"batteryPackCommLost" : False,
+	"calibrationStart" : False,
+	"upsTurnedOn" : False,
+	"upsBatteryReplaced" : False,
+	"powerModuleIncrease" : False,
+	"powerModuleDecrease" : False,
 }
 
 ups_snmp_trap_r = {
@@ -139,8 +141,8 @@ ups_snmp_trap_react = {
 	("batteryOverTemperature", True) : Reaction(Critical("ups: battery temperature is too high", "type", "ip")
 		, Recover("ups: battery temperature is ok", "type", "ip")),
 
-	("abnormalCondition", True) : Reaction(Critical("ups: abnormal condition", "type", "ip")
-		, Recover("ups: normal condition", "type", "ip")),
+	("abnormalCondition", True) : Reaction(Critical("ups: abnormal condition", "type", "ip", "abnormalCondition_descr")
+		, Recover("ups: normal condition", "type", "ip", "abnormalCondition_descr")),
 
 	("upsOverload_changed", True) : Reaction(Danger("ups trap: upsOverload", "type", "ip")),
 	("upsDiagnosticsFailed_changed", True) : Reaction(Danger("ups trap: upsDiagnosticsFailed", "type", "ip")),
