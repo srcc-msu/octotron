@@ -47,6 +47,14 @@ class CalcSpeed(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
+class ToPct(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class ToArgPct(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 class Changed(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
