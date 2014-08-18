@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 #
-# TODO: add OptionParser
-#
 
+import sys
 import httplib
 import base64
-from urllib import quote
-import sys
 
-def import_file(ip, port, fname, name, password):
+from urllib import quote
+
+from optparse import OptionParser
+
+def import_file(ip, port, fname, usr, pwd):
 	headers = {}
-	headers["Authorization"] = "Basic " + base64.b64encode(name + ":" + password)
+	headers["Authorization"] = "Basic " + base64.b64encode(usr + ":" + pwd)
 	headers['Connection'] = 'Keep-Alive'
 
 	conn = httplib.HTTPConnection(ip, port)
@@ -55,8 +56,23 @@ def import_file(ip, port, fname, name, password):
 	f.close()
 
 if __name__ == "__main__":
-	ip = str(sys.argv[1])
-	port = int(sys.argv[2])
-	fname = sys.argv[3]
+	parser = OptionParser()
+	parser.add_option("-i", "--ip", dest="ip")
+	parser.add_option("-p", "--port", dest="port", type = int)
+	parser.add_option("-f", "--fname", dest="fname")
+	parser.add_option("--usr", dest="usr", default = "")
+	parser.add_option("--pwd", dest="pwd", default = "")
 
-	import_file(ip, port, fname, "admin", "admin")
+	(options, args) = parser.parse_args()
+
+	if not options.ip:
+		raise RuntimeError("specify ip")
+
+	if not options.port:
+		raise RuntimeError("specify port")
+
+	if not options.fname:
+		raise RuntimeError("specify fname")
+
+	import_file(options.ip, options.port, options.fname
+		, options.usr, options.pwd)

@@ -4,14 +4,14 @@
 # and feeding them to import_url_file.py
 # skips data starting with '#' and empty lines
 #
-# TODO: add OptionParser
-#
 
 import sys
 import os
 import import_url_file
 
-def split_import(ip, port, max_lines, fname, name, password):
+from optparse import OptionParser
+
+def split_import(ip, port, max_lines, fname, usr, pwd):
 	file = None
 	lines = 0
 
@@ -29,7 +29,7 @@ def split_import(ip, port, max_lines, fname, name, password):
 			file.close()
 
 			print "importing", lines
-			import_url_file.import_file(ip, port, fname, name, password)
+			import_url_file.import_file(ip, port, fname, usr, pwd)
 
 			lines = 0
 			file = None
@@ -37,11 +37,26 @@ def split_import(ip, port, max_lines, fname, name, password):
 	# import leftovers, when stream ends
 	if file is not None:
 		print "importing", lines
-		import_url_file.import_file(ip, port, fname, name, password)
+		import_url_file.import_file(ip, port, fname, usr, pwd)
 
 if __name__ == "__main__":
-	ip = str(sys.argv[1])
-	port = int(sys.argv[2])
-	max_lines = int(sys.argv[3])
 
-	split_import(ip, port, max_lines, "/tmp/octo_split_script", "", "")
+	parser = OptionParser()
+	parser.add_option("-i", "--ip", dest="ip")
+	parser.add_option("-p", "--port", dest="port", type = int)
+	parser.add_option("-l", "--lines", dest="lines", type = int, default = 1)
+	parser.add_option("--usr", dest="usr", default = "")
+	parser.add_option("--pwd", dest="pwd", default = "")
+	parser.add_option("--tmp", dest="tmp", default = "/tmp/octo_split_script")
+
+	(options, args) = parser.parse_args()
+
+	if not options.ip:
+		raise RuntimeError("specify ip")
+
+	if not options.port:
+		raise RuntimeError("specify port")
+
+	split_import(options.ip, options.port, options.lines
+		, options.tmp
+		, options.usr, options.pwd)
