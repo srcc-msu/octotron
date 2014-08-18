@@ -1,8 +1,7 @@
 from octopy import *
 
-eth_port_snmp_a = {
-	"type" : "port",
-
+eth_port_snmp_const = { "_static_eth_port_error_speed_max" : 10.0 }
+eth_port_snmp_sensor = {
 	"out_frames" : 0,
 	"in_frames" : 0,
 
@@ -17,12 +16,10 @@ eth_port_snmp_a = {
 	"in_errors" : 0,
 	"out_errors" : 0,
 
-	"q_len" : 0,
-
-	"_static_eth_port_error_speed_max" : 10.0,
+	"q_len" : 0
 }
 
-eth_port_snmp_r = {
+eth_port_snmp_var = {
 	"eth_out_frames_speed" : CalcSpeed("out_frames"),
 	"eth_in_frames_speed" : CalcSpeed("in_frames"),
 

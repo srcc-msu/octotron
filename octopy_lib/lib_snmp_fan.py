@@ -1,7 +1,6 @@
 from octopy import *
 
-fan_snmp_a = {
-	"type" : "rack_fan",
+fan_snmp_sensor = {
 	"inlet_1" : 0,
 	"inlet_2" : 0,
 	"inlet_3" : 0,
@@ -20,7 +19,7 @@ fan_snmp_a = {
 	"_static_infra_humidity" : 70,
 }
 
-fan_snmp_r = {
+fan_snmp_var = {
 	"inlet_1_ok" : UpperArgThreshold("inlet_1", "_static_infra_air_in_temp"),
 	"inlet_2_ok" : UpperArgThreshold("inlet_2", "_static_infra_air_in_temp"),
 	"inlet_3_ok" : UpperArgThreshold("inlet_3", "_static_infra_air_in_temp"),
@@ -72,7 +71,7 @@ fan_snmp_react = {
 }
 
 # False = no trap
-fan_snmp_trap_a = {
+fan_snmp_trap_sensor = {
 	"airCriticalCondition_29" : False,
 	"airCriticalCondition_29_descr" : "",
 
@@ -95,7 +94,7 @@ fan_snmp_trap_a = {
 	"airInformationalCondition_3_descr" : "",
 }
 
-fan_snmp_trap_r = {
+fan_snmp_trap_var = {
 	"airWarningCondition_24_descr_changed" : UpdatedRecently("airWarningCondition_24_descr", 10),
 
 	"pump_fault" : ContainsString("airCriticalCondition_29_descr", "fault exists"),

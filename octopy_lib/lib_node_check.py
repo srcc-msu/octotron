@@ -1,7 +1,6 @@
 from octopy import *
 
-node_check_a = {
-	"type" : "node",
+node_check_sensor = {
 	"chk_ssh" : True,
 	"chk_ping" : True,
 	"chk_mpi" : True,
@@ -12,7 +11,7 @@ node_check_a = {
 	"ib_visible" : True
 }
 
-node_check_r = {
+node_check_var = {
 }
 
 node_check_react = {

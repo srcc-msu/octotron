@@ -14,7 +14,9 @@ CPU_PER_NODE = 2
 # assigne to them attributes from collectd library module
 nodes = CreateObjects(
 	const  = {"type" : "node"}
-	, sensor = cd_node_a
+	, sensor = cd_node_sensor
+	, var = cd_node_var
+	, react = cd_node_react
 	, count  = NODES)
 
 # assign to every object ip from the file

@@ -1,6 +1,6 @@
 from octopy import *
 
-cd_disk_a = {
+cd_disk_sensor = {
 	"current_pending_sector" : 0,
 	"hardware_ecc_recovered" : 0,
 	"offline_uncorrectable"  : 0,
@@ -15,7 +15,7 @@ cd_disk_a = {
 	"_static_disk_temp_max" :  40,
 }
 
-cd_disk_r = {
+cd_disk_var = {
 	"current_pending_sector_ok" : Match("current_pending_sector", 0),
 	"offline_uncorrectable_ok"  : Match("offline_uncorrectable", 0),
 	"reallocated_sector_ct_ok"  : Match("reallocated_sector_ct", 0),
@@ -52,7 +52,7 @@ cd_disk_react = {
 
 #// ----------------------------------------- NODE --------------------------------------------
 
-cd_node_a = {
+cd_node_sensor = {
 	"temp" : 0,
 	"la_1" : 0.0,
 	"forks" : 0,
@@ -77,8 +77,7 @@ cd_node_a = {
 	"_static_system_thr2" :  50,
 }
 
-
-cd_node_r = {
+cd_node_var = {
 	"la_1_acceptable" : UpperArgThreshold("la_1", "_static_la_thr1"),
 	"la_1_sane"       : UpperArgThreshold("la_1", "_static_la_thr2"),
 
@@ -139,14 +138,14 @@ cd_node_react = {
 
 #// ----------------------------------------- CPU --------------------------------------------
 
-cd_cpu_a = {
+cd_cpu_sensor = {
 	"temp" : 0,
 
 	"_static_temp_thr1" : 75,
 	"_static_temp_thr2" : 80
 }
 
-cd_cpu_r = {
+cd_cpu_var = {
 	"cpu_temp_ok"         : UpperArgThreshold("temp", "_static_temp_thr1"),
 	"cpu_temp_acceptable" : UpperArgThreshold("temp", "_static_temp_thr2"),
 }
@@ -162,14 +161,14 @@ cd_cpu_react = {
 
 #// ----------------------------------------- MEMORY --------------------------------------------
 
-cd_memory_a = {
+cd_memory_sensor = {
 	"buffered" : 0,
 	"cached" : 0,
 	"free" : 0,
 	"used" : 0
 }
 
-cd_memory_r = {
+cd_memory_var = {
 #	"mem_total_ok" : LowerArgThreshold("mem_total", "req_mem"),
 #	"cd_memory_err_cnt" : CheckBoolRules("mem_total_ok")
 }
@@ -182,7 +181,7 @@ cd_memory_react = {
 
 #// ----------------------------------------- ETH --------------------------------------------
 
-cd_eth_a = {
+cd_eth_sensor = {
 	"speed" : 0,
 	"duplex" : "",
 
@@ -198,7 +197,7 @@ cd_eth_a = {
 	"_static_eth_duplex_req" : "full",
 }
 
-cd_eth_r = {
+cd_eth_var = {
 	"speed_ok" : ArgMatch("speed", "_static_eth_speed_req"),
 	"duplex_ok" : ArgMatch("duplex", "_static_eth_duplex_req"),
 

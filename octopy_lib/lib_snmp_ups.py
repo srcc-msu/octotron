@@ -1,7 +1,6 @@
 from octopy import *
 
-ups_snmp_a = {
-	"type" : "ups",
+ups_snmp_sensor = {
 	"capacity" : 100,
 
 	"remaining_battery_time" : 0,
@@ -30,7 +29,7 @@ ups_snmp_a = {
 	"_static_ups_temp_max" :  40,
 }
 
-ups_snmp_r = {
+ups_snmp_var = {
 	"remaining_battery_time_ok" : LowerArgThreshold("remaining_battery_time", "_static_remaining_battery_time_min"),
 	"battery_status_ok" : ArgMatch("battery_status", "_static_battery_status_ref"),
 
@@ -72,7 +71,7 @@ ups_snmp_react = {
 			, Recover("ups: power modules are fine", "type", "ip", "pm_ok", "pm_not", "pm_fail", "pm_ok_ref", "pm_not_ref", "pm_fail_ref"))
 }
 
-ups_snmp_trap_a = {
+ups_snmp_trap_sensor = {
 	"communicationLost" : False,
 	"upsOnBattery" : False,
 	"lowBattery" : False,
@@ -102,7 +101,7 @@ ups_snmp_trap_a = {
 	"powerModuleDecrease" : False,
 }
 
-ups_snmp_trap_r = {
+ups_snmp_trap_var = {
 	"upsOverload_changed" : UpdatedRecently("upsOverload", 10),
 	"upsDiagnosticsFailed_changed" : UpdatedRecently("upsDiagnosticsFailed", 10),
 	"upsDischarged_changed" : UpdatedRecently("upsDischarged", 10),

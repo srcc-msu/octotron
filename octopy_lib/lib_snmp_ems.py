@@ -1,9 +1,7 @@
 from octopy import *
 
-# provide "descr" attribute if you need it
-ems_sensor_a = {
-	"type" : "ems_sensor",
-
+ems_sensor_const = {"type" : "ems_sensor"}
+ems_sensor_sensor = {
 # cold
 	"front_humidity" : 0,
 	"front_temp" : 0,
@@ -19,7 +17,7 @@ ems_sensor_a = {
 	"_static_ems_sensor_humidity_max" : 70,
 }
 
-ems_sensor_r = {
+ems_sensor_var = {
 	"front_temp_ok" : UpperArgThreshold("front_temp", "_static_ems_sensor_front_temp_max"),
 	"back_temp_ok" : UpperArgThreshold("back_temp", "_static_ems_sensor_back_temp_max"),
 
@@ -56,14 +54,14 @@ ems_sensor_react = {
 			, Recover("ems sensor: back humidity is back to normal", "type", "descr", "back_humidity")),
 }
 
-# provide "descr" attribute if you need it
-ems_contact_a = {
-	"type" : "ems_contact",
+ems_sensor_const = {"type" : "ems_contact"}
+
+ems_contact_sensor = {
 	"state" : "",
 	"normal_state" : ""
 }
 
-ems_contact_r = {
+ems_contact_var = {
 	"state_ok" : VarArgMatch("state", "normal_state")
 }
 
@@ -73,7 +71,7 @@ ems_contact_react = {
 			, Recover("ems contact is ok", "type", "descr", "state", "normal_state")),
 }
 
-ems_snmp_trap_a = {
+ems_snmp_trap_sensor = {
 	"iemHighTempThresholdViolation" : False,
 	"iemLowTempThresholdViolation" : False,
 	"iemHighHumidThresholdViolation" : False,
@@ -104,7 +102,7 @@ ems_snmp_trap_a = {
 	"emsSensorFault" : 0,
 }
 
-ems_snmp_trap_r = {
+ems_snmp_trap_var = {
 	"iemContactFault_changed" : UpdatedRecently("iemContactFault", 10),
 	"contactFault_changed" : UpdatedRecently("contactFault", 10),
 	"emsSensorFault_changed" : UpdatedRecently("emsSensorFault", 10),
@@ -186,5 +184,4 @@ ems_snmp_trap_react = {
 
 	("emsSensorFault_changed", True)
 		: Reaction(Danger("ems trap: emsSensorFault", "type", "ip")),
-
 }

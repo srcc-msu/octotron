@@ -1,6 +1,6 @@
 from octopy import *
 
-snmp_general_a = {
+snmp_general_sensor = {
 	"configChangeSNMP" : True,
 	"accessViolationConsole" : True,
 	"accessViolationHTTP" : True,

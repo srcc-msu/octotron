@@ -1,6 +1,6 @@
 from octopy import *
 
-eth_link_r = {
+eth_link_var = {
 	"duplex_match" : LinkedVarArgMatch("duplex"),
 	"speed_match" : LinkedVarArgMatch("speed"),
 }

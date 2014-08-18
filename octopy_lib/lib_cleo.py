@@ -1,8 +1,6 @@
 from octopy import *
 
-queue_a = {
-	"type" : "queue",
-
+cleo_sensor = {
 	"tasks_total"   : 0,
 	"tasks_running" : 0,
 	"tasks_blocked" : 0,
@@ -19,7 +17,7 @@ queue_a = {
 	"cpus_blocked_count" : 0
 }
 
-queue_r = {
+cleo_var = {
 	"tasks_total_ok"   : LowerArgThreshold("tasks_total", "tasks_total_req"),
 	"tasks_running_ok" : LowerArgThreshold("tasks_running", "tasks_running_req"),
 	"tasks_queued_ok"  : LowerArgThreshold("tasks_queued", "tasks_queued_req"),
@@ -29,7 +27,7 @@ queue_r = {
 	"cpus_blocked_count_ok" : UpperArgThreshold("cpus_blocked_count", "cpus_blocked_max"),
 }
 
-queue_react = {
+cleo_react = {
 	("tasks_total_ok", False) :
 		Reaction(Warning("total tasks count is low", "type", "queue_name", "tasks_total")),
 
