@@ -1,0 +1,7 @@
+/modify/import?path=obj(ip==10.0.0.1).out_n().q(lid==0).uniq()&name=temperature&value=30
+/modify/import?path=obj(ip==10.0.0.2).out_n().q(lid==0).uniq()&name=temperature&value=80
+/modify/import?path=obj(ip==10.0.0.3).out_n().q(lid==0).uniq()&name=temperature&value=100
+
+/modify/import?path=obj(ip==10.0.0.1).out_n().q(lid==0).uniq()&name=temperature&value=30
+/modify/import?path=obj(ip==10.0.0.2).out_n().q(lid==0).uniq()&name=temperature&value=30
+/modify/import?path=obj(ip==10.0.0.3).out_n().q(lid==0).uniq()&name=temperature&value=30

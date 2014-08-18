@@ -6,13 +6,13 @@ import jarray
 
 import ru.parallel.octotron as octotron
 
-def GetLinkFactory(constants, sensors, variables, reactions, type):
+def GetLinkFactory(const, sensor, var, react, type):
 	factory = octotron.generators.LinkFactory()
 
-	factory = factory.Constants(ConvertAttributes(constants))
-	factory = factory.Sensors(ConvertAttributes(sensors))
-	factory = factory.Variables(ConvertVariables(variables))
-	factory = factory.Reactions(ConvertReactions(reactions))
+	factory = factory.Constants(ConvertAttributes(const))
+	factory = factory.Sensors(ConvertAttributes(sensor))
+	factory = factory.Varyings(ConvertVar(var))
+	factory = factory.Reactions(ConvertReact(react))
 
 	return factory.Constants(octotron.core.primitive.SimpleAttribute("type", type))
 
@@ -36,12 +36,12 @@ def Call(name, types, kwargs, *args):
 	if len(types) == 0:
 		raise RuntimeError("specify some types for link")
 
-	keywords = ["constants", "sensors", "variables", "reactions", "single"]
+	keywords = ["const", "sensor", "var", "react", "single"]
 
-	constants = kwargs.get(keywords[0], {})
-	sensors   = kwargs.get(keywords[1], {})
-	variables = kwargs.get(keywords[2], {})
-	reactions = kwargs.get(keywords[3], {})
+	const = kwargs.get(keywords[0], {})
+	sensor   = kwargs.get(keywords[1], {})
+	var = kwargs.get(keywords[2], {})
+	react = kwargs.get(keywords[3], {})
 	single    = kwargs.get(keywords[4], False)
 
 	for key in kwargs:
@@ -51,7 +51,7 @@ def Call(name, types, kwargs, *args):
 	result = octotron.core.model.impl.ModelLinkList()
 
 	for type in types:
-		factory = GetLinkFactory(constants, sensors, variables, reactions, type)
+		factory = GetLinkFactory(const, sensor, var, react, type)
 
 		links = CallFactoryMethod(factory, name, args)
 

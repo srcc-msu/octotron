@@ -3,27 +3,26 @@ from octopy.utils import *
 
 import ru.parallel.octotron as octotron
 
-def CreateObjects(constants = None, sensors = None, variables = None, reactions = None, count = 1):
-	if constants is None: constants = {}
-	if sensors is None: sensors = {}
-	if variables is None: variables = {}
-	if reactions is None: reactions = {}
-
-	SystemCtx.Debug("created a list with " + str(count) + " objects")
+def CreateObjects(const = None, static = None, sensor = None, var = None, react = None, count = None):
+	if const is None: const = {}
+	if static is None: static = {}
+	if sensor is None: sensor = {}
+	if var is None: var = {}
+	if react is None: react = {}
 
 	factory = octotron.generators.ObjectFactory()
 
-	factory = factory.Constants(ConvertAttributes(constants))
-	factory = factory.Sensors(ConvertAttributes(sensors))
-	factory = factory.Variables(ConvertVariables(variables))
-	factory = factory.Reactions(ConvertReactions(reactions))
+	factory = factory.Constants(ConvertAttributes(const))
+	factory = factory.Sensors(ConvertAttributes(sensor))
+	factory = factory.Varyings(ConvertVar(var))
+	factory = factory.Reactions(ConvertReact(react))
 
-	return factory.Create(count)
-
-def CreateObject(constants = None, sensors = None, variables = None, reactions = None):
-	SystemCtx.Debug("created 1 object")
-
-	return CreateObjects(constants, sensors, variables, reactions).Only()
+	if count is None:
+		SystemCtx.Debug("created 1 object")
+		return factory.Create()
+	else:
+		SystemCtx.Debug("created a list with " + str(count) + " objects")
+		return factory.Create(count)
 
 Enumerator = octotron.generators.Enumerator
 CSVReader = octotron.generators.CSVReader

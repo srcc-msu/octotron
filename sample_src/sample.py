@@ -12,16 +12,24 @@ CPU_PER_NODE = 2
 
 # create 4 objects with "type" = "node"
 # assigne to them attributes from collectd library module
-nodes = CreateObjects({"type" : "node"}, cd_node_a, count = NODES)
+nodes = CreateObjects(
+	const  = {"type" : "node"}
+	, sensor = cd_node_a
+	, count  = NODES)
 
 # assign to every object ip from the file
 CSVReader.Declare(nodes, "sample_src/ip.csv")
 
 # create 8 nodes and assign to them properties, declared in sample_lib.py
-cpus = CreateObjects({"type" : "cpu"}, cpu_attributes, cpu_rules, cpu_reactions, count = NODES * CPU_PER_NODE)
+cpus = CreateObjects(
+	const  = [cpu_const, {"type" : "cpu"}]
+	, sensor = cpu_sensor
+	, var    = cpu_var
+	, react  = cpu_react
+	, count  = NODES * CPU_PER_NODE)
 
 # add attribute "lid" to each cpu, that equals
-# its position in list by module CPU_PER_NODE
+# its position in list by modulo CPU_PER_NODE
 # 0, 1, 0, 1, 0, 1, 0, 1
 Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 

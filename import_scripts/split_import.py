@@ -44,4 +44,4 @@ if __name__ == "__main__":
 	port = int(sys.argv[2])
 	max_lines = int(sys.argv[3])
 
-	split_import(ip, port, max_lines, "/tmp/octo_split_script", "admin", "admin")
+	split_import(ip, port, max_lines, "/tmp/octo_split_script", "", "")

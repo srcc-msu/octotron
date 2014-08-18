@@ -8,10 +8,10 @@ def AttributesFromDict(attributes_dict):
 
 	return res
 
-def VariablesFromDict(variables_dict):
+def VaryingsFromDict(varyings_dict):
 	res = []
 
-	for arg_name, obj in variables_dict.items():
+	for arg_name, obj in varyings_dict.items():
 		obj.SetArgName(arg_name)
 
 		res.append(obj.GetOcto())
@@ -47,8 +47,8 @@ def FromNested(attributes):
 def ConvertAttributes(attributes):
 	return AttributesFromDict(FromNested(attributes))
 
-def ConvertVariables(variables):
-	return VariablesFromDict(FromNested(variables))
+def ConvertVar(var):
+	return VaryingsFromDict(FromNested(var))
 
-def ConvertReactions(reactions):
-	return ReactionsFromDict(FromNested(reactions))
+def ConvertReact(react):
+	return ReactionsFromDict(FromNested(react))

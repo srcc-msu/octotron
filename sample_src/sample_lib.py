@@ -1,21 +1,26 @@
 # include all system wrappers
 from octopy import *
 
-# declare attributes
-cpu_attributes = {
-	"temperature" : 0,
-	"avg_load" : 0,
+# declare constants
+cpu_const = {
 	"_static_temp_max" : 70,
 	"_static_load_max" : 90,
 }
 
-cpu_rules = {
+# declare sensors
+cpu_sensor = {
+	"temperature" : 0,
+	"avg_load" : 0,
+}
+
+# declare varying attrbiutes
+cpu_var = {
 	"temp_ok" : UpperArgThreshold("temperature", "_static_temp_max"),
 	"load_ok" : UpperArgThreshold("avg_load", "_static_load_max")
 }
 
-cpu_reactions = {
-
+# declare reactions
+cpu_react = {
 # invoke the Danger() reaction if "temperature" becomes greater
 # than "_static_temp_max"
 # invoke the Recover() reaction when "temperature" lowers
