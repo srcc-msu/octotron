@@ -1,18 +1,17 @@
 import ru.parallel.octotron as octotron
 
-def AttributesFromDict(attr_dict):
+def AttributesFromDict(attributes_dict):
 	res = []
 
-	for pair in attr_dict.items():
-		res.append(octotron.primitive.SimpleAttribute(*pair))
+	for pair in attributes_dict.items():
+		res.append(octotron.core.primitive.SimpleAttribute(*pair))
 
 	return res
 
-def RulesFromDict(rule_dict):
+def VariablesFromDict(variables_dict):
 	res = []
 
-	for pair in rule_dict.items():
-		(arg_name, obj)	= pair
+	for arg_name, obj in variables_dict.items():
 		obj.SetArgName(arg_name)
 
 		res.append(obj.GetOcto())
@@ -22,27 +21,23 @@ def RulesFromDict(rule_dict):
 def ReactionsFromDict(react_dict):
 	res = []
 
-	for key in react_dict:
-		(name, value) = key
-
-		reaction = react_dict[key]
-
-		res.append(octotron.core.OctoReaction(name, value, reaction.response, reaction.delay, reaction.recover))
+	for (name, value), reaction in react_dict.items():
+		res.append(octotron.core.OctoReaction(name, value, reaction.response, reaction.delay, reaction.repeat, reaction.recover))
 
 	return res
 
-def FromNested(attributes, func):
-	res = []
+def FromNested(attributes):
+	res = {}
 
 	if isinstance(attributes, list):
-		for attr_dict in attributes:
-			if isinstance(attr_dict, dict):
-				res += func(attr_dict)
+		for attributes_dict in attributes:
+			if isinstance(attributes_dict, dict):
+				res.update(attributes_dict)
 			else:
-				print "got: ", attr_dict
+				print "got: ", attributes_dict
 				raise RuntimeError("requires a dictionary or list of dictionaries")
 	elif isinstance(attributes, dict):
-		res = func(attributes)
+		return attributes
 	else:
 		print "got: ", attributes
 		raise RuntimeError("requires a dictionary or list of dictionaries")
@@ -50,10 +45,10 @@ def FromNested(attributes, func):
 	return res
 
 def ConvertAttributes(attributes):
-	return FromNested(attributes, AttributesFromDict)
+	return AttributesFromDict(FromNested(attributes))
 
-def ConvertRules(rules):
-	return FromNested(rules, RulesFromDict)
+def ConvertVariables(variables):
+	return VariablesFromDict(FromNested(variables))
 
 def ConvertReactions(reactions):
-	return FromNested(reactions, ReactionsFromDict)
+	return ReactionsFromDict(FromNested(reactions))

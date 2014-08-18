@@ -3,18 +3,11 @@ from octopy.utils import *
 import ru.parallel.octotron as octotron
 
 class Reaction(object):
-	def __init__(self, response, recover = None, delay = 0):
+	def __init__(self, response, recover = None, delay = 0, repeat = 0):
 		self.response = response
 		self.recover = recover
 		self.delay = delay
-
-class Rule(object):
-	def __init__(self, args):
-		self.args = args
-		self.arg_name = None
-
-	def SetArgName(self, arg_name):
-		self.arg_name = arg_name
+		self.repeat = repeat
 
 def Info(msg, *args):
 	return octotron.reactions.CommonReactions.Info(msg, *args)

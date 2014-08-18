@@ -6,14 +6,15 @@ import jarray
 
 import ru.parallel.octotron as octotron
 
-def GetLinkFactory(attributes, rules, reactions, type):
-	factory = octotron.generators.LinkFactory(SystemCtx.GetGraphService())
+def GetLinkFactory(constants, sensors, variables, reactions, type):
+	factory = octotron.generators.LinkFactory()
 
-	factory = factory.Attributes(ConvertAttributes(attributes))
-	factory = factory.Rules(ConvertRules(rules))
+	factory = factory.Constants(ConvertAttributes(constants))
+	factory = factory.Sensors(ConvertAttributes(sensors))
+	factory = factory.Variables(ConvertVariables(variables))
 	factory = factory.Reactions(ConvertReactions(reactions))
 
-	return factory.Attributes(octotron.primitive.SimpleAttribute("type", type))
+	return factory.Constants(octotron.core.primitive.SimpleAttribute("type", type))
 
 def CallFactoryMethod(factory, name, args):
 	arg_types = []
@@ -35,21 +36,22 @@ def Call(name, types, kwargs, *args):
 	if len(types) == 0:
 		raise RuntimeError("specify some types for link")
 
-	keywords = ["attributes", "rules", "reactions", "single"]
+	keywords = ["constants", "sensors", "variables", "reactions", "single"]
 
-	attributes = kwargs.get(keywords[0], {})
-	rules      = kwargs.get(keywords[1], {})
-	reactions  = kwargs.get(keywords[2], {})
-	single     = kwargs.get(keywords[3], False)
+	constants = kwargs.get(keywords[0], {})
+	sensors   = kwargs.get(keywords[1], {})
+	variables = kwargs.get(keywords[2], {})
+	reactions = kwargs.get(keywords[3], {})
+	single    = kwargs.get(keywords[4], False)
 
 	for key in kwargs:
 		if key not in keywords:
 			raise RuntimeError("unknown keyword: " + key)
 
-	result = octotron.utils.OctoLinkList()
+	result = octotron.core.model.impl.ModelLinkList()
 
 	for type in types:
-		factory = GetLinkFactory(attributes, rules, reactions, type)
+		factory = GetLinkFactory(constants, sensors, variables, reactions, type)
 
 		links = CallFactoryMethod(factory, name, args)
 
@@ -98,5 +100,3 @@ def ChunksToEvery_Guided(obj1, obj2, guide, *types, **kwargs):
 
 def EveryToChunks_Guided(obj1, obj2, guide, *types, **kwargs):
 	Call(EveryToChunks_Guided.__name__, types, kwargs, obj1, obj2, guide)
-
-Enumerator = octotron.generators.Enumerator

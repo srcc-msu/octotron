@@ -131,4 +131,4 @@ class LinkedVarArgMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-import ru.parallel.octotron.primitive.EDependencyType as EDependencyType
+import ru.parallel.octotron.core.primitive.EDependencyType as EDependencyType

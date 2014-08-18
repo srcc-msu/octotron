@@ -52,13 +52,6 @@ class SystemCtx(object):
 			SystemCtx.creator = None
 
 	@staticmethod
-	def GetGraphService():
-		if not SystemCtx.creator:
-			raise RuntimeError("init not done")
-
-		return SystemCtx.creator.GetGraphService()
-
-	@staticmethod
 	def Debug(msg):
 		if not SystemCtx.debug:
 			return
