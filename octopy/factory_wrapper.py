@@ -18,11 +18,13 @@ def CreateObjects(const = None, static = None, sensor = None, var = None, react 
 	factory = factory.Reactions(ConvertReact(react))
 
 	if count is None:
-		SystemCtx.Debug("created 1 object")
-		return factory.Create()
-	else:
-		SystemCtx.Debug("created a list with " + str(count) + " objects")
-		return factory.Create(count)
+		count = 1
+
+	return factory.Create(count)
+
+def CreateObject(const = None, static = None, sensor = None, var = None, react = None):
+	SystemCtx.Debug("created 1 object")
+	return CreateObjects(const, static, sensor, var, react).Only()
 
 Enumerator = octotron.generators.Enumerator
 CSVReader = octotron.generators.CSVReader
