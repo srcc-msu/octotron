@@ -1,11 +1,11 @@
-from lib_cleo import *
-from lib_collectd import *
-from lib_eth import *
-from lib_links import *
-from lib_node_check import *
-from lib_panasas import *
-from lib_snmp_ems import *
-from lib_snmp_eth import *
-from lib_snmp_fan import *
-from lib_snmp import *
-from lib_snmp_ups import *
+import lib_cleo
+import lib_collectd
+import lib_eth
+import lib_links
+import lib_node_check
+import lib_panasas
+import lib_snmp_ems
+import lib_snmp_eth
+import lib_snmp_fan
+import lib_snmp
+import lib_snmp_ups

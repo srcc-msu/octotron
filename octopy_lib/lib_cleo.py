@@ -1,48 +1,62 @@
 from octopy import *
 
-cleo_sensor = {
-	"tasks_total"   : 0,
-	"tasks_running" : 0,
-	"tasks_blocked" : 0,
-	"tasks_queued"  : 0,
-	"tasks_prerun"  : 0,
+#
+# checks require next attrbiutes:
+# tasks_total_req
+# tasks_running_req
+# tasks_queued_req
+# cpus_free_max
+# queue_req_cpus
+# cpus_blocked_max
+#
+# TODO: make more clear
+#
 
-	"tasks_completition" : 0,
+cleo_module = {
+	"sensor" : {
+		"tasks_total"   : 0,
+		"tasks_running" : 0,
+		"tasks_blocked" : 0,
+		"tasks_queued"  : 0,
+		"tasks_prerun"  : 0,
 
-	"can_run_tasks"   : 0,
-	"can_queue_tasks" : 0,
+		"tasks_completition" : 0,
 
-	"cpus_total_free"    : 0,
-	"cpus_total_number"  : 0,
-	"cpus_blocked_count" : 0
-}
+		"can_run_tasks"   : 0,
+		"can_queue_tasks" : 0,
 
-cleo_var = {
-	"tasks_total_ok"   : LowerArgThreshold("tasks_total", "tasks_total_req"),
-	"tasks_running_ok" : LowerArgThreshold("tasks_running", "tasks_running_req"),
-	"tasks_queued_ok"  : LowerArgThreshold("tasks_queued", "tasks_queued_req"),
+		"cpus_total_free"    : 0,
+		"cpus_total_number"  : 0,
+		"cpus_blocked_count" : 0
+	},
 
-	"cpus_total_free_ok"    : UpperArgThreshold("cpus_total_free", "cpus_free_max"),
-	"cpus_total_number_ok"  : ArgMatch("cpus_total_number", "queue_req_cpus"),
-	"cpus_blocked_count_ok" : UpperArgThreshold("cpus_blocked_count", "cpus_blocked_max"),
-}
+	"var" : {
+		"tasks_total_ok"   : LowerArgThreshold("tasks_total", "tasks_total_req"),
+		"tasks_running_ok" : LowerArgThreshold("tasks_running", "tasks_running_req"),
+		"tasks_queued_ok"  : LowerArgThreshold("tasks_queued", "tasks_queued_req"),
 
-cleo_react = {
-	("tasks_total_ok", False) :
-		Reaction(Warning("total tasks count is low", "type", "queue_name", "tasks_total")),
+		"cpus_total_free_ok"    : UpperArgThreshold("cpus_total_free", "cpus_free_max"),
+		"cpus_total_number_ok"  : ArgMatch("cpus_total_number", "queue_req_cpus"),
+		"cpus_blocked_count_ok" : UpperArgThreshold("cpus_blocked_count", "cpus_blocked_max"),
+	},
 
-	("tasks_running_ok", False) :
-		Reaction(Warning("running tasks count is low", "type", "queue_name", "tasks_running")),
+	"react" : {
+		("tasks_total_ok", False) :
+			Reaction(Warning("total tasks count is low", "type", "queue_name", "tasks_total")),
 
-	("tasks_queued_ok", False) :
-		Reaction(Warning("queued tasks count is low", "type", "queue_name", "tasks_queued")),
+		("tasks_running_ok", False) :
+			Reaction(Warning("running tasks count is low", "type", "queue_name", "tasks_running")),
 
-	("cpus_total_free_ok", False) :
-		Reaction(Danger("too many free cpus", "type", "queue_name", "cpus_total_free")),
+		("tasks_queued_ok", False) :
+			Reaction(Warning("queued tasks count is low", "type", "queue_name", "tasks_queued")),
 
-	("cpus_total_number_ok", False) :
-		Reaction(Danger("the queue has lost some cpus", "type", "queue_name", "cpus_total_number")),
+		("cpus_total_free_ok", False) :
+			Reaction(Danger("too many free cpus", "type", "queue_name", "cpus_total_free")),
 
-	("cpus_blocked_count_ok", False) :
-		Reaction(Danger("too many blocked cpus", "type", "queue_name", "cpus_blocked_count")),
+		("cpus_total_number_ok", False) :
+			Reaction(Danger("the queue has lost some cpus", "type", "queue_name", "cpus_total_number")),
+
+		("cpus_blocked_count_ok", False) :
+			Reaction(Danger("too many blocked cpus", "type", "queue_name", "cpus_blocked_count"))
+	}
 }

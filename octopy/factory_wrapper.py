@@ -3,7 +3,7 @@ from octopy.utils import *
 
 import ru.parallel.octotron as octotron
 
-def CreateObjects(const = None, static = None, sensor = None, var = None, react = None, count = None):
+def CreateObjects(const = None, static = None, sensor = None, var = None, react = None, count = None, modules):
 	if const is None: const = {}
 	if static is None: static = {}
 	if sensor is None: sensor = {}
