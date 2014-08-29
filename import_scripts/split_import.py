@@ -42,7 +42,7 @@ def split_import(ip, port, max_lines, fname, usr, pwd):
 if __name__ == "__main__":
 
 	parser = OptionParser()
-	parser.add_option("-i", "--ip", dest="ip")
+	parser.add_option("-i", "--ip", dest="ip", default = "127.0.0.1")
 	parser.add_option("-p", "--port", dest="port", type = int)
 	parser.add_option("-l", "--lines", dest="lines", type = int, default = 1)
 	parser.add_option("--usr", dest="usr", default = "")
@@ -50,9 +50,6 @@ if __name__ == "__main__":
 	parser.add_option("--tmp", dest="tmp", default = "/tmp/octo_split_script")
 
 	(options, args) = parser.parse_args()
-
-	if not options.ip:
-		raise RuntimeError("specify ip")
 
 	if not options.port:
 		raise RuntimeError("specify port")

@@ -57,16 +57,13 @@ def import_file(ip, port, fname, usr, pwd):
 
 if __name__ == "__main__":
 	parser = OptionParser()
-	parser.add_option("-i", "--ip", dest="ip")
+	parser.add_option("-i", "--ip", dest="ip", default = "127.0.0.1")
 	parser.add_option("-p", "--port", dest="port", type = int)
 	parser.add_option("-f", "--fname", dest="fname")
 	parser.add_option("--usr", dest="usr", default = "")
 	parser.add_option("--pwd", dest="pwd", default = "")
 
 	(options, args) = parser.parse_args()
-
-	if not options.ip:
-		raise RuntimeError("specify ip")
 
 	if not options.port:
 		raise RuntimeError("specify port")
