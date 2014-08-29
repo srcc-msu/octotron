@@ -29,12 +29,14 @@ def VaryingsFromDict(varyings_dict):
 def ReactionsFromDict(react_dict):
 	res = []
 
-	for (name, value), reaction in react_dict.items():
-		if len(reaction) > 1:
-			raise RuntimeError("duplicated reaction: " + name + ", " + value + " : "  + str(reaction))
+	for (name, value), reactions in react_dict.items():
+		duplicates = set([x for x in reactions if reactions.count(x) > 1])
 
-		reaction = reaction[0]
-		res.append(octotron.core.OctoReaction(name, value, reaction.response, reaction.delay, reaction.repeat, reaction.recover))
+		if len(duplicates) > 0:
+			raise RuntimeError("duplicated reaction: " + name + ", " + str(value) + " : "  + str(duplicates))
+
+		for reaction in reactions:
+			res.append(octotron.core.OctoReaction(name, value, reaction.response, reaction.delay, reaction.repeat, reaction.recover))
 
 	return res
 
@@ -65,7 +67,7 @@ def MergeDicts(dicts):
 
 	for d in dicts:
 		if not isinstance(d, dict):
-			raise RuntimeError("dictionary is required, got: " + dicts)
+			raise RuntimeError("dictionary is required, got: " + str(dicts))
 
 		for key, value in d.items():
 			for single in GetIterable(value):

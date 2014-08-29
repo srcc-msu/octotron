@@ -4,7 +4,7 @@ from octopy.utils import *
 import ru.parallel.octotron as octotron
 
 def CreateObject(*modules):
-	return CreateObjects(1, modules).Only()
+	return CreateObjects(1, *modules).Only()
 
 def CreateObjects(count, *modules):
 	params = MergeDicts(modules)
@@ -23,3 +23,13 @@ def CreateObjects(count, *modules):
 
 Enumerator = octotron.generators.Enumerator
 CSVReader = octotron.generators.CSVReader
+
+def UpdateObject(object, *modules):
+	params = MergeDicts(modules)
+
+	object.DeclareConstants(ConvertAttributes(MergeDicts(params["const"])))
+	object.DeclareConstants(ConvertAttributes(MergeDicts(params["static"])))
+	object.DeclareSensors(ConvertAttributes(MergeDicts(params["sensor"])))
+
+	object.DeclareVaryings(ConvertVars(MergeDicts(params["var"])))
+	object.AddReactions(ConvertReacts(MergeDicts(params["react"])))

@@ -48,8 +48,25 @@ def Call(name, types, modules, *args):
 
 	return result
 
+def CallSingle(types, modules, *args):
+	params = MergeDicts(modules)
+
+	result = octotron.core.model.impl.ModelLinkList()
+
+	for type in GetIterable(types):
+		factory = GetLinkFactory(params, type)
+
+		link = CallFactoryMethod(factory, "OneToOne", args)
+
+		SystemCtx.Debug("created 1 link for type " + type)
+		result.add(link)
+
+	return result
+
 def OneToOne(obj1, obj2, types, *modules):
-	return Call(OneToOne.__name__, types, modules, obj1, obj2)
+	result = CallSingle(types, modules, obj1, obj2)
+
+	return result.Only() if result.size() == 1 else result
 
 def OneToEvery(obj1, obj2, types, *modules):
 	return Call(OneToEvery.__name__, types, modules, obj1, obj2)
