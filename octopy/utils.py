@@ -1,7 +1,6 @@
 import ru.parallel.octotron as octotron
 
 def AttributesFromDict(attributes_dict):
-	print attributes_dict
 	res = []
 
 	for name, value in attributes_dict.items():
