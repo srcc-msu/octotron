@@ -6,13 +6,14 @@ import jarray
 
 import ru.parallel.octotron as octotron
 
-def GetLinkFactory(const, sensor, var, react, type):
+def GetLinkFactory(params, type):
 	factory = octotron.generators.LinkFactory()
 
-	factory = factory.Constants(ConvertAttributes(const))
-	factory = factory.Sensors(ConvertAttributes(sensor))
-	factory = factory.Varyings(ConvertVar(var))
-	factory = factory.Reactions(ConvertReact(react))
+	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
+	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
+	factory = factory.Sensors  (ConvertAttributes(MergeDicts(params["sensor"])))
+	factory = factory.Varyings (ConvertVars(MergeDicts(params["var"])))
+	factory = factory.Reactions(ConvertReacts(MergeDicts(params["react"])))
 
 	return factory.Constants(octotron.core.primitive.SimpleAttribute("type", type))
 
@@ -32,71 +33,50 @@ def CallFactoryMethod(factory, name, args):
 
 	return method.invoke(factory, *args)
 
-def Call(name, types, kwargs, *args):
-	if len(types) == 0:
-		raise RuntimeError("specify some types for link")
-
-	keywords = ["const", "sensor", "var", "react", "single"]
-
-	const = kwargs.get(keywords[0], {})
-	sensor   = kwargs.get(keywords[1], {})
-	var = kwargs.get(keywords[2], {})
-	react = kwargs.get(keywords[3], {})
-	single    = kwargs.get(keywords[4], False)
-
-	for key in kwargs:
-		if key not in keywords:
-			raise RuntimeError("unknown keyword: " + key)
+def Call(name, types, modules, *args):
+	params = MergeDicts(modules)
 
 	result = octotron.core.model.impl.ModelLinkList()
 
-	for type in types:
-		factory = GetLinkFactory(const, sensor, var, react, type)
+	for type in GetIterable(types):
+		factory = GetLinkFactory(params, type)
 
 		links = CallFactoryMethod(factory, name, args)
 
-		if single:
-			SystemCtx.Debug("created 1 link")
-			result.add(links)
-		else:
-			SystemCtx.Debug("created " + str(links.size()) + " links")
-			result.append(links)
+		SystemCtx.Debug("created " + str(links.size()) + " links for type " + type)
+		result.append(links)
 
 	return result
 
-def OneToOne(obj1, obj2, *types, **kwargs):
-	kwargs["single"] = True
-	result = Call(OneToOne.__name__, types, kwargs, obj1, obj2)
+def OneToOne(obj1, obj2, types, *modules):
+	return Call(OneToOne.__name__, types, modules, obj1, obj2)
 
-	if len(types) == 1:
-		return result.get(0) # return the single object, if is the only
+def OneToEvery(obj1, obj2, types, *modules):
+	return Call(OneToEvery.__name__, types, modules, obj1, obj2)
 
-def OneToEvery(obj1, obj2, *types, **kwargs):
-	Call(OneToEvery.__name__, types, kwargs, obj1, obj2)
+def EveryToOne(obj1, obj2, types, *modules):
+	return Call(EveryToOne.__name__, types, modules, obj1, obj2)
 
-def EveryToOne(obj1, obj2, *types, **kwargs):
-	Call(EveryToOne.__name__, types, kwargs, obj1, obj2)
+def AllToAll(obj1, obj2, types, *modules):
+	return Call(AllToAll.__name__, types, modules, obj1, obj2)
 
-def AllToAll(obj1, obj2, *types, **kwargs):
-	Call(AllToAll.__name__, types, kwargs, obj1, obj2)
+def EveryToEvery(obj1, obj2, types, *modules):
+	return Call(EveryToEvery.__name__, types, modules, obj1, obj2)
 
-def EveryToEvery(obj1, obj2, *types, **kwargs):
-	Call(EveryToEvery.__name__, types, kwargs, obj1, obj2)
+def ChunksToEvery(obj1, obj2, types, *modules):
+	return Call(ChunksToEvery.__name__, types, modules, obj1, obj2)
 
-def ChunksToEvery(obj1, obj2, *types, **kwargs):
-	Call(ChunksToEvery.__name__, types, kwargs, obj1, obj2)
+def EveryToChunks(obj1, obj2, types, *modules):
+	return Call(EveryToChunks.__name__, types, modules, obj1, obj2)
 
-def EveryToChunks(obj1, obj2, *types, **kwargs):
-	Call(EveryToChunks.__name__, types, kwargs, obj1, obj2)
+def ChunksToEvery_LastLess(obj1, obj2, types, *modules):
+	return Call(ChunksToEvery_LastLess.__name__, types, modules, obj1, obj2)
 
-def ChunksToEvery_LastLess(obj1, obj2, *types, **kwargs):
-	Call(ChunksToEvery_LastLess.__name__, types, kwargs, obj1, obj2)
+def EveryToChunks_LastLess(obj1, obj2, types, *modules):
+	return Call(EveryToChunks_LastLess.__name__, types, modules, obj1, obj2)
 
-def EveryToChunks_LastLess(obj1, obj2, *types, **kwargs):
-	Call(EveryToChunks_LastLess.__name__, types, kwargs, obj1, obj2)
+def ChunksToEvery_Guided(obj1, obj2, guide, types, *modules):
+	return Call(ChunksToEvery_Guided.__name__, types, modules, obj1, obj2, guide)
 
-def ChunksToEvery_Guided(obj1, obj2, guide, *types, **kwargs):
-	Call(ChunksToEvery_Guided.__name__, types, kwargs, obj1, obj2, guide)
-
-def EveryToChunks_Guided(obj1, obj2, guide, *types, **kwargs):
-	Call(EveryToChunks_Guided.__name__, types, kwargs, obj1, obj2, guide)
+def EveryToChunks_Guided(obj1, obj2, guide, types, *modules):
+	return Call(EveryToChunks_Guided.__name__, types, modules, obj1, obj2, guide)

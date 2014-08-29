@@ -6,7 +6,7 @@ snmp_general_module = {
 		"accessViolationConsole" : True,
 		"accessViolationHTTP" : True,
 		"passwordChange" : True,
-	}
+	},
 
 	"react" : {
 		("configChangeSNMP", False) : Reaction(Danger("SNMP trap: configChangeSNMP", "type")),

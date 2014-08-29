@@ -1,20 +1,29 @@
 import ru.parallel.octotron as octotron
 
 def AttributesFromDict(attributes_dict):
+	print attributes_dict
 	res = []
 
-	for pair in attributes_dict.items():
-		res.append(octotron.core.primitive.SimpleAttribute(*pair))
+	for name, value in attributes_dict.items():
+		if len(value) > 1:
+			raise RuntimeError("duplicated attribute: " + name + " : " + str(value))
+		value = value[0]
+
+		res.append(octotron.core.primitive.SimpleAttribute(name, value))
 
 	return res
 
 def VaryingsFromDict(varyings_dict):
 	res = []
 
-	for arg_name, obj in varyings_dict.items():
-		obj.SetArgName(arg_name)
+	for name, rule in varyings_dict.items():
+		if len(rule) > 1:
+			raise RuntimeError("duplicated var: " + name + " : " + str(rule))
+		rule = rule[0]
 
-		res.append(obj.GetOcto())
+		rule.SetArgName(name)
+
+		res.append(rule.GetOcto())
 
 	return res
 
@@ -22,69 +31,45 @@ def ReactionsFromDict(react_dict):
 	res = []
 
 	for (name, value), reaction in react_dict.items():
+		if len(reaction) > 1:
+			raise RuntimeError("duplicated reaction: " + name + ", " + value + " : "  + str(reaction))
+
+		reaction = reaction[0]
 		res.append(octotron.core.OctoReaction(name, value, reaction.response, reaction.delay, reaction.repeat, reaction.recover))
 
 	return res
 
-def FromNested(attributes):
-	"""convert list of dictionaries to a single dictionary"""
-	res = {}
-
-	if isinstance(attributes, list):
-		for attributes_dict in attributes:
-			if isinstance(attributes_dict, dict):
-				res.update(attributes_dict)
-			else:
-				print "got: ", attributes_dict
-				raise RuntimeError("requires a dictionary or list of dictionaries")
-	elif isinstance(attributes, dict):
-		return attributes
-	else:
-		print "got: ", attributes
-		raise RuntimeError("requires a dictionary or list of dictionaries")
-
-	return res
-
 def ConvertAttributes(attributes):
-	return AttributesFromDict(FromNested(attributes))
+	return AttributesFromDict(attributes)
 
-def ConvertVar(var):
-	return VaryingsFromDict(FromNested(var))
+def ConvertVars(var):
+	return VaryingsFromDict(var)
 
-def ConvertReact(react):
-	return ReactionsFromDict(FromNested(react))
+def ConvertReacts(react):
+	return ReactionsFromDict(react)
 
+import collections
 
-# TODO: make better
-def UnrollParams(const = None, static = None
-	, sensor = None, var = None
-	, react = None
-	, count = None
-	, modules = None):
+def GetIterable(thing):
+	if isinstance(thing, (list, tuple)):
+		return thing
+	return (thing, )
 
-	if const is None: const = {}
-	if static is None: static = {}
-	if sensor is None: sensor = {}
-	if var is None: var = {}
-	if react is None: react = {}
+	"""next is the correct method, but is not working in jython"""
+	if isinstance(thing, collections.Iterable):
+		return thing
+	else:
+		return (thing,)
 
-	const_dict = FromNested(const)
-	static_dict = FromNested(static)
-	sensor_dict = FromNested(sensor)
-	var_dict = FromNested(var)
-	react_dict = FromNested(react)
+def MergeDicts(dicts):
+	result = collections.defaultdict(list)
 
+	for d in dicts:
+		if not isinstance(d, dict):
+			raise RuntimeError("dictionary is required, got: " + dicts)
 
-	for module in modules:
-		if "const" in module:
-			const_dict.update(module["const"])
-		if "static" in module:
-			static_dict.update(module["static"])
-		if "sensor" in module:
-			sensor_dict.update(module["sensor"])
-		if "var" in module:
-			var_dict.update(module["var"])
-		if "react" in module:
-			react_dict.update(module["react"])
+		for key, value in d.items():
+			for single in GetIterable(value):
+				result[key].append(single)
 
-	return (const_dict, static_dict, sensor_dict, var_dict, react_dict) 
+	return result

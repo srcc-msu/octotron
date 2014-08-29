@@ -2,3 +2,4 @@
 *.java
 *.pyc
 crash_*
+.idea
