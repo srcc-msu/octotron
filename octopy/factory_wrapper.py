@@ -15,7 +15,8 @@ def CreateObjects(count, *modules):
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
 	factory = factory.Sensors  (ConvertAttributes(MergeDicts(params["sensor"])))
 	factory = factory.Varyings (ConvertVars(MergeDicts(params["var"])))
-	factory = factory.Reactions(ConvertReacts(MergeDicts(params["react"])))
+
+	factory = factory.Reactions(ConvertReacts(MergeUniqueDicts(params["react"])))
 
 	SystemCtx.Debug("created list with %d objects" % count)
 
@@ -30,6 +31,6 @@ def UpdateObject(object, *modules):
 	object.DeclareConstants(ConvertAttributes(MergeDicts(params["const"])))
 	object.DeclareConstants(ConvertAttributes(MergeDicts(params["static"])))
 	object.DeclareSensors(ConvertAttributes(MergeDicts(params["sensor"])))
-
 	object.DeclareVaryings(ConvertVars(MergeDicts(params["var"])))
-	object.AddReactions(ConvertReacts(MergeDicts(params["react"])))
+
+	object.AddReactions(ConvertReacts(MergeUniqueDicts(params["react"])))

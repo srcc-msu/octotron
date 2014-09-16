@@ -36,9 +36,9 @@ def CallFactoryMethod(factory, name, args):
 def Call(name, types, modules, *args):
 	params = MergeDicts(modules)
 
-	result = octotron.core.model.impl.ModelLinkList()
+	result = octotron.core.model.collections.ModelLinkList()
 
-	for type in GetIterable(types):
+	for type in GetCollection(types):
 		factory = GetLinkFactory(params, type)
 
 		links = CallFactoryMethod(factory, name, args)
@@ -53,7 +53,7 @@ def CallSingle(types, modules, *args):
 
 	result = octotron.core.model.impl.ModelLinkList()
 
-	for type in GetIterable(types):
+	for type in GetCollection(types):
 		factory = GetLinkFactory(params, type)
 
 		link = CallFactoryMethod(factory, "OneToOne", args)

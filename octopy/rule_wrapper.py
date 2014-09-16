@@ -107,10 +107,6 @@ class NotMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class UpdatedRecently(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
 class UpperArgThreshold(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)

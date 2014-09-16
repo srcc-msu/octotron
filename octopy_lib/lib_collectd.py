@@ -30,26 +30,26 @@ disk_module = {
 	},
 
 	"react" : {
-		("current_pending_sector_ok", False) :
-			Reaction(Warning("current_pending_sector > 0", "type", "current_pending_sector").PrintParent("type", "node", "ip")),
+		Equals("current_pending_sector_ok", False) :
+			Warning("current_pending_sector > 0", "type", "current_pending_sector").PrintParent("type", "node", "ip"),
 
-		("offline_uncorrectable_ok", False) :
-			Reaction(Warning("offline_uncorrectable > 0", "type", "offline_uncorrectable").PrintParent("type", "node", "ip")),
+		Equals("offline_uncorrectable_ok", False) :
+			Warning("offline_uncorrectable > 0", "type", "offline_uncorrectable").PrintParent("type", "node", "ip"),
 
-		("reallocated_sector_ct_ok", False) :
-			Reaction(Warning("reallocated_sector_ct > 0", "type", "reallocated_sector_ct").PrintParent("type", "node", "ip")),
+		Equals("reallocated_sector_ct_ok", False) :
+			Warning("reallocated_sector_ct > 0", "type", "reallocated_sector_ct").PrintParent("type", "node", "ip"),
 
-		("reported_uncorrect_ok", False) :
-			Reaction(Warning("reported_uncorrect > 0", "type", "reported_uncorrect").PrintParent("type", "node", "ip")),
+		Equals("reported_uncorrect_ok", False) :
+			Warning("reported_uncorrect > 0", "type", "reported_uncorrect").PrintParent("type", "node", "ip"),
 
-		("spin_retry_count_ok", False) :
-			Reaction(Warning("spin_retry_count > 0", "type", "spin_retry_count").PrintParent("type", "node", "ip")),
+		Equals("spin_retry_count_ok", False) :
+			Warning("spin_retry_count > 0", "type", "spin_retry_count").PrintParent("type", "node", "ip"),
 
-		("udma_crc_error_count_ok", False) :
-			Reaction(Warning("udma_crc_error_count > 0", "type", "spin_retry_count").PrintParent("type", "node", "ip")),
+		Equals("udma_crc_error_count_ok", False) :
+			Warning("udma_crc_error_count > 0", "type", "spin_retry_count").PrintParent("type", "node", "ip"),
 
-		("temp_ok", False) :
-			Reaction(Danger("disk temperature is above threshold", "type", "temperature_celsius").PrintParent("type", "node", "ip")
+		Equals("temp_ok", False) :
+			(Danger("disk temperature is above threshold", "type", "temperature_celsius").PrintParent("type", "node", "ip")
 				, Recover("disk temperature is back to normal", "type", "temperature_celsius").PrintParent("type", "node", "ip"))
 	}
 }
@@ -108,40 +108,40 @@ node_module = {
 	},
 
 	"react" : {
-		("fork_rate_ok", False) :
-			Reaction(Warning("High fork rate on node for last 1000 seconds", "type", "node", "ip", "forks", "fork_rate", "_static_fork_rate_thr"), delay = 1000),
+		Equals("fork_rate_ok", False).Delay(1000) :
+			Warning("High fork rate on node for last 1000 seconds", "type", "node", "ip", "forks", "fork_rate", "_static_fork_rate_thr"),
 
-		("zombies_ok", False) :
-			Reaction(Warning("Zombie processes present for last 1000 seconds, run for your life!", "type", "node", "ip", "zombies"), delay = 1000),
+		Equals("zombies_ok", False).Delay(1000) :
+			Warning("Zombie processes present for last 1000 seconds, run for your life!", "type", "node", "ip", "zombies"),
 
-		("la_1_acceptable", False) :
-			Reaction(Warning("LA on on the node exceeded threshold 1 for last 1000 seconds", "type", "node", "ip", "la_1", "_static_la_thr1")
-				, Recover("LA is back to normal", "type", "node", "ip", "la_1"), delay = 1000),
+		Equals("la_1_acceptable", False).Delay(1000) :
+			(Warning("LA on on the node exceeded threshold 1 for last 1000 seconds", "type", "node", "ip", "la_1", "_static_la_thr1")
+				, Recover("LA is back to normal", "type", "node", "ip", "la_1")),
 
-		("la_1_sane", False) :
-			Reaction(Danger("LA on on the node exceeded threshold 2 for last 1000 seconds", "type", "node", "ip", "la_1", "_static_la_thr2")),
+		Equals("la_1_sane", False) :
+			Danger("LA on on the node exceeded threshold 2 for last 1000 seconds", "type", "node", "ip", "la_1", "_static_la_thr2"),
 
-		("check_tmp_ok", False) :
-			Reaction(Danger("could not access tmp on node", "type", "node", "ip"), Recover("tmp on node is accessible again", "type", "node", "ip")),
-		("check_home_ok", False) :
-			Reaction(Danger("could not access home on node", "type", "node", "ip"), Recover("home on node is accessible again", "type", "node", "ip")),
-		("check_clean_ok", False) :
-			Reaction(Danger("could not remove file on node", "type", "node", "ip"), Recover("remove file on node worked", "type", "node", "ip")),
+		Equals("check_tmp_ok", False) :
+			(Danger("could not access tmp on node", "type", "node", "ip"), Recover("tmp on node is accessible again", "type", "node", "ip")),
+		Equals("check_home_ok", False) :
+			(Danger("could not access home on node", "type", "node", "ip"), Recover("home on node is accessible again", "type", "node", "ip")),
+		Equals("check_clean_ok", False) :
+			(Danger("could not remove file on node", "type", "node", "ip"), Recover("remove file on node worked", "type", "node", "ip")),
 
-		("check_nmond_ok", False) :
-			Reaction(Danger("hopsa agent(nmond) not found", "type", "node", "ip"), Recover("hopsa agent(nmond) found", "type", "node", "ip")),
+		Equals("check_nmond_ok", False) :
+			(Danger("hopsa agent(nmond) not found", "type", "node", "ip"), Recover("hopsa agent(nmond) found", "type", "node", "ip")),
 
-		("ntpd_drift_ok_1", False) :
-			Reaction(Danger("ntpd drift is too big", "type", "node", "ip", "ntpd_drift"), Recover("ntpd drift is ok", "type", "node", "ip", "ntpd_drift")),
+		Equals("ntpd_drift_ok_1", False) :
+			(Danger("ntpd drift is too big", "type", "node", "ip", "ntpd_drift"), Recover("ntpd drift is ok", "type", "node", "ip", "ntpd_drift")),
 
-		("ntpd_drift_ok_2", False) :
-			Reaction(Danger("ntpd drift is too big", "type", "node", "ip", "ntpd_drift"), Recover("ntpd drift is ok", "type", "node", "ip", "ntpd_drift")),
+		Equals("ntpd_drift_ok_2", False) :
+			(Danger("ntpd drift is too big", "type", "node", "ip", "ntpd_drift"), Recover("ntpd drift is ok", "type", "node", "ip", "ntpd_drift")),
 
-		("temp_ok", False) :
-			Reaction(Warning("bad system temp on node", "type", "node", "ip", "temp"), Recover("system temp on node is ok", "type", "node", "ip", "temp")),
+		Equals("temp_ok", False) :
+			(Warning("bad system temp on node", "type", "node", "ip", "temp"), Recover("system temp on node is ok", "type", "node", "ip", "temp")),
 
-		("temp_acceptable", False) :
-			Reaction(Critical("critical system temp on node", "type", "node", "ip", "temp"))
+		Equals("temp_acceptable", False) :
+			Critical("critical system temp on node", "type", "node", "ip", "temp")
 	}
 }
 
@@ -164,12 +164,12 @@ cpu_module = {
 	},
 
 	"react" : {
-		("cpu_temp_ok", False) :
-			Reaction(Warning("bad cpu temp", "type", "lid", "temp").PrintParent("type", "node", "ip")
+		Equals("cpu_temp_ok", False) :
+			(Warning("bad cpu temp", "type", "lid", "temp").PrintParent("type", "node", "ip")
 				, Recover("cpu temp is ok now", "type", "lid", "temp").PrintParent("type", "node", "ip")),
 
-		("cpu_temp_acceptable", False) :
-			Reaction(Critical("critical cpu temp", "type", "lid", "temp").PrintParent("type", "node", "ip"))
+		Equals("cpu_temp_acceptable", False) :
+			Critical("critical cpu temp", "type", "lid", "temp").PrintParent("type", "node", "ip")
 	}
 }
 
@@ -189,8 +189,8 @@ memory_module = {
 	},
 
 	"react" : {
-	#	("mem_total_ok", False) :
-	#		Reaction(Danger("total mem reduced below check value", "mem_total", "req_mem").PrintParent("type", "node", "ip")
+	#	Equals("mem_total_ok", False) :
+	#		Danger("total mem reduced below check value", "mem_total", "req_mem").PrintParent("type", "node", "ip")
 	#			, Recover("total mem is ok", "mem_total", "req_mem").PrintParent("type", "node", "ip"))
 	}
 }
@@ -235,26 +235,22 @@ eth_module = {
 	},
 
 	"react" : {
-		("speed_ok", False) :
-			Reaction(Danger("speed does not match requred speed", "descr", "speed", "_static_eth_speed_req").PrintParent("type", "node", "ip")),
+		Equals("speed_ok", False) :
+			Danger("speed does not match requred speed", "descr", "speed", "_static_eth_speed_req").PrintParent("type", "node", "ip"),
 
-		("duplex_ok", False) :
-			Reaction(Danger("duplex mode does not match requred mode", "descr", "duplex", "_static_eth_duplex_req").PrintParent("type", "node", "ip")),
+		Equals("duplex_ok", False) :
+			Danger("duplex mode does not match requred mode", "descr", "duplex", "_static_eth_duplex_req").PrintParent("type", "node", "ip"),
 
-		("check_rx_errors", False) :
-			Reaction(Warning("recieve errors growing fast for last 1000 seconds", "descr", "rx_errors").PrintParent("type", "node", "ip")
-				, delay = 1000),
+		Equals("check_rx_errors", False).Delay(1000) :
+			Warning("recieve errors growing fast for last 1000 seconds", "descr", "rx_errors").PrintParent("type", "node", "ip"),
 
-		("check_tx_errors", False) :
-			Reaction(Warning("transm errors growing fast for last 1000 seconds", "descr", "tx_errors").PrintParent("type", "node", "ip")
-				, delay = 1000),
+		Equals("check_tx_errors", False).Delay(1000) :
+			Warning("transm errors growing fast for last 1000 seconds", "descr", "tx_errors").PrintParent("type", "node", "ip"),
 
-		("check_tx_dropped", False) :
-			Reaction(Warning("tranms dropped growing fast for last 1000 seconds", "descr", "tx_dropped").PrintParent("type", "node", "ip")
-				, delay = 1000),
+		Equals("check_tx_dropped", False).Delay(1000) :
+			Warning("tranms dropped growing fast for last 1000 seconds", "descr", "tx_dropped").PrintParent("type", "node", "ip"),
 
-		("check_collisions", False) :
-			Reaction(Warning("collisions growing fast for last 1000 seconds", "descr", "collisions").PrintParent("type", "node", "ip")
-				, delay = 1000),
+		Equals("check_collisions", False).Delay(1000) :
+			Warning("collisions growing fast for last 1000 seconds", "descr", "collisions").PrintParent("type", "node", "ip"),
 	}
 }

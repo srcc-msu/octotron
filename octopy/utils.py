@@ -1,5 +1,18 @@
 import ru.parallel.octotron as octotron
 
+import collections
+
+def GetCollection(thing):
+	if isinstance(thing, (list, tuple)):
+		return thing
+	return (thing, )
+
+	"""next is the correct method, but is not working in jython"""
+	if isinstance(thing, collections.Iterable):
+		return thing
+	else:
+		return (thing,)
+
 def AttributesFromDict(attributes_dict):
 	res = []
 
@@ -29,14 +42,15 @@ def VaryingsFromDict(varyings_dict):
 def ReactionsFromDict(react_dict):
 	res = []
 
-	for (name, value), reactions in react_dict.items():
-		duplicates = set([x for x in reactions if reactions.count(x) > 1])
+	for event, response in react_dict.items():
+		collection = GetCollection(response)
 
-		if len(duplicates) > 0:
-			raise RuntimeError("duplicated reaction: " + name + ", " + str(value) + " : "  + str(duplicates))
-
-		for reaction in reactions:
-			res.append(octotron.core.OctoReaction(name, value, reaction.response, reaction.delay, reaction.repeat, reaction.recover))
+		if len(collection) == 2:
+			res.append(event.Response(collection[0]).RecoverResponse(collection[1]))
+		elif len(collection) == 1:
+			res.append(event.Response(collection[0]))
+		else:
+			raise RuntimeError("expected a single response or list/tuple with 2 responses, got: " + response)
 
 	return res
 
@@ -49,19 +63,6 @@ def ConvertVars(var):
 def ConvertReacts(react):
 	return ReactionsFromDict(react)
 
-import collections
-
-def GetIterable(thing):
-	if isinstance(thing, (list, tuple)):
-		return thing
-	return (thing, )
-
-	"""next is the correct method, but is not working in jython"""
-	if isinstance(thing, collections.Iterable):
-		return thing
-	else:
-		return (thing,)
-
 def MergeDicts(dicts):
 	result = collections.defaultdict(list)
 
@@ -70,7 +71,21 @@ def MergeDicts(dicts):
 			raise RuntimeError("dictionary is required, got: " + str(dicts))
 
 		for key, value in d.items():
-			for single in GetIterable(value):
+			for single in GetCollection(value):
 				result[key].append(single)
+
+	return result
+
+def MergeUniqueDicts(dicts):
+	result = collections.defaultdict(list)
+
+	for d in dicts:
+		if not isinstance(d, dict):
+			raise RuntimeError("dictionary is required, got: " + str(dicts))
+
+		for key, value in d.items():
+			if key in result:
+				raise RuntimeError("duplicated entry for: " + key)
+			result[key] = value
 
 	return result

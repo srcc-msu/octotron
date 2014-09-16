@@ -50,28 +50,28 @@ ups_snmp_module = {
 	},
 
 	"react" : {
-		("ups_capacity_ok", False) :
-			Reaction(Critical("ups: capacity is low", "type", "ip", "capacity")
+		Equals("ups_capacity_ok", False) :
+			(Critical("ups: capacity is low", "type", "ip", "capacity")
 				, Recover("ups: capacity is ok", "type", "ip", "capacity")),
 
-		("input_voltage_ok", False) :
-			Reaction(Critical("ups: low input voltage", "type", "ip", "input_voltage")
+		Equals("input_voltage_ok", False) :
+			(Critical("ups: low input voltage", "type", "ip", "input_voltage")
 				, Recover("ups: voltage is ok", "type", "ip", "input_voltage")),
 
-		("output_status_ok", False) :
-			Reaction(Critical("ups: status changed", "type", "ip", "output_status")
+		Equals("output_status_ok", False) :
+			(Critical("ups: status changed", "type", "ip", "output_status")
 				, Recover("ups: status is ok", "type", "ip", "output_status")),
 
-		("ups_temp_ok", False) :
-			Reaction(Danger("ups: temperature is too high", "type", "ip", "temp")
+		Equals("ups_temp_ok", False) :
+			(Danger("ups: temperature is too high", "type", "ip", "temp")
 				, Recover("ups: temperature is ok", "type", "ip", "temp")),
 
-		("ups_num_batteries_ok", False) :
-			Reaction(Danger("ups: lost some batteries", "type", "ip", "num_batteries")
+		Equals("ups_num_batteries_ok", False) :
+			(Danger("ups: lost some batteries", "type", "ip", "num_batteries")
 				, Recover("ups: obtained some batteries", "type", "ip", "num_batteries")),
 
-		("pm_good", False) :
-			Reaction(Danger("ups: power module failed", "type", "ip", "pm_ok", "pm_not", "pm_fail", "pm_ok_ref", "pm_not_ref", "pm_fail_ref")
+		Equals("pm_good", False) :
+			(Danger("ups: power module failed", "type", "ip", "pm_ok", "pm_not", "pm_fail", "pm_ok_ref", "pm_not_ref", "pm_fail_ref")
 				, Recover("ups: power modules are fine", "type", "ip", "pm_ok", "pm_not", "pm_fail", "pm_ok_ref", "pm_not_ref", "pm_fail_ref"))
 	}
 }
@@ -108,63 +108,68 @@ ups_snmp_trap_module = {
 		"powerModuleDecrease" : False,
 	},
 
-	"var" : {
-		"upsOverload_changed" : UpdatedRecently("upsOverload", 10),
-		"upsDiagnosticsFailed_changed" : UpdatedRecently("upsDiagnosticsFailed", 10),
-		"upsDischarged_changed" : UpdatedRecently("upsDischarged", 10),
-		"upsTurnedOff_changed" : UpdatedRecently("upsTurnedOff", 10),
-		"upsSleeping_changed" : UpdatedRecently("upsSleeping", 10),
-		"upsWokeUp_changed" : UpdatedRecently("upsWokeUp", 10),
-		"upsRebootStarted_changed" : UpdatedRecently("upsRebootStarted", 10),
-		"upsBatteryNeedsReplacement_changed" : UpdatedRecently("upsBatteryNeedsReplacement", 10),
-		"bypassPowerSupplyFailure_changed" : UpdatedRecently("bypassPowerSupplyFailure", 10),
-		"baseFanFailure_changed" : UpdatedRecently("baseFanFailure", 10),
-		"batteryPackCommLost_changed" : UpdatedRecently("batteryPackCommLost", 10),
-		"calibrationStart_changed" : UpdatedRecently("calibrationStart", 10),
-		"upsTurnedOn_changed" : UpdatedRecently("upsTurnedOn", 10),
-		"upsBatteryReplaced_changed" : UpdatedRecently("upsBatteryReplaced", 10),
-		"powerModuleIncrease_changed" : UpdatedRecently("powerModuleIncrease", 10),
-		"powerModuleDecrease_changed" : UpdatedRecently("powerModuleDecrease", 10),
-	},
-
 	"react" : {
-		("communicationLost", True) : Reaction(Danger("ups: communication lost", "type")
-			, Recover("ups: communication established", "type")),
+		Equals("communicationLost", True) :
+			(Danger("ups: communication lost", "type")
+				, Recover("ups: communication established", "type")),
 
-		("upsOnBattery", True) : Reaction(Critical("ups: power off, ups is on battary", "type", "ip")
-			, Recover("ups: power on", "type", "ip")),
+		Equals("upsOnBattery", True) :
+			(Critical("ups: power off, ups is on battary", "type", "ip")
+				, Recover("ups: power on", "type", "ip")),
 
-		("lowBattery", True) : Reaction(Critical("ups: low battery", "type", "ip")
-			, Recover("ups: battery is ok", "type", "ip")),
+		Equals("lowBattery", True) :
+			(Critical("ups: low battery", "type", "ip")
+				, Recover("ups: battery is ok", "type", "ip")),
 
-		("bypass", True) : Reaction(Danger("ups: up is on bypass", "type", "ip", "bypass_descr")
-			, Recover("ups: returned from bypass", "type", "ip")),
+		Equals("bypass", True) :
+			(Danger("ups: up is on bypass", "type", "ip", "bypass_descr")
+				, Recover("ups: returned from bypass", "type", "ip")),
 
-		("badVoltage", True) : Reaction(Critical("ups: bad voltage", "type", "ip")
-			, Recover("ups: voltage is ok", "type", "ip")),
-		("chargerFailure", True) : Reaction(Critical("ups: charger failure", "type", "ip")
-			, Recover("ups: charger is ok", "type", "ip")),
-		("batteryOverTemperature", True) : Reaction(Critical("ups: battery temperature is too high", "type", "ip")
-			, Recover("ups: battery temperature is ok", "type", "ip")),
+		Equals("badVoltage", True) :
+			(Critical("ups: bad voltage", "type", "ip")
+				, Recover("ups: voltage is ok", "type", "ip")),
+		Equals("chargerFailure", True) :
+			(Critical("ups: charger failure", "type", "ip")
+				, Recover("ups: charger is ok", "type", "ip")),
+		Equals("batteryOverTemperature", True) :
+			(Critical("ups: battery temperature is too high", "type", "ip")
+				, Recover("ups: battery temperature is ok", "type", "ip")),
 
-		("abnormalCondition", True) : Reaction(Critical("ups: abnormal condition", "type", "ip", "abnormalCondition_descr")
-			, Recover("ups: normal condition", "type", "ip", "abnormalCondition_descr")),
+		Equals("abnormalCondition", True) :
+			(Critical("ups: abnormal condition", "type", "ip", "abnormalCondition_descr")
+				, Recover("ups: normal condition", "type", "ip", "abnormalCondition_descr")),
 
-		("upsOverload_changed", True) : Reaction(Danger("ups trap: upsOverload", "type", "ip")),
-		("upsDiagnosticsFailed_changed", True) : Reaction(Danger("ups trap: upsDiagnosticsFailed", "type", "ip")),
-		("upsDischarged_changed", True) : Reaction(Danger("ups trap: upsDischarged", "type", "ip")),
-		("upsTurnedOff_changed", True) : Reaction(Danger("ups trap: upsTurnedOff", "type", "ip")),
-		("upsSleeping_changed", True) : Reaction(Danger("ups trap: upsSleeping", "type", "ip")),
-		("upsWokeUp_changed", True) : Reaction(Danger("ups trap: upsWokeUp", "type", "ip")),
-		("upsRebootStarted_changed", True) : Reaction(Danger("ups trap: upsRebootStarted", "type", "ip")),
-		("upsBatteryNeedsReplacement_changed", True) : Reaction(Danger("ups trap: upsBatteryNeedsReplacement", "type", "ip")),
-		("bypassPowerSupplyFailure_changed", True) : Reaction(Danger("ups trap: bypassPowerSupplyFailure", "type", "ip")),
-		("baseFanFailure_changed", True) : Reaction(Danger("ups trap: baseFanFailure", "type", "ip")),
-		("batteryPackCommLost_changed", True) : Reaction(Danger("ups trap: batteryPackCommLost", "type", "ip")),
-		("calibrationStart_changed", True) : Reaction(Danger("ups trap: calibrationStart", "type", "ip")),
-		("upsTurnedOn_changed", True) : Reaction(Danger("ups trap: upsTurnedOn", "type", "ip")),
-		("upsBatteryReplaced_changed", True) : Reaction(Danger("ups trap: upsBatteryReplaced", "type", "ip")),
-		("powerModuleIncrease_changed", True) : Reaction(Danger("ups trap: powerModuleIncrease", "type", "ip")),
-		("powerModuleDecrease_changed", True) : Reaction(Danger("ups trap: powerModuleDecrease", "type", "ip")),
+		Equals("upsOverload", True).Repeatable(True) :
+			Danger("ups trap: upsOverload", "type", "ip"),
+		Equals("upsDiagnosticsFailed", True).Repeatable(True) :
+			Danger("ups trap: upsDiagnosticsFailed", "type", "ip"),
+		Equals("upsDischarged", True).Repeatable(True) :
+			Danger("ups trap: upsDischarged", "type", "ip"),
+		Equals("upsTurnedOff", True).Repeatable(True) :
+			Danger("ups trap: upsTurnedOff", "type", "ip"),
+		Equals("upsSleeping", True).Repeatable(True) :
+			Danger("ups trap: upsSleeping", "type", "ip"),
+		Equals("upsWokeUp", True).Repeatable(True) :
+			Danger("ups trap: upsWokeUp", "type", "ip"),
+		Equals("upsRebootStarted", True).Repeatable(True) :
+			Danger("ups trap: upsRebootStarted", "type", "ip"),
+		Equals("upsBatteryNeedsReplacement", True).Repeatable(True) :
+			Danger("ups trap: upsBatteryNeedsReplacement", "type", "ip"),
+		Equals("bypassPowerSupplyFailure", True).Repeatable(True) :
+			Danger("ups trap: bypassPowerSupplyFailure", "type", "ip"),
+		Equals("baseFanFailure", True).Repeatable(True) :
+			Danger("ups trap: baseFanFailure", "type", "ip"),
+		Equals("batteryPackCommLost", True).Repeatable(True) :
+			Danger("ups trap: batteryPackCommLost", "type", "ip"),
+		Equals("calibrationStart", True).Repeatable(True) :
+			Danger("ups trap: calibrationStart", "type", "ip"),
+		Equals("upsTurnedOn", True).Repeatable(True) :
+			Danger("ups trap: upsTurnedOn", "type", "ip"),
+		Equals("upsBatteryReplaced", True).Repeatable(True) :
+			Danger("ups trap: upsBatteryReplaced", "type", "ip"),
+		Equals("powerModuleIncrease", True).Repeatable(True) :
+			Danger("ups trap: powerModuleIncrease", "type", "ip"),
+		Equals("powerModuleDecrease", True).Repeatable(True) :
+			Danger("ups trap: powerModuleDecrease", "type", "ip"),
 	}
 }

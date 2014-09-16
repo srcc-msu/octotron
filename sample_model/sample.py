@@ -17,7 +17,7 @@ nodes = CreateObjects(NODES
 	, lib_collectd.node_module)
 
 # assign to every object ip from the file
-CSVReader.Declare(nodes, "sample_src/ip.csv")
+CSVReader.Declare(nodes, "sample_model/ip.csv")
 
 # create 8 nodes and assign to them properties, declared in sample_lib.py
 cpus = CreateObjects(NODES * CPU_PER_NODE

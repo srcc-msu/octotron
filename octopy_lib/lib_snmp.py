@@ -9,9 +9,9 @@ snmp_general_module = {
 	},
 
 	"react" : {
-		("configChangeSNMP", False) : Reaction(Danger("SNMP trap: configChangeSNMP", "type")),
-		("accessViolationConsole", False) : Reaction(Danger("SNMP trap: accessViolationConsole", "type")),
-		("accessViolationHTTP", False) : Reaction(Danger("SNMP trap: accessViolationHTTP", "type")),
-		("passwordChange", False) : Reaction(Danger("SNMP trap: passwordChange", "type")),
+		Equals("configChangeSNMP", False) : Danger("SNMP trap: configChangeSNMP", "type"),
+		Equals("accessViolationConsole", False) : Danger("SNMP trap: accessViolationConsole", "type"),
+		Equals("accessViolationHTTP", False) : Danger("SNMP trap: accessViolationHTTP", "type"),
+		Equals("passwordChange", False) : Danger("SNMP trap: passwordChange", "type"),
 	}
 }

@@ -2,12 +2,8 @@ from octopy.utils import *
 
 import ru.parallel.octotron as octotron
 
-class Reaction(object):
-	def __init__(self, response, recover = None, delay = 0, repeat = 0):
-		self.response = response
-		self.recover = recover
-		self.delay = delay
-		self.repeat = repeat
+Equals = octotron.core.logic.impl.Equals
+NotEquals = octotron.core.logic.impl.NotEquals
 
 def Info(msg, *args):
 	return octotron.reactions.CommonReactions.Info(msg, *args)

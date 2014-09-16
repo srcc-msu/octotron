@@ -42,25 +42,25 @@ eth_port_snmp_module = {
 	},
 
 	"react" : {
-		("q_len_ok", False) :
-			Reaction(Warning("eth port queue length is growing for last 1000 seconds", "type", "if_id", "q_len").PrintParent("type", "ip"), delay = 1000),
+		Equals("q_len_ok", False).Delay(1000) :
+			Warning("eth port queue length is growing for last 1000 seconds", "type", "if_id", "q_len").PrintParent("type", "ip"),
 
-		("status_match", False) :
-			Reaction(Danger("port went down", "type", "if_id", "admin_status", "oper_status").PrintParent("type", "ip")
+		Equals("status_match", False) :
+			(Danger("port went down", "type", "if_id", "admin_status", "oper_status").PrintParent("type", "ip")
 				, Recover("port is up", "if_id", "admin_status", "oper_status").PrintParent("type", "ip")),
 
-		("duplex_match", False) :
-			Reaction(Danger("wrong duplex mode", "type", "if_id", "duplex", "_static_duplex_req").PrintParent("type", "ip")
+		Equals("duplex_match", False) :
+			(Danger("wrong duplex mode", "type", "if_id", "duplex", "_static_duplex_req").PrintParent("type", "ip")
 				, Recover("duplex is ok", "type", "if_id", "duplex", "_static_duplex_req").PrintParent("type", "ip")),
 
-		("speed_match", False) :
-			Reaction(Danger("port has a wrong speed", "type", "if_id", "speed", "speed_req").PrintParent("type", "ip")
+		Equals("speed_match", False) :
+			(Danger("port has a wrong speed", "type", "if_id", "speed", "speed_req").PrintParent("type", "ip")
 				, Recover("port speed is good", "if_id", "speed", "speed_req").PrintParent("type", "ip")),
 
-		("in_errors_ok", False) :
-			Reaction(Warning("in errors growing fast for last 1000 seconds", "type", "if_id", "eth_in_errors", "eth_in_errors_speed", "_static_eth_port_error_speed_max").PrintParent("type", "ip"), delay = 1000),
+		Equals("in_errors_ok", False).Delay(1000) :
+			Warning("in errors growing fast for last 1000 seconds", "type", "if_id", "eth_in_errors", "eth_in_errors_speed", "_static_eth_port_error_speed_max").PrintParent("type", "ip"),
 
-		("out_errors_ok", False) :
-			Reaction(Warning("out errors growing fast for last 1000 seconds", "type", "if_id", "eth_out_errors", "eth_out_errors_speed", "_static_eth_port_error_speed_max").PrintParent("type", "ip"), delay = 1000)
+		Equals("out_errors_ok", False).Delay(1000) :
+			Warning("out errors growing fast for last 1000 seconds", "type", "if_id", "eth_out_errors", "eth_out_errors_speed", "_static_eth_port_error_speed_max").PrintParent("type", "ip")
 	}
 }
