@@ -21,7 +21,7 @@ If you are interested in full source code - visit http://github.com/srcc-msu/oct
 - the system can be created and started on a windows system, but bash scripts will not work, unless you provide some kind of linux-like environment (not tested)
 
 #### Model description
-Every model is described by a python script, written using 'octopy' module (see [sample_src/sample.py](sample_src/sample.py)) and a user-provided json configuration file.
+Every model is described by a python script, written using 'octopy' module (see [sample_src/sample.py](sample_model/sample.py)) and a user-provided json configuration file.
 See [wiki](https://github.com/srcc-msu/octotron/wiki) for more information.
 
 #### Model creation with a Makefile
