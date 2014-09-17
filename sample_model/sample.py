@@ -34,4 +34,4 @@ cpus = CreateObjects(NODES * CPU_PER_NODE
 Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 
 # connect every node with 2 cpus
-EveryToChunks(nodes, cpus, ("contain", "chill"))
+EveryToChunks(nodes, cpus, ["contain", "chill"])
