@@ -192,15 +192,67 @@ memory_module = {
 
 	"react" : {
 		Equals("total_mem_ok", False) :
-			Danger("total mem reduced below check value", "mem_total", "req_mem").PrintParent("type", "node", "ip")
-				, Recover("total mem is ok", "mem_total", "req_mem").PrintParent("type", "node", "ip"))
+			(Danger("total mem reduced below check value", "total_mem", "req_mem").PrintParent("type", "node", "ip")
+				, Recover("total mem is ok", "total_mem", "req_mem").PrintParent("type", "node", "ip"))
 	}
 }
 
 #// ----------------------------------------- ETH --------------------------------------------
 
-eth_module = {
+ib_module = {
+	"sensor" : {
+		"state" : 0,
+		"physical_state" : 0,
 
+		"LinkRecovers" : 0,
+		"LinkDowned" : 0,
+
+		"SymbolErrors" : 0,
+		"RcvErrors" : 0,
+		"RcvRemotePhysErrors" : 0,
+		"RcvSwRelayErrors" : 0,
+		"XmtDiscards" : 0,
+		"XmtConstraintErrors" : 0,
+		"RcvConstraintErrors" : 0,
+		"LinkIntegrityErrors" : 0,
+		"ExcBufOverrunErrors" : 0,
+		"VL15Dropped" : 0,
+		"PortXmitData" : 0,
+		"PortRcvData" : 0,
+		"PortXmitPkts" : 0,
+		"PortRcvPkts" : 0,
+	},
+
+	"react" : {
+		NotEquals("state", 0) :
+			Danger("IB link problem: state").PrintParent("type", "node", "ip"),
+		NotEquals("physical_state", 0) :
+			Danger("IB link problem: physical state").PrintParent("type", "node", "ip"),
+
+		NotEquals("SymbolErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "SymbolErrors").PrintParent("type", "node", "ip"),
+		NotEquals("RcvErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "RcvErrors").PrintParent("type", "node", "ip"),
+		NotEquals("RcvRemotePhysErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "RcvRemotePhysErrors").PrintParent("type", "node", "ip"),
+		NotEquals("RcvSwRelayErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "RcvSwRelayErrors").PrintParent("type", "node", "ip"),
+		NotEquals("XmtDiscards", 0).Repeatable(True) :
+			Warning("IB errros growing", "XmtDiscards").PrintParent("type", "node", "ip"),
+		NotEquals("XmtConstraintErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "XmtConstraintErrors").PrintParent("type", "node", "ip"),
+		NotEquals("RcvConstraintErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "RcvConstraintErrors").PrintParent("type", "node", "ip"),
+		NotEquals("LinkIntegrityErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "LinkIntegrityErrors").PrintParent("type", "node", "ip"),
+		NotEquals("ExcBufOverrunErrors", 0).Repeatable(True) :
+			Warning("IB errros growing", "ExcBufOverrunErrors").PrintParent("type", "node", "ip"),
+		NotEquals("VL15Dropped", 0).Repeatable(True) :
+			Warning("IB errros growing", "VL15Dropped").PrintParent("type", "node", "ip"),
+	}
+}
+
+eth_module = {
 	"static" : {
 		"_static_eth_err_speed_thr" : 10.0,
 
