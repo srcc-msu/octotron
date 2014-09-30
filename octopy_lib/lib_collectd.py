@@ -184,14 +184,16 @@ memory_module = {
 	},
 
 	"var" : {
-	#	"mem_total_ok" : LowerArgThreshold("mem_total", "req_mem"),
-	#	"cd_memory_err_cnt" : CheckBoolRules("mem_total_ok")
+		"total_mem" : AggregateLongSum(EDependencyType.SELF
+			, "buffered", "cached", "free", "used"),
+		"total_mem_ok" : LowerArgThreshold("total_mem", "req_mem"),
+
 	},
 
 	"react" : {
-	#	Equals("mem_total_ok", False) :
-	#		Danger("total mem reduced below check value", "mem_total", "req_mem").PrintParent("type", "node", "ip")
-	#			, Recover("total mem is ok", "mem_total", "req_mem").PrintParent("type", "node", "ip"))
+		Equals("total_mem_ok", False) :
+			Danger("total mem reduced below check value", "mem_total", "req_mem").PrintParent("type", "node", "ip")
+				, Recover("total mem is ok", "mem_total", "req_mem").PrintParent("type", "node", "ip"))
 	}
 }
 
