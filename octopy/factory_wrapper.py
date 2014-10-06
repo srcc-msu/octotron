@@ -24,9 +24,9 @@ def CreateObjects(count, *modules):
 def UpdateObject(object, *modules):
 	params = MergeDicts(modules)
 
-	object.DeclareConstants(ConvertAttributes(MergeDicts(params["const"])))
-	object.DeclareConstants(ConvertAttributes(MergeDicts(params["static"])))
-	object.DeclareSensors(ConvertAttributes(MergeDicts(params["sensor"])))
-	object.DeclareVaryings(ConvertVars(MergeDicts(params["var"])))
+	object.GetBuilder().DeclareConst(ConvertAttributes(MergeDicts(params["const"])))
+	object.GetBuilder().DeclareConst(ConvertAttributes(MergeDicts(params["static"])))
+	object.GetBuilder().DeclareSensor(ConvertAttributes(MergeDicts(params["sensor"])))
+	object.GetBuilder().DeclareVar(ConvertVars(MergeDicts(params["var"])))
 
-	object.AddReactions(ConvertReacts(MergeUniqueDicts(params["react"])))
+	object.GetBuilder().AddReaction(ConvertReacts(MergeUniqueDicts(params["react"])))
