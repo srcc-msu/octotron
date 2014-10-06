@@ -1,6 +1,6 @@
-import ru.parallel.octotron as octotron
-
 import collections
+
+from ru.parallel.octotron.core.primitive import SimpleAttribute
 
 def GetCollection(thing):
 	if isinstance(thing, (list, tuple)):
@@ -21,7 +21,7 @@ def AttributesFromDict(attributes_dict):
 			raise RuntimeError("duplicated attribute: " + name + " : " + str(value))
 		value = value[0]
 
-		res.append(octotron.core.primitive.SimpleAttribute(name, value))
+		res.append(SimpleAttribute(name, value))
 
 	return res
 

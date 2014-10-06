@@ -1,7 +1,18 @@
 {
-	"db" :
+	"model" :
 	{
 		"name" : "sample",
+		"path" : "../octotron/sample_model",
+		"main" : "sample.py"
+	},
+
+	"sys" :
+	{
+		"path" : "../octotron/"
+	},
+
+	"db" :
+	{
 		"path" : "dbs/"
 	},
 

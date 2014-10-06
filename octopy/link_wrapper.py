@@ -1,13 +1,13 @@
-from octopy.system import SystemCtx
 from octopy.utils import *
+from ru.parallel.octotron.core.collections import ModelLinkList
+from ru.parallel.octotron.core.primitive import SimpleAttribute
+from ru.parallel.octotron.generators import LinkFactory
 
 import java.lang
 import jarray
 
-import ru.parallel.octotron as octotron
-
 def GetLinkFactory(params, type):
-	factory = octotron.generators.LinkFactory()
+	factory = LinkFactory()
 
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
@@ -15,7 +15,7 @@ def GetLinkFactory(params, type):
 	factory = factory.Varyings (ConvertVars(MergeDicts(params["var"])))
 	factory = factory.Reactions(ConvertReacts(MergeDicts(params["react"])))
 
-	return factory.Constants(octotron.core.primitive.SimpleAttribute("type", type))
+	return factory.Constants(SimpleAttribute("type", type))
 
 def CallFactoryMethod(factory, name, args):
 	arg_types = []
@@ -36,14 +36,13 @@ def CallFactoryMethod(factory, name, args):
 def Call(name, types, modules, *args):
 	params = MergeDicts(modules)
 
-	result = octotron.core.model.collections.ModelLinkList()
+	result = ModelLinkList()
 
 	for type in GetCollection(types):
 		factory = GetLinkFactory(params, type)
 
 		links = CallFactoryMethod(factory, name, args)
 
-		SystemCtx.Debug("created " + str(links.size()) + " links for type " + type)
 		result.append(links)
 
 	return result
@@ -51,14 +50,13 @@ def Call(name, types, modules, *args):
 def CallSingle(types, modules, *args):
 	params = MergeDicts(modules)
 
-	result = octotron.core.model.impl.ModelLinkList()
+	result = ModelLinkList()
 
 	for type in GetCollection(types):
 		factory = GetLinkFactory(params, type)
 
 		link = CallFactoryMethod(factory, "OneToOne", args)
 
-		SystemCtx.Debug("created 1 link for type " + type)
 		result.add(link)
 
 	return result

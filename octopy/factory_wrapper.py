@@ -1,7 +1,8 @@
-from octopy.system import SystemCtx
 from octopy.utils import *
 
-import ru.parallel.octotron as octotron
+from ru.parallel.octotron.generators import Enumerator
+from ru.parallel.octotron.generators import CSVReader
+from ru.parallel.octotron.generators import ObjectFactory
 
 def CreateObject(*modules):
 	return CreateObjects(1, *modules).Only()
@@ -9,7 +10,7 @@ def CreateObject(*modules):
 def CreateObjects(count, *modules):
 	params = MergeDicts(modules)
 
-	factory = octotron.generators.ObjectFactory()
+	factory = ObjectFactory()
 
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
@@ -18,12 +19,7 @@ def CreateObjects(count, *modules):
 
 	factory = factory.Reactions(ConvertReacts(MergeUniqueDicts(params["react"])))
 
-	SystemCtx.Debug("created list with %d objects" % count)
-
 	return factory.Create(count)
-
-Enumerator = octotron.generators.Enumerator
-CSVReader = octotron.generators.CSVReader
 
 def UpdateObject(object, *modules):
 	params = MergeDicts(modules)

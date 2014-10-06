@@ -1,21 +1,9 @@
 from octopy.utils import *
+from ru.parallel.octotron.core.logic.impl import Equals
+from ru.parallel.octotron.core.logic.impl import NotEquals
 
-import ru.parallel.octotron as octotron
-
-Equals = octotron.core.logic.impl.Equals
-NotEquals = octotron.core.logic.impl.NotEquals
-
-def Info(msg, *args):
-	return octotron.reactions.CommonReactions.Info(msg, *args)
-
-def Warning(msg, *args):
-	return octotron.reactions.CommonReactions.Warning(msg, *args)
-
-def Danger(msg, *args):
-	return octotron.reactions.CommonReactions.Danger(msg, *args)
-
-def Critical(msg, *args):
-	return octotron.reactions.CommonReactions.Critical(msg, *args)
-
-def Recover(msg, *args):
-	return octotron.reactions.CommonReactions.Recover(msg, *args)
+from ru.parallel.octotron.reactions.CommonReactions import Info
+from ru.parallel.octotron.reactions.CommonReactions import Warning
+from ru.parallel.octotron.reactions.CommonReactions import Danger
+from ru.parallel.octotron.reactions.CommonReactions import Critical
+from ru.parallel.octotron.reactions.CommonReactions import Recover

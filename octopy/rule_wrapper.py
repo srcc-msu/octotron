@@ -1,6 +1,7 @@
-import ru.parallel.octotron as octotron
 import java.lang
 import jarray
+
+from ru.parallel.octotron.core.primitive import EDependencyType
 
 OCTO_PACKAGE = "ru.parallel.octotron"
 
@@ -126,5 +127,3 @@ class VarArgMatch(Rule):
 class LinkedVarArgMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
-
-import ru.parallel.octotron.core.primitive.EDependencyType as EDependencyType
