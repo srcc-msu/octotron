@@ -8,11 +8,11 @@ link_module = {
 
 	"react" : {
 		Equals("duplex_match", False) :
-			(Danger("mismatch duplex mode on two sides of the link", "type")
-				, Recover("duplex on the link is ok", "type")),
+			(Danger("ETH", "mismatch duplex mode on two sides of the link")
+				, Recover("duplex on the link is ok")),
 
 		Equals("speed_match", False) :
-			(Danger("mismatch speed on two sides of the link", "type")
-				, Recover("speed on the link is ok", "type")),
+			(Danger("ETH", "mismatch speed on two sides of the link")
+				, Recover("speed on the link is ok")),
 	}
 }

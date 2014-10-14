@@ -9,9 +9,13 @@ snmp_general_module = {
 	},
 
 	"react" : {
-		Equals("configChangeSNMP", False) : Danger("SNMP trap: configChangeSNMP", "type"),
-		Equals("accessViolationConsole", False) : Danger("SNMP trap: accessViolationConsole", "type"),
-		Equals("accessViolationHTTP", False) : Danger("SNMP trap: accessViolationHTTP", "type"),
-		Equals("passwordChange", False) : Danger("SNMP trap: passwordChange", "type"),
+		Equals("configChangeSNMP", False) :
+			Danger("INFRASTRUCUTRE", "SNMP trap: configChangeSNMP"),
+		Equals("accessViolationConsole", False) :
+			Danger("INFRASTRUCUTRE", "SNMP trap: accessViolationConsole"),
+		Equals("accessViolationHTTP", False) :
+			Danger("INFRASTRUCUTRE", "SNMP trap: accessViolationHTTP"),
+		Equals("passwordChange", False) :
+			Danger("INFRASTRUCUTRE", "SNMP trap: passwordChange"),
 	}
 }

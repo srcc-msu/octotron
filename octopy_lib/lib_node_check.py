@@ -14,27 +14,27 @@ node_check_module = {
 
 	"react" : {
 		Equals("chk_ssh", False) :
-			(Critical("node failure: ssh", "type", "node", "ip"), Recover("node is good: ssh", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: ssh"), Recover("{node} is good: ssh")),
 
 		Equals("chk_ping", False) :
-			(Critical("node failure: ping", "type", "node", "ip"), Recover("node is good: ping", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: ping"), Recover("{node} is good: ping")),
 
 		Equals("chk_mpi", False) :
-			(Critical("node failure: mpi", "type", "node", "ip"), Recover("node is good: mpi", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: mpi"), Recover("{node} is good: mpi")),
 
 		Equals("chk_mem", False) :
-			(Critical("node failure: mem", "type", "node", "ip"), Recover("node is good: mem", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: mem"), Recover("{node} is good: mem")),
 
 		Equals("chk_ib", False) :
-			(Critical("node failure: ib", "type", "node", "ip"), Recover("node is good: ib", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: ib"), Recover("{node} is good: ib")),
 
 		Equals("chk_disk", False) :
-			(Critical("node failure: disk", "type", "node", "ip"), Recover("node is good: disk", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: disk"), Recover("{node} is good: disk")),
 
 		Equals("chk_tmp", False) :
-			(Critical("node failure: tmp", "type", "node", "ip"), Recover("node is good: tmp", "type", "node", "ip")),
+			(Critical("NODE", "{node} failure: tmp"), Recover("{node} is good: tmp")),
 
 		Equals("ib_visible", False) :
-			(Critical("node is not visible in SubNet manager", "type", "node", "ip"), Recover("node is visible in SubNet manager again", "type", "node", "ip"))
+			(Critical("NODE", "{node} is not visible in SubNet manager"), Recover("{node} is visible in SubNet manager again"))
 	}
 }

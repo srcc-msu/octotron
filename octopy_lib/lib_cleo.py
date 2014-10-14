@@ -42,21 +42,21 @@ cleo_module = {
 
 	"react" : {
 		Equals("tasks_total_ok", False) :
-			Warning("total tasks count is low", "type", "queue_name", "tasks_total"),
+			Warning("QUEUE", "total tasks count is low({tasks_total}) in queue {queue_name}"),
 
 		Equals("tasks_running_ok", False) :
-			Warning("running tasks count is low", "type", "queue_name", "tasks_running"),
+			Warning("QUEUE", "running tasks count is low({tasks_running}) in queue {queue_name}"),
 
 		Equals("tasks_queued_ok", False) :
-			Warning("queued tasks count is low", "type", "queue_name", "tasks_queued"),
+			Warning("QUEUE", "queued tasks count is low({tasks_queued}) in queue {queue_name}"),
 
 		Equals("cpus_total_free_ok", False) :
-			Danger("too many free cpus", "type", "queue_name", "cpus_total_free"),
+			Danger("QUEUE", "too many free cpus({cpus_total_free}) in queue {queue_name}"),
 
 		Equals("cpus_total_number_ok", False) :
-			Danger("the queue has lost some cpus", "type", "queue_name", "cpus_total_number"),
+			Danger("QUEUE", "the queue has lost some cpus({cpus_total_number}) in queue {queue_name}"),
 
 		Equals("cpus_blocked_count_ok", False) :
-			Danger("too many blocked cpus", "type", "queue_name", "cpus_blocked_count")
+			Danger("QUEUE", "too many blocked cpus({cpus_blocked_count}) in queue {queue_name}")
 	}
 }

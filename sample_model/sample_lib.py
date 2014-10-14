@@ -26,8 +26,8 @@ my_module = {
 	# than "temp_max"
 	# invoke the Recover() reaction when "temperature" lowers
 		Equals("temp_ok", False).Repeatable() :
-			(Danger("very high cpu temperature", "temperature").PrintParent("type", "ip")
-				, Recover("temperature is back to normal", "temperature").PrintParent("type", "ip"))
+			(Danger("TEMPERATURE", "very high cpu temperature: {temperature}")
+				, Recover("TEMPERATURE", "temperature is back to normal: {temperature}"))
 	}
 }
 
@@ -52,5 +52,5 @@ my_react = {
 	# invoke the Warning() reaction when "avg_load" becomes greater
 	# than "load_max" and stays so for 60 or more seconds
 		Equals("load_ok", False).Delay(60) :
-			Warning("high cpu load for last minute", "avg_load").PrintParent("type", "ip")
+			Warning("high cpu load for last minute: {avg_load}")
 }

@@ -2,25 +2,20 @@
 	"model" :
 	{
 		"name" : "sample",
-		"path" : "../octotron/sample_model",
+		"path" : "sample_model",
 		"main" : "sample.py"
 	},
 
-	"sys" :
+	"system" :
 	{
-		"path" : "../octotron/"
+		"path" : "",
+		"log_dir" : "log/"
 	},
 
 	"db" :
 	{
 		"path" : "dbs/"
 	},
-
-    "logs" :
-    {
-        "all" : "log/all.log",
-        "errors" : "log/errors.log"
-    },
 
     "scripts" :
     {

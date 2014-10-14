@@ -57,12 +57,12 @@ panasas_blade_module = {
 
 	"reaction" : {
 		Equals("status", "warning") :
-			(Danger("warning on panasas blade", "type", "uid", "status")
-				, Recover("panasas blade is ok", "type", "uid", "status")),
+			(Danger("STORAGE", "warning on panasas blade {uid}")
+				, Recover("panasas blade is ok {uid}")),
 
 		Equals("status", "offline") :
-			(Danger("panasas blade went offline", "type", "uid", "status")
-				, Recover("panasas blade is ok", "type", "uid", "status")),
+			(Danger("STORAGE", "panasas blade went offline {uid}")
+				, Recover("panasas blade is ok {uid}")),
 	}
 }
 

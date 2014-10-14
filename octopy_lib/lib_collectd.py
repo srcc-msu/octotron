@@ -31,26 +31,26 @@ disk_module = {
 
 	"react" : {
 		Equals("current_pending_sector_ok", False) :
-			Warning("current_pending_sector > 0", "type", "current_pending_sector").PrintParent("type", "node", "ip"),
+			Warning("DISK", "current_pending_sector growing : {current_pending_sector}").PrintParent("type", "node", "ip"),
 
 		Equals("offline_uncorrectable_ok", False) :
-			Warning("offline_uncorrectable > 0", "type", "offline_uncorrectable").PrintParent("type", "node", "ip"),
+			Warning("DISK", "offline_uncorrectable growing : {offline_uncorrectable}").PrintParent("type", "node", "ip"),
 
 		Equals("reallocated_sector_ct_ok", False) :
-			Warning("reallocated_sector_ct > 0", "type", "reallocated_sector_ct").PrintParent("type", "node", "ip"),
+			Warning("DISK", "reallocated_sector_ct growing : {reallocated_sector_ct}").PrintParent("type", "node", "ip"),
 
 		Equals("reported_uncorrect_ok", False) :
-			Warning("reported_uncorrect > 0", "type", "reported_uncorrect").PrintParent("type", "node", "ip"),
+			Warning("DISK", "reported_uncorrect growing : {reported_uncorrect}").PrintParent("type", "node", "ip"),
 
 		Equals("spin_retry_count_ok", False) :
-			Warning("spin_retry_count > 0", "type", "spin_retry_count").PrintParent("type", "node", "ip"),
+			Warning("DISK", "spin_retry_count growing : {spin_retry_count}").PrintParent("type", "node", "ip"),
 
 		Equals("udma_crc_error_count_ok", False) :
-			Warning("udma_crc_error_count > 0", "type", "spin_retry_count").PrintParent("type", "node", "ip"),
+			Warning("DISK", "udma_crc_error_count growing : {spin_retry_count}").PrintParent("type", "node", "ip"),
 
 		Equals("temp_ok", False) :
-			(Danger("disk temperature is above threshold", "type", "temperature_celsius").PrintParent("type", "node", "ip")
-				, Recover("disk temperature is back to normal", "type", "temperature_celsius").PrintParent("type", "node", "ip"))
+			(Danger("TEMPERATURE", "disk temperature is above threshol({temperature_celsius})").PrintParent("type", "node", "ip")
+				, Recover("disk temperature is back to normal({temperature_celsius})").PrintParent("type", "node", "ip"))
 	}
 }
 
@@ -109,39 +109,46 @@ node_module = {
 
 	"react" : {
 		Equals("fork_rate_ok", False).Delay(1000) :
-			Warning("High fork rate on node for last 1000 seconds", "type", "node", "ip", "forks", "fork_rate", "_static_fork_rate_thr"),
+			Warning("NODE", "High fork rate on {node} for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"),
 
 		Equals("zombies_ok", False).Delay(1000) :
-			Warning("Zombie processes present for last 1000 seconds, run for your life!", "type", "node", "ip", "zombies"),
+			Warning("NODE", "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
 
 		Equals("la_1_acceptable", False).Delay(1000) :
-			(Warning("LA on on the node exceeded threshold 1 for last 1000 seconds", "type", "node", "ip", "la_1", "_static_la_thr1")
-				, Recover("LA is back to normal", "type", "node", "ip", "la_1")),
+			(Warning("NODE", "LA({la_1}) on {node} exceeded threshold 1 for last 1000 seconds")
+				, Recover("LA({la_1}) on {node} is back to normal")),
 
 		Equals("la_1_sane", False) :
-			Danger("LA on on the node exceeded threshold 2 for last 1000 seconds", "type", "node", "ip", "la_1", "_static_la_thr2"),
+			Danger("NODE", "LA({la_1}) on {node} exceeded threshold 2 for last 1000 seconds"),
 
 		Equals("check_tmp_ok", False) :
-			(Danger("could not access tmp on node", "type", "node", "ip"), Recover("tmp on node is accessible again", "type", "node", "ip")),
+			(Danger("NODE", "could not access tmp on {node}")
+				, Recover("tmp on {node} is accessible again")),
 		Equals("check_home_ok", False) :
-			(Danger("could not access home on node", "type", "node", "ip"), Recover("home on node is accessible again", "type", "node", "ip")),
+			(Danger("NODE", "could not access home on {node}")
+				, Recover("home on {node} is accessible again")),
 		Equals("check_clean_ok", False) :
-			(Danger("could not remove file on node", "type", "node", "ip"), Recover("remove file on node worked", "type", "node", "ip")),
+			(Danger("NODE", "could not remove file on {node}")
+				, Recover("remove file on {node} worked")),
 
 		Equals("check_nmond_ok", False) :
-			(Danger("hopsa agent(nmond) not found", "type", "node", "ip"), Recover("hopsa agent(nmond) found", "type", "node", "ip")),
+			(Danger("NODE", "hopsa agent(nmond) not found on {node}")
+				, Recover("hopsa agent(nmond) found on {node}")),
 
 		Equals("ntpd_drift_ok_1", False) :
-			(Danger("ntpd drift is too big", "type", "node", "ip", "ntpd_drift"), Recover("ntpd drift is ok", "type", "node", "ip", "ntpd_drift")),
+			(Danger("NODE", "ntpd drift({ntpd_drift}) on {node} is too big", "ntpd_drift")
+				, Recover("ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("ntpd_drift_ok_2", False) :
-			(Danger("ntpd drift is too big", "type", "node", "ip", "ntpd_drift"), Recover("ntpd drift is ok", "type", "node", "ip", "ntpd_drift")),
+			(Danger("NODE", "ntpd drift({ntpd_drift}) on {node} is too big", "ntpd_drift")
+				, Recover("ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("temp_ok", False) :
-			(Warning("bad system temp on node", "type", "node", "ip", "temp"), Recover("system temp on node is ok", "type", "node", "ip", "temp")),
+			(Warning("TEMPERATURE", "bad system temp on {node}")
+				, Recover("system temp on {node} is ok")),
 
 		Equals("temp_acceptable", False) :
-			Critical("critical system temp on node", "type", "node", "ip", "temp")
+			Critical("TEMPERATURE", "critical system temp on {node}")
 	}
 }
 
@@ -165,11 +172,11 @@ cpu_module = {
 
 	"react" : {
 		Equals("cpu_temp_ok", False) :
-			(Warning("bad cpu temp", "type", "lid", "temp").PrintParent("type", "node", "ip")
-				, Recover("cpu temp is ok now", "type", "lid", "temp").PrintParent("type", "node", "ip")),
+			(Warning("TEMPERATURE", "bad cpu temp({temp})").PrintParent("type", "node", "ip")
+				, Recover("cpu temp({temp}) is ok now ").PrintParent("type", "node", "ip")),
 
 		Equals("cpu_temp_acceptable", False) :
-			Critical("critical cpu temp", "type", "lid", "temp").PrintParent("type", "node", "ip")
+			Critical("TEMPERATURE", "critical cpu temp({temp})").PrintParent("type", "node", "ip")
 	}
 }
 
@@ -192,8 +199,8 @@ memory_module = {
 
 	"react" : {
 		Equals("total_mem_ok", False) :
-			(Danger("total mem reduced below check value", "total_mem", "req_mem").PrintParent("type", "node", "ip")
-				, Recover("total mem is ok", "total_mem", "req_mem").PrintParent("type", "node", "ip"))
+			(Danger("MEM", "total mem({total_mem}) reduced below check value({req_mem})").PrintParent("type", "node", "ip")
+				, Recover("total mem({total_mem}) is ok").PrintParent("type", "node", "ip"))
 	}
 }
 
@@ -225,30 +232,30 @@ ib_module = {
 
 	"react" : {
 		NotEquals("state", 0) :
-			Danger("IB link problem: state").PrintParent("type", "node", "ip"),
+			Danger("IB", "IB link problem: state").PrintParent("type", "node", "ip"),
 		NotEquals("physical_state", 0) :
-			Danger("IB link problem: physical state").PrintParent("type", "node", "ip"),
+			Danger("IB", "IB link problem: physical state").PrintParent("type", "node", "ip"),
 
 		NotEquals("SymbolErrors", 0).Repeatable() :
-			Warning("IB errros growing", "SymbolErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: SymbolErrors = {SymbolErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("RcvErrors", 0).Repeatable() :
-			Warning("IB errros growing", "RcvErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: RcvErrors = {RcvErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("RcvRemotePhysErrors", 0).Repeatable() :
-			Warning("IB errros growing", "RcvRemotePhysErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: RcvRemotePhysErrors = {RcvRemotePhysErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("RcvSwRelayErrors", 0).Repeatable() :
-			Warning("IB errros growing", "RcvSwRelayErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: RcvSwRelayErrors = {RcvSwRelayErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("XmtDiscards", 0).Repeatable() :
-			Warning("IB errros growing", "XmtDiscards").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: XmtDiscards = {XmtDiscards}").PrintParent("type", "node", "ip"),
 		NotEquals("XmtConstraintErrors", 0).Repeatable() :
-			Warning("IB errros growing", "XmtConstraintErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: XmtConstraintErrors = {XmtConstraintErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("RcvConstraintErrors", 0).Repeatable() :
-			Warning("IB errros growing", "RcvConstraintErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: RcvConstraintErrors = {RcvConstraintErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("LinkIntegrityErrors", 0).Repeatable() :
-			Warning("IB errros growing", "LinkIntegrityErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: LinkIntegrityErrors = {LinkIntegrityErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("ExcBufOverrunErrors", 0).Repeatable() :
-			Warning("IB errros growing", "ExcBufOverrunErrors").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: ExcBufOverrunErrors = {ExcBufOverrunErrors}").PrintParent("type", "node", "ip"),
 		NotEquals("VL15Dropped", 0).Repeatable() :
-			Warning("IB errros growing", "VL15Dropped").PrintParent("type", "node", "ip"),
+			Warning("IB", "IB errros growing: VL15Dropped = {VL15Dropped}").PrintParent("type", "node", "ip"),
 	}
 }
 
@@ -290,21 +297,21 @@ eth_module = {
 
 	"react" : {
 		Equals("speed_ok", False) :
-			Danger("speed does not match requred speed", "descr", "speed", "_static_eth_speed_req").PrintParent("type", "node", "ip"),
+			Danger("ETH", "speed({speed}) does not match requred speed({_static_eth_speed_req})").PrintParent("type", "node", "ip"),
 
 		Equals("duplex_ok", False) :
-			Danger("duplex mode does not match requred mode", "descr", "duplex", "_static_eth_duplex_req").PrintParent("type", "node", "ip"),
+			Danger("ETH", "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req})").PrintParent("type", "node", "ip"),
 
 		Equals("check_rx_errors", False).Delay(1000) :
-			Warning("recieve errors growing fast for last 1000 seconds", "descr", "rx_errors").PrintParent("type", "node", "ip"),
+			Warning("ETH", "recieve errors({rx_errors}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
 
 		Equals("check_tx_errors", False).Delay(1000) :
-			Warning("transm errors growing fast for last 1000 seconds", "descr", "tx_errors").PrintParent("type", "node", "ip"),
+			Warning("ETH", "transm errors({tx_errors}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
 
 		Equals("check_tx_dropped", False).Delay(1000) :
-			Warning("tranms dropped growing fast for last 1000 seconds", "descr", "tx_dropped").PrintParent("type", "node", "ip"),
+			Warning("ETH", "tranms dropped({tx_dropped}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
 
 		Equals("check_collisions", False).Delay(1000) :
-			Warning("collisions growing fast for last 1000 seconds", "descr", "collisions").PrintParent("type", "node", "ip"),
+			Warning("ETH", "collisions({collisions}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
 	}
 }
