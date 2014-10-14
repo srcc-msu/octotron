@@ -8,17 +8,12 @@ OCTO_PACKAGE = "ru.parallel.octotron"
 class Rule(object):
 	def __init__(self, args):
 		self.args = args
-		self.arg_name = None
-
-	def SetArgName(self, arg_name):
-		self.arg_name = arg_name
 
 	def GetOcto(self):
-		params = (self.arg_name,) + self.args
 		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__)
 		cons = c.getConstructors()[0]
 
-		return cons.newInstance(*params)
+		return cons.newInstance(*self.args)
 
 class AggregateDoubleSum(Rule):
 	def __init__(self, arg1, *arg2):

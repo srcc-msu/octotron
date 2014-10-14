@@ -119,7 +119,7 @@ fan_snmp_trap_module = {
 	},
 
 	"react" : {
-		Equals("airWarningCondition_24", True).Repeatable(True) :
+		Equals("airWarningCondition_24", True).Repeatable() :
 			Warning("Frequent Humidifier faults", "type", "ip", "airWarningCondition_24_descr"),
 
 		Equals("pump_fault", True) :

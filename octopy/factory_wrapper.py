@@ -1,7 +1,7 @@
 from octopy.utils import *
 
-from ru.parallel.octotron.generators import Enumerator
-from ru.parallel.octotron.generators import CSVReader
+#from ru.parallel.octotron.generators import Enumerator
+#from ru.parallel.octotron.generators import CSVReader
 from ru.parallel.octotron.generators import ObjectFactory
 
 def CreateObject(*modules):
@@ -10,7 +10,7 @@ def CreateObject(*modules):
 def CreateObjects(count, *modules):
 	params = MergeDicts(modules)
 
-	factory = ObjectFactory()
+	factory = ObjectFactory(context.model_service)
 
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
@@ -24,9 +24,9 @@ def CreateObjects(count, *modules):
 def UpdateObject(object, *modules):
 	params = MergeDicts(modules)
 
-	object.GetBuilder().DeclareConst(ConvertAttributes(MergeDicts(params["const"])))
-	object.GetBuilder().DeclareConst(ConvertAttributes(MergeDicts(params["static"])))
-	object.GetBuilder().DeclareSensor(ConvertAttributes(MergeDicts(params["sensor"])))
-	object.GetBuilder().DeclareVar(ConvertVars(MergeDicts(params["var"])))
+	object.GetBuilder(context.model_service).DeclareConst(ConvertAttributes(MergeDicts(params["const"])))
+	object.GetBuilder(context.model_service).DeclareConst(ConvertAttributes(MergeDicts(params["static"])))
+	object.GetBuilder(context.model_service).DeclareSensor(ConvertAttributes(MergeDicts(params["sensor"])))
+	object.GetBuilder(context.model_service).DeclareVar(ConvertVars(MergeDicts(params["var"])))
 
-	object.GetBuilder().AddReaction(ConvertReacts(MergeUniqueDicts(params["react"])))
+	object.GetBuilder(context.model_service).AddReaction(ConvertReacts(MergeUniqueDicts(params["react"])))

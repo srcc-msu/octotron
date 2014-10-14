@@ -139,37 +139,37 @@ ups_snmp_trap_module = {
 			(Critical("ups: abnormal condition", "type", "ip", "abnormalCondition_descr")
 				, Recover("ups: normal condition", "type", "ip", "abnormalCondition_descr")),
 
-		Equals("upsOverload", True).Repeatable(True) :
+		Equals("upsOverload", True).Repeatable() :
 			Danger("ups trap: upsOverload", "type", "ip"),
-		Equals("upsDiagnosticsFailed", True).Repeatable(True) :
+		Equals("upsDiagnosticsFailed", True).Repeatable() :
 			Danger("ups trap: upsDiagnosticsFailed", "type", "ip"),
-		Equals("upsDischarged", True).Repeatable(True) :
+		Equals("upsDischarged", True).Repeatable() :
 			Danger("ups trap: upsDischarged", "type", "ip"),
-		Equals("upsTurnedOff", True).Repeatable(True) :
+		Equals("upsTurnedOff", True).Repeatable() :
 			Danger("ups trap: upsTurnedOff", "type", "ip"),
-		Equals("upsSleeping", True).Repeatable(True) :
+		Equals("upsSleeping", True).Repeatable() :
 			Danger("ups trap: upsSleeping", "type", "ip"),
-		Equals("upsWokeUp", True).Repeatable(True) :
+		Equals("upsWokeUp", True).Repeatable() :
 			Danger("ups trap: upsWokeUp", "type", "ip"),
-		Equals("upsRebootStarted", True).Repeatable(True) :
+		Equals("upsRebootStarted", True).Repeatable() :
 			Danger("ups trap: upsRebootStarted", "type", "ip"),
-		Equals("upsBatteryNeedsReplacement", True).Repeatable(True) :
+		Equals("upsBatteryNeedsReplacement", True).Repeatable() :
 			Danger("ups trap: upsBatteryNeedsReplacement", "type", "ip"),
-		Equals("bypassPowerSupplyFailure", True).Repeatable(True) :
+		Equals("bypassPowerSupplyFailure", True).Repeatable() :
 			Danger("ups trap: bypassPowerSupplyFailure", "type", "ip"),
-		Equals("baseFanFailure", True).Repeatable(True) :
+		Equals("baseFanFailure", True).Repeatable() :
 			Danger("ups trap: baseFanFailure", "type", "ip"),
-		Equals("batteryPackCommLost", True).Repeatable(True) :
+		Equals("batteryPackCommLost", True).Repeatable() :
 			Danger("ups trap: batteryPackCommLost", "type", "ip"),
-		Equals("calibrationStart", True).Repeatable(True) :
+		Equals("calibrationStart", True).Repeatable() :
 			Danger("ups trap: calibrationStart", "type", "ip"),
-		Equals("upsTurnedOn", True).Repeatable(True) :
+		Equals("upsTurnedOn", True).Repeatable() :
 			Danger("ups trap: upsTurnedOn", "type", "ip"),
-		Equals("upsBatteryReplaced", True).Repeatable(True) :
+		Equals("upsBatteryReplaced", True).Repeatable() :
 			Danger("ups trap: upsBatteryReplaced", "type", "ip"),
-		Equals("powerModuleIncrease", True).Repeatable(True) :
+		Equals("powerModuleIncrease", True).Repeatable() :
 			Danger("ups trap: powerModuleIncrease", "type", "ip"),
-		Equals("powerModuleDecrease", True).Repeatable(True) :
+		Equals("powerModuleDecrease", True).Repeatable() :
 			Danger("ups trap: powerModuleDecrease", "type", "ip"),
 	}
 }

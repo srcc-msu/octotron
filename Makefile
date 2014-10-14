@@ -5,12 +5,12 @@ include Makefile.config
 # attribute will take the most space in typical configs
 
 OCTO_LIB=lib/octotron.jar
-JAVA_PARAM=-d64 -XX:+UseConcMarkSweepGC -Xms1G -Xmx2G -Dsun.net.httpserver.nodelay=true -cp $(OCTO_LIB)
+JAVA_PARAM=-d64 -Dsun.net.httpserver.nodelay=true -cp $(OCTO_LIB)
 
-all : model
+all : run
 
 run: $(OCTO_LIB) $(MODEL_CFG)
-	java $(JAVA_PARAM) ru.parallel.octotron.exec.Start $(MODEL_CFG)
+	java $(JAVA_PARAM) $(USR_JAVA_PARAM) ru.parallel.octotron.exec.Start $(MODEL_CFG)
 
 clean:
 	rm -f octopy/*.class

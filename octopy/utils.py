@@ -2,6 +2,9 @@ import collections
 
 from ru.parallel.octotron.core.primitive import SimpleAttribute
 
+import ru.parallel.octotron.generators.CSVReader as CSVReader_java
+import ru.parallel.octotron.generators.Enumerator as Enumerator_java
+
 def GetCollection(thing):
 	if isinstance(thing, (list, tuple)):
 		return thing
@@ -33,9 +36,7 @@ def VaryingsFromDict(varyings_dict):
 			raise RuntimeError("duplicated var: " + name + " : " + str(rule))
 		rule = rule[0]
 
-		rule.SetArgName(name)
-
-		res.append(rule.GetOcto())
+		res.append(SimpleAttribute(name, rule.GetOcto()))
 
 	return res
 
@@ -89,3 +90,13 @@ def MergeUniqueDicts(dicts):
 			result[key] = value
 
 	return result
+
+class CSVReader:
+	@staticmethod
+	def Declare(*params):
+		CSVReader_java.Declare(context.model_service, *params)
+
+class Enumerator:
+	@staticmethod
+	def Sequence(*params):
+		Enumerator_java.Sequence(context.model_service, *params)

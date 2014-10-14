@@ -25,7 +25,7 @@ my_module = {
 	# invoke the Danger() reaction if "temperature" becomes greater
 	# than "_static_temp_max"
 	# invoke the Recover() reaction when "temperature" lowers
-		Equals("temp_ok", False).Repeatable(True) :
+		Equals("temp_ok", False).Repeatable() :
 			(Danger("very high cpu temperature", "temperature").PrintParent("type", "ip")
 				, Recover("temperature is back to normal", "temperature").PrintParent("type", "ip"))
 	}

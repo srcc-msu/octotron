@@ -7,7 +7,7 @@ import java.lang
 import jarray
 
 def GetLinkFactory(params, type):
-	factory = LinkFactory()
+	factory = LinkFactory(context.model_service)
 
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))

@@ -198,13 +198,13 @@ ems_snmp_trap_module = {
 			(Danger("ems: envLowHumidityThresholdViolation", "type", "ip")
 				, Recover("ems: envLowHumidityThresholdViolation is OK", "type", "ip")),
 
-		Equals("iemContactFault", True).Repeatable(True) :
+		Equals("iemContactFault", True).Repeatable() :
 			Danger("ems trap: iemContactFault", "type", "ip"),
 
-		Equals("contactFault", True).Repeatable(True) :
+		Equals("contactFault", True).Repeatable() :
 			Danger("ems trap: contactFault", "type", "ip"),
 
-		Equals("emsSensorFault", True).Repeatable(True) :
+		Equals("emsSensorFault", True).Repeatable() :
 			Danger("ems trap: emsSensorFault", "type", "ip"),
 	}
 }

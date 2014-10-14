@@ -229,25 +229,25 @@ ib_module = {
 		NotEquals("physical_state", 0) :
 			Danger("IB link problem: physical state").PrintParent("type", "node", "ip"),
 
-		NotEquals("SymbolErrors", 0).Repeatable(True) :
+		NotEquals("SymbolErrors", 0).Repeatable() :
 			Warning("IB errros growing", "SymbolErrors").PrintParent("type", "node", "ip"),
-		NotEquals("RcvErrors", 0).Repeatable(True) :
+		NotEquals("RcvErrors", 0).Repeatable() :
 			Warning("IB errros growing", "RcvErrors").PrintParent("type", "node", "ip"),
-		NotEquals("RcvRemotePhysErrors", 0).Repeatable(True) :
+		NotEquals("RcvRemotePhysErrors", 0).Repeatable() :
 			Warning("IB errros growing", "RcvRemotePhysErrors").PrintParent("type", "node", "ip"),
-		NotEquals("RcvSwRelayErrors", 0).Repeatable(True) :
+		NotEquals("RcvSwRelayErrors", 0).Repeatable() :
 			Warning("IB errros growing", "RcvSwRelayErrors").PrintParent("type", "node", "ip"),
-		NotEquals("XmtDiscards", 0).Repeatable(True) :
+		NotEquals("XmtDiscards", 0).Repeatable() :
 			Warning("IB errros growing", "XmtDiscards").PrintParent("type", "node", "ip"),
-		NotEquals("XmtConstraintErrors", 0).Repeatable(True) :
+		NotEquals("XmtConstraintErrors", 0).Repeatable() :
 			Warning("IB errros growing", "XmtConstraintErrors").PrintParent("type", "node", "ip"),
-		NotEquals("RcvConstraintErrors", 0).Repeatable(True) :
+		NotEquals("RcvConstraintErrors", 0).Repeatable() :
 			Warning("IB errros growing", "RcvConstraintErrors").PrintParent("type", "node", "ip"),
-		NotEquals("LinkIntegrityErrors", 0).Repeatable(True) :
+		NotEquals("LinkIntegrityErrors", 0).Repeatable() :
 			Warning("IB errros growing", "LinkIntegrityErrors").PrintParent("type", "node", "ip"),
-		NotEquals("ExcBufOverrunErrors", 0).Repeatable(True) :
+		NotEquals("ExcBufOverrunErrors", 0).Repeatable() :
 			Warning("IB errros growing", "ExcBufOverrunErrors").PrintParent("type", "node", "ip"),
-		NotEquals("VL15Dropped", 0).Repeatable(True) :
+		NotEquals("VL15Dropped", 0).Repeatable() :
 			Warning("IB errros growing", "VL15Dropped").PrintParent("type", "node", "ip"),
 	}
 }
