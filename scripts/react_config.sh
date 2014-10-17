@@ -3,17 +3,35 @@ set -u
 
 #
 # parameteres from octotron system will look like:
-# $1 - timestamp
-# $2 - event type
+# $1 - event type
+# $2 - json log entry
 # $3, ... - event messages
 #
 
 # this is general format for reporting about events
-event_time=`date -d @$1 "+%x %X"`
+# trying to extract `tag` and `msg` from
+# user messages to form a short subject string
 
-MSG="[$event_time] -- $2: $3"
+DATA="[`date`]"
 
-for param in "${@:4}"
+TAG=""
+MSG=""
+
+for param in "${@:3}"
 do
-	MSG+="\n\n$param"
+	DATA+="\n\n$param"
+
+	if [[ $param == *tag:* ]]
+	then
+		TAG+=$param
+	fi
+
+	if [[ $param == *msg:* ]]
+	then
+		MSG+=$param
+	fi
 done
+
+SHORT="$1 $TAG $MSG"
+
+DATA+="\n\n$2"
