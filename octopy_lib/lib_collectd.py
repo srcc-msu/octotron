@@ -33,40 +33,40 @@ disk_module = {
 		Equals("current_pending_sector_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "current_pending_sector growing")
-				.Msg("msg", "disk in {in_n:node} current_pending_sector growing : {current_pending_sector}"),
+				.Msg("msg", "disk on {in_n:node} current_pending_sector growing : {current_pending_sector}"),
 
 		Equals("offline_uncorrectable_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "offline_uncorrectable growing")
-				.Msg("msg", "disk in {in_n:node} offline_uncorrectable growing : {offline_uncorrectable}"),
+				.Msg("msg", "disk on {in_n:node} offline_uncorrectable growing : {offline_uncorrectable}"),
 
 		Equals("reallocated_sector_ct_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "reallocated_sector_ct growing")
-				.Msg("msg", "disk in {in_n:node} reallocated_sector_ct growing : {reallocated_sector_ct}"),
+				.Msg("msg", "disk on {in_n:node} reallocated_sector_ct growing : {reallocated_sector_ct}"),
 
 		Equals("reported_uncorrect_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "reported_uncorrect growing")
-				.Msg("msg", "disk in {in_n:node} reported_uncorrect growing : {reported_uncorrect}"),
+				.Msg("msg", "disk on {in_n:node} reported_uncorrect growing : {reported_uncorrect}"),
 
 		Equals("spin_retry_count_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "spin_retry_count growing")
-				.Msg("msg", "disk in {in_n:node} spin_retry_count growing : {spin_retry_count}"),
+				.Msg("msg", "disk on {in_n:node} spin_retry_count growing : {spin_retry_count}"),
 
 		Equals("udma_crc_error_count_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "udma_crc_error_count growing")
-				.Msg("msg", "disk in {in_n:node} udma_crc_error_count growing : {spin_retry_count}"),
+				.Msg("msg", "disk on {in_n:node} udma_crc_error_count growing : {spin_retry_count}"),
 
 		Equals("temp_ok", False) : (
 			Danger("tag", "TEMPERATURE")
 				.Msg("descr", "disk temperature is above threshol")
-				.Msg("msg", "disk temperature is above threshol({temperature_celsius})"),
+				.Msg("msg", "disk temperature on {in_n:node} is above threshol({temperature_celsius})"),
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "disk temperature is back to normal"))
-				.Msg("msg", "disk temperature is back to normal({temperature_celsius})")),
+				.Msg("msg", "disk temperature on {in_n:node}is back to normal({temperature_celsius})")),
 	}
 }
 
