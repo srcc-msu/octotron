@@ -33,40 +33,40 @@ disk_module = {
 		Equals("current_pending_sector_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "current_pending_sector growing")
-				.Msg("msg", "disk on {in_n:node} current_pending_sector growing : {current_pending_sector}"),
+				.Msg("msg"  , "disk on {in_n:node} current_pending_sector growing : {current_pending_sector}"),
 
 		Equals("offline_uncorrectable_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "offline_uncorrectable growing")
-				.Msg("msg", "disk on {in_n:node} offline_uncorrectable growing : {offline_uncorrectable}"),
+				.Msg("msg"  , "disk on {in_n:node} offline_uncorrectable growing : {offline_uncorrectable}"),
 
 		Equals("reallocated_sector_ct_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "reallocated_sector_ct growing")
-				.Msg("msg", "disk on {in_n:node} reallocated_sector_ct growing : {reallocated_sector_ct}"),
+				.Msg("msg"  , "disk on {in_n:node} reallocated_sector_ct growing : {reallocated_sector_ct}"),
 
 		Equals("reported_uncorrect_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "reported_uncorrect growing")
-				.Msg("msg", "disk on {in_n:node} reported_uncorrect growing : {reported_uncorrect}"),
+				.Msg("msg"  , "disk on {in_n:node} reported_uncorrect growing : {reported_uncorrect}"),
 
 		Equals("spin_retry_count_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "spin_retry_count growing")
-				.Msg("msg", "disk on {in_n:node} spin_retry_count growing : {spin_retry_count}"),
+				.Msg("msg"  , "disk on {in_n:node} spin_retry_count growing : {spin_retry_count}"),
 
 		Equals("udma_crc_error_count_ok", False) :
 			Warning("tag", "DISK")
 				.Msg("descr", "udma_crc_error_count growing")
-				.Msg("msg", "disk on {in_n:node} udma_crc_error_count growing : {spin_retry_count}"),
+				.Msg("msg"  , "disk on {in_n:node} udma_crc_error_count growing : {spin_retry_count}"),
 
 		Equals("temp_ok", False) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "disk temperature is above threshol")
-				.Msg("msg", "disk temperature on {in_n:node} is above threshol({temperature_celsius}")
+				.Msg("msg"  , "disk temperature on {in_n:node} is above threshol({temperature_celsius}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "disk temperature is back to normal")
-				.Msg("msg", "disk temperature on {in_n:node} is back to normal({temperature_celsius})")),
+				.Msg("msg"  , "disk temperature on {in_n:node} is back to normal({temperature_celsius})")),
 	}
 }
 
@@ -127,84 +127,84 @@ node_module = {
 		Equals("fork_rate_ok", False).Delay(1000) :
 			Warning("tag", "NODE")
 				.Msg("descr", "High fork rate on node for last 1000 seconds")
-				.Msg("msg", "High fork rate on {node} for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"),
+				.Msg("msg"  , "High fork rate on {node} for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"),
 
 		Equals("zombies_ok", False).Delay(1000) :
 			Warning("tag", "NODE")
 				.Msg("descr", "zombies present on node for last 1000 seconds")
-				.Msg("msg", "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
+				.Msg("msg"  , "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
 
 		Equals("la_1_acceptable", False).Delay(1000) :
 			( Warning("tag", "NODE")
 				.Msg("descr", "LA on node exceeded threshold 1 for last 1000 seconds")
-				.Msg("msg", "LA({la_1}) on {node} exceeded {_static_la_thr1} for last 1000 seconds")
+				.Msg("msg"  , "LA({la_1}) on {node} exceeded {_static_la_thr1} for last 1000 seconds")
 			, Recover("tag", "NODE")
 				.Msg("descr", "LA on node is back to normal")
-				.Msg("msg", "LA({la_1}) on {node} is back to normal")),
+				.Msg("msg"  , "LA({la_1}) on {node} is back to normal")),
 
 		Equals("la_1_sane", False) :
 			Danger("tag", "NODE")
 				.Msg("descr", "LA on node exceeded threshold 2 for last 1000 seconds")
-				.Msg("msg", "LA({la_1}) on {node} exceeded {_static_la_thr2} for last 1000 seconds"),
+				.Msg("msg"  , "LA({la_1}) on {node} exceeded {_static_la_thr2} for last 1000 seconds"),
 
 		Equals("check_tmp_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "could not access tmp on node")
-				.Msg("msg", "could not access tmp on {node}")
+				.Msg("msg"  , "could not access tmp on {node}")
 			, Recover("tag", "NODE")
 				.Msg("descr", "tmp on node is accessible again")
-				.Msg("msg", "tmp on {node} is accessible again")),
+				.Msg("msg"  , "tmp on {node} is accessible again")),
 		Equals("check_home_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "could not access home on node")
-				.Msg("msg", "could not access home on {node}")
+				.Msg("msg"  , "could not access home on {node}")
 			, Recover("tag", "NODE")
 				.Msg("descr", "home on node is accessible again")
-				.Msg("msg", "home on {node} is accessible again")),
+				.Msg("msg"  , "home on {node} is accessible again")),
 		Equals("check_clean_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "could not remove file on node")
-				.Msg("msg", "could not remove file on {node}")
+				.Msg("msg"  , "could not remove file on {node}")
 			, Recover("tag", "NODE")
 				.Msg("descr", "remove file on node worked")
-				.Msg("msg", "remove file on {node} worked")),
+				.Msg("msg"  , "remove file on {node} worked")),
 
 		Equals("check_nmond_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "hopsa agent(nmond) not found on node")
-				.Msg("msg", "hopsa agent(nmond) not found on {node}")
+				.Msg("msg"  , "hopsa agent(nmond) not found on {node}")
 			, Recover("tag", "NODE")
 				.Msg("descr", "hopsa agent(nmond) found on node")
-				.Msg("msg", "hopsa agent(nmond) found on {node}")),
+				.Msg("msg"  , "hopsa agent(nmond) found on {node}")),
 
 		Equals("ntpd_drift_ok_1", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "ntpd drift on node is too big")
-				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big")
+				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is too big")
 			, Recover("tag", "NODE")
 				.Msg("descr", "ntpd drift on node is ok")
-				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is ok")),
+				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("ntpd_drift_ok_2", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "ntpd drift on node is too big")
-				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big")
+				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is too big")
 			, Recover("tag", "NODE")
 				.Msg("descr", "ntpd drift on node is ok")
-				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is ok")),
+				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("temp_ok", False) :
 			( Warning("tag", "TEMPERATURE")
 				.Msg("descr", "bad system temp on node")
-				.Msg("msg", "bad system temp on {node}")
+				.Msg("msg"  , "bad system temp on {node}")
 			, Recover("tag", "NODE")
 				.Msg("descr", "system temp on node is ok")
-				.Msg("msg", "system temp on {node} is ok")),
+				.Msg("msg"  , "system temp on {node} is ok")),
 
 		Equals("temp_acceptable", False) :
 			Critical("tag", "TEMPERATURE")
 				.Msg("descr", "critical system temp on node")
-				.Msg("msg", "critical system temp on {node}"),
+				.Msg("msg"  , "critical system temp on {node}"),
 	}
 }
 
@@ -229,15 +229,15 @@ cpu_module = {
 		Equals("cpu_temp_ok", False) :
 			( Warning("tag", "TEMPERATURE")
 				.Msg("descr", "bad cpu temp")
-				.Msg("msg", "bad cpu temp({temp})  node {in_n:node}")
+				.Msg("msg"  , "bad cpu temp({temp})  node {in_n:node}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "cpu temp({temp}) is ok now ")
-				.Msg("msg", "cpu temp({temp})  node {in_n:node} is ok now ")),
+				.Msg("msg"  , "cpu temp({temp})  node {in_n:node} is ok now ")),
 
 		Equals("cpu_temp_acceptable", False) :
 			Critical("tag", "TEMPERATURE")
 				.Msg("descr", "critical cpu temp")
-				.Msg("msg", "critical cpu temp({temp})  node {in_n:node}"),
+				.Msg("msg"  , "critical cpu temp({temp})  node {in_n:node}"),
 	}
 }
 
@@ -262,10 +262,10 @@ memory_module = {
 		Equals("total_mem_ok", False) :
 			( Danger("tag", "MEM")
 				.Msg("descr", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem})")
-				.Msg("msg", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem}")
+				.Msg("msg"  , "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem}")
 			, Recover("tag", "MEM")
 				.Msg("descr", "total mem({total_mem})  node {in_n:node} is ok")
-				.Msg("msg", "total mem({total_mem})  node {in_n:node} is ok")),
+				.Msg("msg"  , "total mem({total_mem})  node {in_n:node} is ok")),
 	}
 }
 
@@ -299,52 +299,52 @@ ib_module = {
 		NotEquals("state", 0) :
 			Danger("tag", "IB")
 				.Msg("descr", "IB link problem on node: state")
-				.Msg("msg", "IB link problem on {in_n:node}: state"),
+				.Msg("msg"  , "IB link problem on {in_n:node}: state"),
 		NotEquals("physical_state", 0) :
 			Danger("tag", "IB")
 				.Msg("descr", "IB link problem on node: physical state")
-				.Msg("msg", "IB link problem on {in_n:node}: physical state"),
+				.Msg("msg"  , "IB link problem on {in_n:node}: physical state"),
 
 		NotEquals("SymbolErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: SymbolErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: SymbolErrors = {SymbolErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: SymbolErrors = {SymbolErrors}"),
 		NotEquals("RcvErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: RcvErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: RcvErrors = {RcvErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: RcvErrors = {RcvErrors}"),
 		NotEquals("RcvRemotePhysErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: RcvRemotePhysErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: RcvRemotePhysErrors = {RcvRemotePhysErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: RcvRemotePhysErrors = {RcvRemotePhysErrors}"),
 		NotEquals("RcvSwRelayErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: RcvSwRelayErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: RcvSwRelayErrors = {RcvSwRelayErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: RcvSwRelayErrors = {RcvSwRelayErrors}"),
 		NotEquals("XmtDiscards", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: XmtDiscards")
-				.Msg("msg", "IB errros growing on {in_n:node}: XmtDiscards = {XmtDiscards}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: XmtDiscards = {XmtDiscards}"),
 		NotEquals("XmtConstraintErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: XmtConstraintErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: XmtConstraintErrors = {XmtConstraintErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: XmtConstraintErrors = {XmtConstraintErrors}"),
 		NotEquals("RcvConstraintErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: RcvConstraintErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: RcvConstraintErrors = {RcvConstraintErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: RcvConstraintErrors = {RcvConstraintErrors}"),
 		NotEquals("LinkIntegrityErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: LinkIntegrityErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: LinkIntegrityErrors = {LinkIntegrityErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: LinkIntegrityErrors = {LinkIntegrityErrors}"),
 		NotEquals("ExcBufOverrunErrors", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: ExcBufOverrunErrors")
-				.Msg("msg", "IB errros growing on {in_n:node}: ExcBufOverrunErrors = {ExcBufOverrunErrors}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: ExcBufOverrunErrors = {ExcBufOverrunErrors}"),
 		NotEquals("VL15Dropped", 0).Repeatable() :
 			Warning("tag", "IB")
 				.Msg("descr", "IB errros growing on node: VL15Dropped")
-				.Msg("msg", "IB errros growing on {in_n:node}: VL15Dropped = {VL15Dropped}"),
+				.Msg("msg"  , "IB errros growing on {in_n:node}: VL15Dropped = {VL15Dropped}"),
 	}
 }
 
@@ -388,31 +388,31 @@ eth_module = {
 		Equals("speed_ok", False) :
 			Danger("tag", "ETH")
 				.Msg("descr", "speed does not match requred speed")
-				.Msg("msg", "speed({speed}) does not match requred speed({_static_eth_speed_req}) on {in_n:node}"),
+				.Msg("msg"  , "speed({speed}) does not match requred speed({_static_eth_speed_req}) on {in_n:node}"),
 
 		Equals("duplex_ok", False) :
 			Danger("tag", "ETH")
 				.Msg("descr", "duplex mode does not match requred mode")
-				.Msg("msg", "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req}) on {in_n:node}"),
+				.Msg("msg"  , "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req}) on {in_n:node}"),
 
 		Equals("check_rx_errors", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "recieve errors growing fast for last 1000 seconds")
-				.Msg("msg", "recieve errors({rx_errors}) growing fast for last 1000 seconds on {in_n:node}"),
+				.Msg("msg"  , "recieve errors({rx_errors}) growing fast for last 1000 seconds on {in_n:node}"),
 
 		Equals("check_tx_errors", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "transm errors growing fast for last 1000 seconds")
-				.Msg("msg", "transm errors({tx_errors}) growing fast for last 1000 seconds on {in_n:node}"),
+				.Msg("msg"  , "transm errors({tx_errors}) growing fast for last 1000 seconds on {in_n:node}"),
 
 		Equals("check_tx_dropped", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "tranms dropped growing fast for last 1000 seconds")
-				.Msg("msg", "tranms dropped({tx_dropped}) growing fast for last 1000 seconds on {in_n:node}"),
+				.Msg("msg"  , "tranms dropped({tx_dropped}) growing fast for last 1000 seconds on {in_n:node}"),
 
 		Equals("check_collisions", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "collisions growing fast for last 1000 seconds")
-				.Msg("msg", "collisions({collisions}) growing fast for last 1000 seconds on {in_n:node}"),
+				.Msg("msg"  , "collisions({collisions}) growing fast for last 1000 seconds on {in_n:node}"),
 	}
 }

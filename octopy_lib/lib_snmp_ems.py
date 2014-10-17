@@ -38,50 +38,50 @@ ems_sensor_module = {
 		Equals("front_temp_ok", False) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems sensor: front temp is very high")
-				.Msg("msg", "ems sensor: front temp in {descr} is very high: {front_temp} {ip}")
+				.Msg("msg"  , "ems sensor: front temp in {descr} is very high: {front_temp} {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems sensor: front temp is back to normal")
-				.Msg("msg", "ems sensor: front temp in {descr} is back to normal: {front_temp}")),
+				.Msg("msg"  , "ems sensor: front temp in {descr} is back to normal: {front_temp}")),
 
 		Equals("back_temp_ok", False) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems sensor: back temp is very high")
-				.Msg("msg", "ems sensor: back temp in {descr} is very high: {back_temp}")
+				.Msg("msg"  , "ems sensor: back temp in {descr} is very high: {back_temp}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems sensor: back temp is back to normal")
-				.Msg("msg", "ems sensor: back temp in {descr} is back to normal: {back_temp}")),
+				.Msg("msg"  , "ems sensor: back temp in {descr} is back to normal: {back_temp}")),
 
 		Equals("front_humidity_max_ok", False) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: front humidity is very high")
-				.Msg("msg", "ems sensor: front humidity in {descr} is very high: {front_humidity}")
+				.Msg("msg"  , "ems sensor: front humidity in {descr} is very high: {front_humidity}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: front humidity is back to normal")
-				.Msg("msg", "ems sensor: front humidity in {descr} is back to normal: {front_humidity}")),
+				.Msg("msg"  , "ems sensor: front humidity in {descr} is back to normal: {front_humidity}")),
 
 		Equals("back_humidity_max_ok", False) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: back humidity is very high")
-				.Msg("msg", "ems sensor: back humidity in {descr} is very high: {back_humidity}")
+				.Msg("msg"  , "ems sensor: back humidity in {descr} is very high: {back_humidity}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: back humidity is back to normal")
-				.Msg("msg", "ems sensor: back humidity in {descr} is back to normal: {back_humidity}")),
+				.Msg("msg"  , "ems sensor: back humidity in {descr} is back to normal: {back_humidity}")),
 
 		Equals("front_humidity_min_ok", False) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: front humidity is low")
-				.Msg("msg", "ems sensor: front humidity in {descr} is low: {front_humidity}")
+				.Msg("msg"  , "ems sensor: front humidity in {descr} is low: {front_humidity}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: front humidity is back to normal")
-				.Msg("msg", "ems sensor: front humidity in {descr} is back to normal: {front_humidity}")),
+				.Msg("msg"  , "ems sensor: front humidity in {descr} is back to normal: {front_humidity}")),
 
 		Equals("back_humidity_min_ok", False) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: back humidity is low")
-				.Msg("msg", "ems sensor: back humidity in {descr} is low: {back_humidity}")
+				.Msg("msg"  , "ems sensor: back humidity in {descr} is low: {back_humidity}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems sensor: back humidity is back to normal")
-				.Msg("msg", "ems sensor: back humidity in {descr} is back to normal: {back_humidity}")),
+				.Msg("msg"  , "ems sensor: back humidity in {descr} is back to normal: {back_humidity}")),
 	}
 }
 
@@ -103,10 +103,10 @@ ems_contact_module = {
 		Equals("state_ok", False) :
 			( Info("tag", "INFRASTRUCTURE")
 				.Msg("descr", "ems contact failed")
-				.Msg("msg", "ems contact {descr} failed: state: {state} normal_state : {normal_state}")
+				.Msg("msg"  , "ems contact {descr} failed: state: {state} normal_state : {normal_state}")
 			, Recover("tag", "INFRASTRUCTURE")
 				.Msg("descr", "ems contact is ok")
-				.Msg("msg", "ems contact {descr} is ok")),
+				.Msg("msg"  , "ems contact {descr} is ok")),
 	}
 }
 
@@ -146,166 +146,166 @@ ems_snmp_trap_module = {
 		Equals("emsCommunicationLost", True) :
 			( Danger("tag", "ems")
 				.Msg("descr", "emsCommunicationLost")
-				.Msg("msg", "emsCommunicationLost")
+				.Msg("msg"  , "emsCommunicationLost")
 			, Recover("tag", "ems")
 				.Msg("descr", "ems: emsCommunicationLost is OK")
-				.Msg("msg", "ems: emsCommunicationLost is OK")),
+				.Msg("msg"  , "ems: emsCommunicationLost is OK")),
 
 		Equals("iemHighTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: iemHighTempThresholdViolation")
-				.Msg("msg", "ems: iemHighTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: iemHighTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: iemHighTempThresholdViolation is OK")
-				.Msg("msg", "ems: iemHighTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: iemHighTempThresholdViolation is OK {ip}")),
 		Equals("iemLowTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: iemLowTempThresholdViolation")
-				.Msg("msg", "ems: iemLowTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: iemLowTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: iemLowTempThresholdViolation is OK")
-				.Msg("msg", "ems: iemLowTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: iemLowTempThresholdViolation is OK {ip}")),
 		Equals("envMaxTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envMaxTempThresholdViolation")
-				.Msg("msg", "ems: envMaxTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envMaxTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envMaxTempThresholdViolation is OK")
-				.Msg("msg", "ems: envMaxTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envMaxTempThresholdViolation is OK {ip}")),
 		Equals("envMinTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envMinTempThresholdViolation")
-				.Msg("msg", "ems: envMinTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envMinTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envMinTempThresholdViolation is OK")
-				.Msg("msg", "ems: envMinTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envMinTempThresholdViolation is OK {ip}")),
 		Equals("apcEnvMaxTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvMaxTempThresholdViolation")
-				.Msg("msg", "ems: apcEnvMaxTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvMaxTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvMaxTempThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvMaxTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvMaxTempThresholdViolation is OK {ip}")),
 		Equals("apcEnvHighTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvHighTempThresholdViolation")
-				.Msg("msg", "ems: apcEnvHighTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvHighTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvHighTempThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvHighTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvHighTempThresholdViolation is OK {ip}")),
 		Equals("apcEnvLowTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvLowTempThresholdViolation")
-				.Msg("msg", "ems: apcEnvLowTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvLowTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvLowTempThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvLowTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvLowTempThresholdViolation is OK {ip}")),
 		Equals("apcEnvMinTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvMinTempThresholdViolation")
-				.Msg("msg", "ems: apcEnvMinTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvMinTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: apcEnvMinTempThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvMinTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvMinTempThresholdViolation is OK {ip}")),
 		Equals("envHighTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envHighTempThresholdViolation")
-				.Msg("msg", "ems: envHighTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envHighTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envHighTempThresholdViolation is OK")
-				.Msg("msg", "ems: envHighTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envHighTempThresholdViolation is OK {ip}")),
 		Equals("envLowTempThresholdViolation", True) :
 			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envLowTempThresholdViolation")
-				.Msg("msg", "ems: envLowTempThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envLowTempThresholdViolation {ip}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "ems: envLowTempThresholdViolation is OK")
-				.Msg("msg", "ems: envLowTempThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envLowTempThresholdViolation is OK {ip}")),
 
 		Equals("iemHighHumidThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: iemHighHumidThresholdViolation")
-				.Msg("msg", "ems: iemHighHumidThresholdViolation {ip}")
+				.Msg("msg"  , "ems: iemHighHumidThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: iemHighHumidThresholdViolation is OK")
-				.Msg("msg", "ems: iemHighHumidThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: iemHighHumidThresholdViolation is OK {ip}")),
 		Equals("iemLowHumidThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: iemLowHumidThresholdViolation")
-				.Msg("msg", "ems: iemLowHumidThresholdViolation {ip}")
+				.Msg("msg"  , "ems: iemLowHumidThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: iemLowHumidThresholdViolation is OK")
-				.Msg("msg", "ems: iemLowHumidThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: iemLowHumidThresholdViolation is OK {ip}")),
 		Equals("envMaxHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envMaxHumidityThresholdViolation")
-				.Msg("msg", "ems: envMaxHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envMaxHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envMaxHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: envMaxHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envMaxHumidityThresholdViolation is OK {ip}")),
 		Equals("envMinHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envMinHumidityThresholdViolation")
-				.Msg("msg", "ems: envMinHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envMinHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envMinHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: envMinHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envMinHumidityThresholdViolation is OK {ip}")),
 		Equals("apcEnvMaxHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvMaxHumidityThresholdViolation")
-				.Msg("msg", "ems: apcEnvMaxHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvMaxHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvMaxHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvMaxHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvMaxHumidityThresholdViolation is OK {ip}")),
 		Equals("apcEnvHighHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvHighHumidityThresholdViolation")
-				.Msg("msg", "ems: apcEnvHighHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvHighHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvHighHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvHighHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvHighHumidityThresholdViolation is OK {ip}")),
 		Equals("apcEnvLowHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvLowHumidityThresholdViolation")
-				.Msg("msg", "ems: apcEnvLowHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvLowHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvLowHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvLowHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvLowHumidityThresholdViolation is OK {ip}")),
 		Equals("apcEnvMinHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvMinHumidityThresholdViolation")
-				.Msg("msg", "ems: apcEnvMinHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: apcEnvMinHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: apcEnvMinHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: apcEnvMinHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: apcEnvMinHumidityThresholdViolation is OK {ip}")),
 		Equals("envHighHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envHighHumidityThresholdViolation")
-				.Msg("msg", "ems: envHighHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envHighHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envHighHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: envHighHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envHighHumidityThresholdViolation is OK {ip}")),
 		Equals("envLowHumidityThresholdViolation", True) :
 			( Danger("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envLowHumidityThresholdViolation")
-				.Msg("msg", "ems: envLowHumidityThresholdViolation {ip}")
+				.Msg("msg"  , "ems: envLowHumidityThresholdViolation {ip}")
 			, Recover("tag", "ENVIRONMENT")
 				.Msg("descr", "ems: envLowHumidityThresholdViolation is OK")
-				.Msg("msg", "ems: envLowHumidityThresholdViolation is OK {ip}")),
+				.Msg("msg"  , "ems: envLowHumidityThresholdViolation is OK {ip}")),
 
 		Equals("iemContactFault", True).Repeatable() :
 			Danger("tag", "INFRASTRUCTURE")
 				.Msg("descr", "ems trap: iemContactFault")
-				.Msg("msg", "ems trap: iemContactFault {ip}"),
+				.Msg("msg"  , "ems trap: iemContactFault {ip}"),
 
 		Equals("contactFault", True).Repeatable() :
 			Danger("tag", "INFRASTRUCTURE")
 				.Msg("descr", "ems trap: contactFault")
-				.Msg("msg", "ems trap: contactFault {ip}"),
+				.Msg("msg"  , "ems trap: contactFault {ip}"),
 
 		Equals("emsSensorFault", True).Repeatable() :
 			Danger("tag", "INFRASTRUCTURE")
 				.Msg("descr", "ems trap: emsSensorFault")
-				.Msg("msg", "ems trap: emsSensorFault {ip}"),
+				.Msg("msg"  , "ems trap: emsSensorFault {ip}"),
 	}
 }

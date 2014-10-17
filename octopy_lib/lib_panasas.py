@@ -58,18 +58,18 @@ panasas_blade_module = {
 		Equals("status", "warning") :
 			( Danger("tag", "STORAGE")
 				.Msg("descr", "warning on panasas blade uid")
-				.Msg("msg", "warning on panasas blade {uid}")
+				.Msg("msg"  , "warning on panasas blade {uid}")
 			, Recover("tag", "STORAGE")
 				.Msg("descr", "panasas blade is ok uid")
-				.Msg("msg", "panasas blade is ok {uid}")),
+				.Msg("msg"  , "panasas blade is ok {uid}")),
 
 		Equals("status", "offline") :
 			( Danger("tag", "STORAGE")
 				.Msg("descr", "panasas blade went offline uid")
-				.Msg("msg", "panasas blade went offline {uid}")
+				.Msg("msg"  , "panasas blade went offline {uid}")
 			, Recover("tag", "STORAGE")
 				.Msg("descr", "panasas blade is ok uid")
-				.Msg("msg", "panasas blade is ok {uid}")),
+				.Msg("msg"  , "panasas blade is ok {uid}")),
 	}
 }
 
