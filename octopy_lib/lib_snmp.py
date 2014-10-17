@@ -10,12 +10,20 @@ snmp_general_module = {
 
 	"react" : {
 		Equals("configChangeSNMP", False) :
-			Danger("INFRASTRUCUTRE", "SNMP trap: configChangeSNMP"),
+			Danger("tag", "INFRASTRUCUTRE")
+				.Msg("descr", "SNMP trap: configChangeSNMP"),
+				.Msg("msg", "SNMP trap: configChangeSNMP on {ip}"),
 		Equals("accessViolationConsole", False) :
-			Danger("INFRASTRUCUTRE", "SNMP trap: accessViolationConsole"),
+			Danger("tag", "INFRASTRUCUTRE")
+				.Msg("descr", "SNMP trap: accessViolationConsole"),
+				.Msg("msg", "SNMP trap: accessViolationConsole on {ip}"),
 		Equals("accessViolationHTTP", False) :
-			Danger("INFRASTRUCUTRE", "SNMP trap: accessViolationHTTP"),
+			Danger("tag", "INFRASTRUCUTRE")
+				.Msg("descr", "SNMP trap: accessViolationHTTP"),
+				.Msg("msg", "SNMP trap: accessViolationHTTP on {ip}"),
 		Equals("passwordChange", False) :
-			Danger("INFRASTRUCUTRE", "SNMP trap: passwordChange"),
+			Danger("tag", "INFRASTRUCUTRE")
+				.Msg("descr", "SNMP trap: passwordChange"),
+				.Msg("msg", "SNMP trap: passwordChange on {ip}"),
 	}
 }

@@ -23,7 +23,6 @@ panasas_system_module = {
 	}
 }
 
-
 panasas_shelf_module = {
 	"const" : {
 		"type" : "panasas_shelf"
@@ -57,12 +56,20 @@ panasas_blade_module = {
 
 	"reaction" : {
 		Equals("status", "warning") :
-			(Danger("STORAGE", "warning on panasas blade {uid}")
-				, Recover("panasas blade is ok {uid}")),
+			( Danger("tag", "STORAGE")
+				.Msg("descr", "warning on panasas blade uid")
+				.Msg("msg", "warning on panasas blade {uid}")
+			, Recover("tag", "STORAGE")
+				.Msg("descr", "panasas blade is ok uid")
+				.Msg("msg", "panasas blade is ok {uid}")),
 
 		Equals("status", "offline") :
-			(Danger("STORAGE", "panasas blade went offline {uid}")
-				, Recover("panasas blade is ok {uid}")),
+			( Danger("tag", "STORAGE")
+				.Msg("descr", "panasas blade went offline uid")
+				.Msg("msg", "panasas blade went offline {uid}")
+			, Recover("tag", "STORAGE")
+				.Msg("descr", "panasas blade is ok uid")
+				.Msg("msg", "panasas blade is ok {uid}")),
 	}
 }
 
