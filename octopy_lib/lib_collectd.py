@@ -60,12 +60,12 @@ disk_module = {
 				.Msg("descr", "udma_crc_error_count growing")
 				.Msg("msg", "disk on {in_n:node} udma_crc_error_count growing : {spin_retry_count}"),
 
-		Equals("temp_ok", False) : (
-			Danger("tag", "TEMPERATURE")
+		Equals("temp_ok", False) :
+			( Danger("tag", "TEMPERATURE")
 				.Msg("descr", "disk temperature is above threshol")
-				.Msg("msg", "disk temperature on {in_n:node} is above threshol({temperature_celsius})"),
+				.Msg("msg", "disk temperature on {in_n:node} is above threshol({temperature_celsius}")
 			, Recover("tag", "TEMPERATURE")
-				.Msg("descr", "disk temperature is back to normal"))
+				.Msg("descr", "disk temperature is back to normal")
 				.Msg("msg", "disk temperature on {in_n:node} is back to normal({temperature_celsius})")),
 	}
 }
@@ -131,72 +131,74 @@ node_module = {
 
 		Equals("zombies_ok", False).Delay(1000) :
 			Warning("tag", "NODE")
-				.Msg("({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
+				.Msg("descr", "zombies present on node for last 1000 seconds")
+				.Msg("msg", "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
 
 		Equals("la_1_acceptable", False).Delay(1000) :
 			( Warning("tag", "NODE")
 				.Msg("descr", "LA on node exceeded threshold 1 for last 1000 seconds")
-				.Msg("msg", "LA({la_1}) on {node} exceeded threshold 1 for last 1000 seconds"),
+				.Msg("msg", "LA({la_1}) on {node} exceeded {_static_la_thr1} for last 1000 seconds")
 			, Recover("tag", "NODE")
-				.Msg("descr", "LA on node is back to normal")),
+				.Msg("descr", "LA on node is back to normal")
 				.Msg("msg", "LA({la_1}) on {node} is back to normal")),
 
 		Equals("la_1_sane", False) :
 			Danger("tag", "NODE")
-			.Msg("LA({la_1}) on {node} exceeded threshold 2 for last 1000 seconds"),
+				.Msg("descr", "LA on node exceeded threshold 2 for last 1000 seconds")
+				.Msg("msg", "LA({la_1}) on {node} exceeded {_static_la_thr2} for last 1000 seconds"),
 
 		Equals("check_tmp_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "could not access tmp on node")
-				.Msg("msg", "could not access tmp on {node}"),
+				.Msg("msg", "could not access tmp on {node}")
 			, Recover("tag", "NODE")
-				.Msg("descr", "tmp on node is accessible again")),
+				.Msg("descr", "tmp on node is accessible again")
 				.Msg("msg", "tmp on {node} is accessible again")),
 		Equals("check_home_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "could not access home on node")
-				.Msg("msg", "could not access home on {node}"),
+				.Msg("msg", "could not access home on {node}")
 			, Recover("tag", "NODE")
-				.Msg("descr", "home on node is accessible again")),
+				.Msg("descr", "home on node is accessible again")
 				.Msg("msg", "home on {node} is accessible again")),
 		Equals("check_clean_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "could not remove file on node")
-				.Msg("msg", "could not remove file on {node}"),
+				.Msg("msg", "could not remove file on {node}")
 			, Recover("tag", "NODE")
-				.Msg("descr", "remove file on node worked")),
+				.Msg("descr", "remove file on node worked")
 				.Msg("msg", "remove file on {node} worked")),
 
 		Equals("check_nmond_ok", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "hopsa agent(nmond) not found on node")
-				.Msg("msg", "hopsa agent(nmond) not found on {node}"),
+				.Msg("msg", "hopsa agent(nmond) not found on {node}")
 			, Recover("tag", "NODE")
-				.Msg("descr", "hopsa agent(nmond) found on node")),
+				.Msg("descr", "hopsa agent(nmond) found on node")
 				.Msg("msg", "hopsa agent(nmond) found on {node}")),
 
 		Equals("ntpd_drift_ok_1", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "ntpd drift on node is too big")
-				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big"),
+				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big")
 			, Recover("tag", "NODE")
-				.Msg("descr", "ntpd drift on node is ok")),
+				.Msg("descr", "ntpd drift on node is ok")
 				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("ntpd_drift_ok_2", False) :
 			( Danger("tag", "NODE")
 				.Msg("descr", "ntpd drift on node is too big")
-				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big"),
+				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big")
 			, Recover("tag", "NODE")
-				.Msg("descr", "ntpd drift on node is ok")),
+				.Msg("descr", "ntpd drift on node is ok")
 				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("temp_ok", False) :
 			( Warning("tag", "TEMPERATURE")
 				.Msg("descr", "bad system temp on node")
-				.Msg("msg", "bad system temp on {node}"),
+				.Msg("msg", "bad system temp on {node}")
 			, Recover("tag", "NODE")
-				.Msg("descr", "system temp on node is ok")),
+				.Msg("descr", "system temp on node is ok")
 				.Msg("msg", "system temp on {node} is ok")),
 
 		Equals("temp_acceptable", False) :
@@ -227,15 +229,15 @@ cpu_module = {
 		Equals("cpu_temp_ok", False) :
 			( Warning("tag", "TEMPERATURE")
 				.Msg("descr", "bad cpu temp")
-				.Msg("msg", "bad cpu temp({temp})  node {in_n:node}"),
+				.Msg("msg", "bad cpu temp({temp})  node {in_n:node}")
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "cpu temp({temp}) is ok now ")
-				.Msg("msg", "cpu temp({temp})  node {in_n:node} is ok now "),
+				.Msg("msg", "cpu temp({temp})  node {in_n:node} is ok now ")),
 
 		Equals("cpu_temp_acceptable", False) :
-			( Critical("tag", "TEMPERATURE")
+			Critical("tag", "TEMPERATURE")
 				.Msg("descr", "critical cpu temp")
-				.Msg("msg", "critical cpu temp({temp})  node {in_n:node}")),
+				.Msg("msg", "critical cpu temp({temp})  node {in_n:node}"),
 	}
 }
 
@@ -260,7 +262,7 @@ memory_module = {
 		Equals("total_mem_ok", False) :
 			( Danger("tag", "MEM")
 				.Msg("descr", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem})")
-				.Msg("msg", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem})"),
+				.Msg("msg", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem}")
 			, Recover("tag", "MEM")
 				.Msg("descr", "total mem({total_mem})  node {in_n:node} is ok")
 				.Msg("msg", "total mem({total_mem})  node {in_n:node} is ok")),
