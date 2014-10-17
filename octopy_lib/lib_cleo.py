@@ -42,21 +42,33 @@ cleo_module = {
 
 	"react" : {
 		Equals("tasks_total_ok", False) :
-			Warning("QUEUE", "total tasks count is low({tasks_total}) in queue {queue_name}"),
+			Warning("tag", "QUEUE")
+				.Msg("descr", "total tasks count is low"),
+				.Msg("msg", "total tasks count is low({tasks_total}) in queue {queue_name}"),
 
 		Equals("tasks_running_ok", False) :
-			Warning("QUEUE", "running tasks count is low({tasks_running}) in queue {queue_name}"),
+			Warning("tag", "QUEUE")
+				.Msg("descr", "running tasks count is low"),
+				.Msg("msg", "running tasks count is low({tasks_running}) in queue {queue_name}"),
 
 		Equals("tasks_queued_ok", False) :
-			Warning("QUEUE", "queued tasks count is low({tasks_queued}) in queue {queue_name}"),
+			Warning("tag", "QUEUE")
+				.Msg("descr", "queued tasks count is low"),
+				.Msg("msg", "queued tasks count is low({tasks_queued}) in queue {queue_name}"),
 
 		Equals("cpus_total_free_ok", False) :
-			Danger("QUEUE", "too many free cpus({cpus_total_free}) in queue {queue_name}"),
+			Danger("tag", "QUEUE")
+				.Msg("descr", "too many free cpus"),
+				.Msg("msg", "too many free cpus({cpus_total_free}) in queue {queue_name}"),
 
 		Equals("cpus_total_number_ok", False) :
-			Danger("QUEUE", "the queue has lost some cpus({cpus_total_number}) in queue {queue_name}"),
+			Danger("tag", "QUEUE")
+				.Msg("descr", "the queue has lost some cpus"),
+				.Msg("msg", "the queue has lost some cpus({cpus_total_number}) in queue {queue_name}"),
 
 		Equals("cpus_blocked_count_ok", False) :
-			Danger("QUEUE", "too many blocked cpus({cpus_blocked_count}) in queue {queue_name}")
+			Danger("tag", "QUEUE")
+				.Msg("descr", "too many blocked cpus")
+				.Msg("msg", "too many blocked cpus({cpus_blocked_count}) in queue {queue_name}")
 	}
 }

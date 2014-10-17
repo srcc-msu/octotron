@@ -31,26 +31,42 @@ disk_module = {
 
 	"react" : {
 		Equals("current_pending_sector_ok", False) :
-			Warning("DISK", "current_pending_sector growing : {current_pending_sector}").PrintParent("type", "node", "ip"),
+			Warning("tag", "DISK")
+				.Msg("descr", "current_pending_sector growing")
+				.Msg("msg", "disk in {in_n:node} current_pending_sector growing : {current_pending_sector}"),
 
 		Equals("offline_uncorrectable_ok", False) :
-			Warning("DISK", "offline_uncorrectable growing : {offline_uncorrectable}").PrintParent("type", "node", "ip"),
+			Warning("tag", "DISK")
+				.Msg("descr", "offline_uncorrectable growing")
+				.Msg("msg", "disk in {in_n:node} offline_uncorrectable growing : {offline_uncorrectable}"),
 
 		Equals("reallocated_sector_ct_ok", False) :
-			Warning("DISK", "reallocated_sector_ct growing : {reallocated_sector_ct}").PrintParent("type", "node", "ip"),
+			Warning("tag", "DISK")
+				.Msg("descr", "reallocated_sector_ct growing")
+				.Msg("msg", "disk in {in_n:node} reallocated_sector_ct growing : {reallocated_sector_ct}"),
 
 		Equals("reported_uncorrect_ok", False) :
-			Warning("DISK", "reported_uncorrect growing : {reported_uncorrect}").PrintParent("type", "node", "ip"),
+			Warning("tag", "DISK")
+				.Msg("descr", "reported_uncorrect growing")
+				.Msg("msg", "disk in {in_n:node} reported_uncorrect growing : {reported_uncorrect}"),
 
 		Equals("spin_retry_count_ok", False) :
-			Warning("DISK", "spin_retry_count growing : {spin_retry_count}").PrintParent("type", "node", "ip"),
+			Warning("tag", "DISK")
+				.Msg("descr", "spin_retry_count growing")
+				.Msg("msg", "disk in {in_n:node} spin_retry_count growing : {spin_retry_count}"),
 
 		Equals("udma_crc_error_count_ok", False) :
-			Warning("DISK", "udma_crc_error_count growing : {spin_retry_count}").PrintParent("type", "node", "ip"),
+			Warning("tag", "DISK")
+				.Msg("descr", "udma_crc_error_count growing")
+				.Msg("msg", "disk in {in_n:node} udma_crc_error_count growing : {spin_retry_count}"),
 
-		Equals("temp_ok", False) :
-			(Danger("TEMPERATURE", "disk temperature is above threshol({temperature_celsius})").PrintParent("type", "node", "ip")
-				, Recover("disk temperature is back to normal({temperature_celsius})").PrintParent("type", "node", "ip"))
+		Equals("temp_ok", False) : (
+			Danger("tag", "TEMPERATURE")
+				.Msg("descr", "disk temperature is above threshol")
+				.Msg("msg", "disk temperature is above threshol({temperature_celsius})"),
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "disk temperature is back to normal"))
+				.Msg("msg", "disk temperature is back to normal({temperature_celsius})")),
 	}
 }
 
@@ -109,53 +125,90 @@ node_module = {
 
 	"react" : {
 		Equals("fork_rate_ok", False).Delay(1000) :
-			Warning("NODE", "High fork rate on {node} for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"),
+			Warning("tag", "NODE")
+				.Msg("descr", "High fork rate on node for last 1000 seconds")
+				.Msg("msg", "High fork rate on {node} for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"),
 
 		Equals("zombies_ok", False).Delay(1000) :
-			Warning("NODE", "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
+			Warning("tag", "NODE")
+				.Msg("({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
 
 		Equals("la_1_acceptable", False).Delay(1000) :
-			(Warning("NODE", "LA({la_1}) on {node} exceeded threshold 1 for last 1000 seconds")
-				, Recover("LA({la_1}) on {node} is back to normal")),
+			( Warning("tag", "NODE")
+				.Msg("descr", "LA on node exceeded threshold 1 for last 1000 seconds")
+				.Msg("msg", "LA({la_1}) on {node} exceeded threshold 1 for last 1000 seconds"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "LA on node is back to normal")),
+				.Msg("msg", "LA({la_1}) on {node} is back to normal")),
 
 		Equals("la_1_sane", False) :
-			Danger("NODE", "LA({la_1}) on {node} exceeded threshold 2 for last 1000 seconds"),
+			Danger("tag", "NODE")
+			.Msg("LA({la_1}) on {node} exceeded threshold 2 for last 1000 seconds"),
 
 		Equals("check_tmp_ok", False) :
-			(Danger("NODE", "could not access tmp on {node}")
-				, Recover("tmp on {node} is accessible again")),
+			( Danger("tag", "NODE")
+				.Msg("descr", "could not access tmp on node")
+				.Msg("msg", "could not access tmp on {node}"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "tmp on node is accessible again")),
+				.Msg("msg", "tmp on {node} is accessible again")),
 		Equals("check_home_ok", False) :
-			(Danger("NODE", "could not access home on {node}")
-				, Recover("home on {node} is accessible again")),
+			( Danger("tag", "NODE")
+				.Msg("descr", "could not access home on node")
+				.Msg("msg", "could not access home on {node}"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "home on node is accessible again")),
+				.Msg("msg", "home on {node} is accessible again")),
 		Equals("check_clean_ok", False) :
-			(Danger("NODE", "could not remove file on {node}")
-				, Recover("remove file on {node} worked")),
+			( Danger("tag", "NODE")
+				.Msg("descr", "could not remove file on node")
+				.Msg("msg", "could not remove file on {node}"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "remove file on node worked")),
+				.Msg("msg", "remove file on {node} worked")),
 
 		Equals("check_nmond_ok", False) :
-			(Danger("NODE", "hopsa agent(nmond) not found on {node}")
-				, Recover("hopsa agent(nmond) found on {node}")),
+			( Danger("tag", "NODE")
+				.Msg("descr", "hopsa agent(nmond) not found on node")
+				.Msg("msg", "hopsa agent(nmond) not found on {node}"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "hopsa agent(nmond) found on node")),
+				.Msg("msg", "hopsa agent(nmond) found on {node}")),
 
 		Equals("ntpd_drift_ok_1", False) :
-			(Danger("NODE", "ntpd drift({ntpd_drift}) on {node} is too big", "ntpd_drift")
-				, Recover("ntpd drift({ntpd_drift}) on {node} is ok")),
+			( Danger("tag", "NODE")
+				.Msg("descr", "ntpd drift on node is too big")
+				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "ntpd drift on node is ok")),
+				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("ntpd_drift_ok_2", False) :
-			(Danger("NODE", "ntpd drift({ntpd_drift}) on {node} is too big", "ntpd_drift")
-				, Recover("ntpd drift({ntpd_drift}) on {node} is ok")),
+			( Danger("tag", "NODE")
+				.Msg("descr", "ntpd drift on node is too big")
+				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is too big"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "ntpd drift on node is ok")),
+				.Msg("msg", "ntpd drift({ntpd_drift}) on {node} is ok")),
 
 		Equals("temp_ok", False) :
-			(Warning("TEMPERATURE", "bad system temp on {node}")
-				, Recover("system temp on {node} is ok")),
+			( Warning("tag", "TEMPERATURE")
+				.Msg("descr", "bad system temp on node")
+				.Msg("msg", "bad system temp on {node}"),
+			, Recover("tag", "NODE")
+				.Msg("descr", "system temp on node is ok")),
+				.Msg("msg", "system temp on {node} is ok")),
 
 		Equals("temp_acceptable", False) :
-			Critical("TEMPERATURE", "critical system temp on {node}")
+			Critical("tag", "TEMPERATURE")
+				.Msg("descr", "critical system temp on node")
+				.Msg("msg", "critical system temp on {node}"),
 	}
 }
 
 #// ----------------------------------------- CPU --------------------------------------------
 
 cpu_module = {
-
 	"static" : {
 		"_static_temp_thr1" : 75,
 		"_static_temp_thr2" : 80
@@ -172,11 +225,17 @@ cpu_module = {
 
 	"react" : {
 		Equals("cpu_temp_ok", False) :
-			(Warning("TEMPERATURE", "bad cpu temp({temp})").PrintParent("type", "node", "ip")
-				, Recover("cpu temp({temp}) is ok now ").PrintParent("type", "node", "ip")),
+			( Warning("tag", "TEMPERATURE")
+				.Msg("descr", "bad cpu temp")
+				.Msg("msg", "bad cpu temp({temp})  node {in_n:node}"),
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "cpu temp({temp}) is ok now ")
+				.Msg("msg", "cpu temp({temp})  node {in_n:node} is ok now "),
 
 		Equals("cpu_temp_acceptable", False) :
-			Critical("TEMPERATURE", "critical cpu temp({temp})").PrintParent("type", "node", "ip")
+			( Critical("tag", "TEMPERATURE")
+				.Msg("descr", "critical cpu temp")
+				.Msg("msg", "critical cpu temp({temp})  node {in_n:node}")),
 	}
 }
 
@@ -199,8 +258,12 @@ memory_module = {
 
 	"react" : {
 		Equals("total_mem_ok", False) :
-			(Danger("MEM", "total mem({total_mem}) reduced below check value({req_mem})").PrintParent("type", "node", "ip")
-				, Recover("total mem({total_mem}) is ok").PrintParent("type", "node", "ip"))
+			( Danger("tag", "MEM")
+				.Msg("descr", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem})")
+				.Msg("msg", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem})"),
+			, Recover("tag", "MEM")
+				.Msg("descr", "total mem({total_mem})  node {in_n:node} is ok")
+				.Msg("msg", "total mem({total_mem})  node {in_n:node} is ok")),
 	}
 }
 
@@ -232,30 +295,54 @@ ib_module = {
 
 	"react" : {
 		NotEquals("state", 0) :
-			Danger("IB", "IB link problem: state").PrintParent("type", "node", "ip"),
+			Danger("tag", "IB")
+				.Msg("descr", "IB link problem on node: state")
+				.Msg("msg", "IB link problem on {in_n:node}: state"),
 		NotEquals("physical_state", 0) :
-			Danger("IB", "IB link problem: physical state").PrintParent("type", "node", "ip"),
+			Danger("tag", "IB")
+				.Msg("descr", "IB link problem on node: physical state")
+				.Msg("msg", "IB link problem on {in_n:node}: physical state"),
 
 		NotEquals("SymbolErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: SymbolErrors = {SymbolErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: SymbolErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: SymbolErrors = {SymbolErrors}"),
 		NotEquals("RcvErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: RcvErrors = {RcvErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: RcvErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: RcvErrors = {RcvErrors}"),
 		NotEquals("RcvRemotePhysErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: RcvRemotePhysErrors = {RcvRemotePhysErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: RcvRemotePhysErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: RcvRemotePhysErrors = {RcvRemotePhysErrors}"),
 		NotEquals("RcvSwRelayErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: RcvSwRelayErrors = {RcvSwRelayErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: RcvSwRelayErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: RcvSwRelayErrors = {RcvSwRelayErrors}"),
 		NotEquals("XmtDiscards", 0).Repeatable() :
-			Warning("IB", "IB errros growing: XmtDiscards = {XmtDiscards}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: XmtDiscards")
+				.Msg("msg", "IB errros growing on {in_n:node}: XmtDiscards = {XmtDiscards}"),
 		NotEquals("XmtConstraintErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: XmtConstraintErrors = {XmtConstraintErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: XmtConstraintErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: XmtConstraintErrors = {XmtConstraintErrors}"),
 		NotEquals("RcvConstraintErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: RcvConstraintErrors = {RcvConstraintErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: RcvConstraintErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: RcvConstraintErrors = {RcvConstraintErrors}"),
 		NotEquals("LinkIntegrityErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: LinkIntegrityErrors = {LinkIntegrityErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: LinkIntegrityErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: LinkIntegrityErrors = {LinkIntegrityErrors}"),
 		NotEquals("ExcBufOverrunErrors", 0).Repeatable() :
-			Warning("IB", "IB errros growing: ExcBufOverrunErrors = {ExcBufOverrunErrors}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: ExcBufOverrunErrors")
+				.Msg("msg", "IB errros growing on {in_n:node}: ExcBufOverrunErrors = {ExcBufOverrunErrors}"),
 		NotEquals("VL15Dropped", 0).Repeatable() :
-			Warning("IB", "IB errros growing: VL15Dropped = {VL15Dropped}").PrintParent("type", "node", "ip"),
+			Warning("tag", "IB")
+				.Msg("descr", "IB errros growing on node: VL15Dropped")
+				.Msg("msg", "IB errros growing on {in_n:node}: VL15Dropped = {VL15Dropped}"),
 	}
 }
 
@@ -297,21 +384,33 @@ eth_module = {
 
 	"react" : {
 		Equals("speed_ok", False) :
-			Danger("ETH", "speed({speed}) does not match requred speed({_static_eth_speed_req})").PrintParent("type", "node", "ip"),
+			Danger("tag", "ETH")
+				.Msg("descr", "speed does not match requred speed")
+				.Msg("msg", "speed({speed}) does not match requred speed({_static_eth_speed_req})"),
 
 		Equals("duplex_ok", False) :
-			Danger("ETH", "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req})").PrintParent("type", "node", "ip"),
+			Danger("tag", "ETH")
+				.Msg("descr", "duplex mode does not match requred mode")
+				.Msg("msg", "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req})"),
 
 		Equals("check_rx_errors", False).Delay(1000) :
-			Warning("ETH", "recieve errors({rx_errors}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
+			Warning("tag", "ETH")
+				.Msg("descr", "recieve errors growing fast for last 1000 seconds")
+				.Msg("msg", "recieve errors({rx_errors}) growing fast for last 1000 seconds"),
 
 		Equals("check_tx_errors", False).Delay(1000) :
-			Warning("ETH", "transm errors({tx_errors}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
+			Warning("tag", "ETH")
+				.Msg("descr", "transm errors growing fast for last 1000 seconds")
+				.Msg("msg", "transm errors({tx_errors}) growing fast for last 1000 seconds"),
 
 		Equals("check_tx_dropped", False).Delay(1000) :
-			Warning("ETH", "tranms dropped({tx_dropped}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
+			Warning("tag", "ETH")
+				.Msg("descr", "tranms dropped growing fast for last 1000 seconds")
+				.Msg("msg", "tranms dropped({tx_dropped}) growing fast for last 1000 seconds"),
 
 		Equals("check_collisions", False).Delay(1000) :
-			Warning("ETH", "collisions({collisions}) growing fast for last 1000 seconds").PrintParent("type", "node", "ip"),
+			Warning("tag", "ETH")
+				.Msg("descr", "collisions growing fast for last 1000 seconds")
+				.Msg("msg", "collisions({collisions}) growing fast for last 1000 seconds"),
 	}
 }
