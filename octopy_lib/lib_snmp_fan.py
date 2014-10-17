@@ -1,9 +1,5 @@
 from octopy import *
 
-def __FanReactSetting(tag, msg1, msg2):
-	return (Danger(tag, msg1).PrintParent("type", "descr")
-		, Recover(msg2).PrintParent("type", "descr"))
-
 fan_snmp_module = {
 	"static" :
 	{
@@ -41,37 +37,69 @@ fan_snmp_module = {
 	},
 
 	"react" : {
-		Equals("inlet_1_ok", False) : __FanReactSetting("TEMPERATURE"
-			, "air temp 1 is too high: {inlet_1}"
-			, "air temp 1 is back to normal"),
+		Equals("inlet_1_ok", False) : 
+			( Danger("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air temp 1 is too high")
+				.Msg("msg", "fan {ip}: air temp 1 is too high: {inlet_1}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air temp 1 is back to normal"),
+				.Msg("msg", "fan {ip}: air temp 1 is back to normal"),
 
-		Equals("inlet_2_ok", False) :	__FanReactSetting("TEMPERATURE"
-			, "air temp 2 is too high: {inlet_2}"
-			, "air temp 2 is back to normal"),
+		Equals("inlet_2_ok", False) :	
+			( Danger("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air temp 2 is too high")
+				.Msg("msg", "fan {ip}: air temp 2 is too high: {inlet_2}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air temp 2 is back to normal"),
+				.Msg("msg", "fan {ip}: air temp 2 is back to normal"),
 
-		Equals("inlet_3_ok", False) : __FanReactSetting("TEMPERATURE"
-			, "air temp 3 is too high: {inlet_3}"
-			, "air temp 3 is back to normal"),
+		Equals("inlet_3_ok", False) : 
+			( Danger("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air temp 3 is too high")
+				.Msg("msg", "fan {ip}: air temp 3 is too high: {inlet_3}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air temp 3 is back to normal"),
+				.Msg("msg", "fan {ip}: air temp 3 is back to normal"),
 
-		Equals("humidity_in_ok", False) : __FanReactSetting("ENVIRONMENT"
-			, "air humidity_in is too high: {humidity_in}"
-			, "air humidity_in is back to normal"),
+		Equals("humidity_in_ok", False) : 
+			( Danger("tag", "ENVIRONMENT")
+				.Msg("descr", "fan: air humidity_in is too high")
+				.Msg("msg", "fan {ip}: air humidity_in is too high: {humidity_in}")
+			, Recover("tag", "ENVIRONMENT")
+				.Msg("descr", "fan: air humidity_in is back to normal"),
+				.Msg("msg", "fan {ip}: air humidity_in is back to normal"),
 
-		Equals("humidity_out_ok", False) : __FanReactSetting("ENVIRONMENT"
-			, "air humidity_out is too high: {humidity_out}"
-			, "air humidity_out is back to normal"),
+		Equals("humidity_out_ok", False) : 
+			( Danger("tag", "ENVIRONMENT")
+				.Msg("descr", "fan: air humidity_out is too high")
+				.Msg("msg", "fan {ip}: air humidity_out is too high: {humidity_out}")
+			, Recover("tag", "ENVIRONMENT")
+				.Msg("descr", "fan: air humidity_out is back to normal"),
+				.Msg("msg", "fan {ip}: air humidity_out is back to normal"),
 
-		Equals("air_in_ok", False) : __FanReactSetting("TEMPERATURE"
-			, "air_in temp is too high: {air_in}"
-			, "air_in temp is back to normal"),
+		Equals("air_in_ok", False) : 
+			( Danger("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air_in temp is too high")
+				.Msg("msg", "fan {ip}: air_in temp is too high: {air_in}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air_in temp is back to normal"),
+				.Msg("msg", "fan {ip}: air_in temp is back to normal"),
 
-		Equals("air_out_ok", False) : __FanReactSetting("TEMPERATURE"
-			, "air_out temp  is too high: {air_out}"
-			, "air_out temp  is back to normal"),
+		Equals("air_out_ok", False) : 
+			( Danger("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air_out temp  is too high")
+				.Msg("msg", "fan {ip}: air_out temp  is too high: {air_out}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: air_out temp  is back to normal"),
+				.Msg("msg", "fan {ip}: air_out temp  is back to normal"),
 
-		Equals("fluid_in_ok", False) : __FanReactSetting("TEMPERATURE"
-			, "fluid_in temp is too high: {fluid_in}"
-			, "fluid_in temp is back to normal"),
+		Equals("fluid_in_ok", False) : 
+			( Danger("tag", "TEMPERATURE")
+				.Msg("descr", "fan: fluid_in temp is too high")
+				.Msg("msg", "fan {ip}: fluid_in temp is too high: {fluid_in}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: fluid_in temp is back to normal"),
+				.Msg("msg", "fan {ip}: fluid_in temp is back to normal"),
 	}
 }
 
@@ -120,38 +148,72 @@ fan_snmp_trap_module = {
 
 	"react" : {
 		Equals("airWarningCondition_24", True).Repeatable() :
-			Warning("INFRASTRUCTURE", "Frequent Humidifier faults: {airWarningCondition_24_descr}"),
+			Warning("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Frequent Humidifier faults")
+				.Msg("msg", "fan: Frequent Humidifier faults: {airWarningCondition_24_descr}"),
 
 		Equals("pump_fault", True) :
-			(Critical("INFRASTRUCTURE", "Condensate pump fault: {airCriticalCondition_29_descr}")
-				, Recover("Condensate pump is ok: {airCriticalCondition_29_descr}")),
+			( Critical("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Condensate pump fault")
+				.Msg("msg", "fan {ip}: Condensate pump fault: {airCriticalCondition_29_descr}")
+			, Recover("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Condensate pump is ok")),
+				.Msg("msg", "fan {ip}: Condensate pump is ok: {airCriticalCondition_29_descr}")),
 
 		Equals("water_detected", True) :
-			(Danger("ENVIRONMENT", "Sensor detected a fluid leak!: {airWarningCondition_28_descr}")
-				, Recover("Sensor is ok, no fluid detected: {airWarningCondition_28_descr}")),
+			( Danger("tag", "ENVIRONMENT")
+				.Msg("descr", "fan: Sensor detected a fluid leak!")
+				.Msg("msg", "fan {ip}: Sensor detected a fluid leak!: {airWarningCondition_28_descr}")
+			, Recover("tag", "ENVIRONMENT")
+				.Msg("descr", "fan: Sensor is ok, no fluid detected")),
+				.Msg("msg", "fan {ip}: Sensor is ok, no fluid detected: {airWarningCondition_28_descr}")),
 
 		Equals("fan_fault", True) :
-			(Warning("INFRASTRUCTURE", "Fan fault: {airWarningCondition_27_descr}")
-				, Recover("Fan is ok: {airWarningCondition_27_descr}")),
+			( Warning("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: fault")
+				.Msg("msg", "fan {ip}: fault: {airWarningCondition_27_descr}")
+			, Recover("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: is ok")),
+				.Msg("msg", "fan {ip}: is ok: {airWarningCondition_27_descr}")),
 
 		Equals("low_water_alarm", True) :
-			(Warning("INFRASTRUCTURE", "Humidifier low water level alarm : {airWarningCondition_32_descr}")
-				, Recover("Humidifier is ok: {airWarningCondition_32_descr}")),
+			( Warning("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Humidifier low water level alarm")
+				.Msg("msg", "fan {ip}: Humidifier low water level alarm : {airWarningCondition_32_descr}")
+			, Recover("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Humidifier is ok")),
+				.Msg("msg", "fan {ip}: Humidifier is ok: {airWarningCondition_32_descr}")),
 
 		Equals("entering_fluid_temp_fault", True) :
-			(Warning("TEMPERATURE", "Entering fluid temperature is too high: {airWarningCondition_39_descr}")
-				, Recover("Entering fluid temperature is ok: {airWarningCondition_39_descr}")),
+			( Warning("tag", "TEMPERATURE")
+				.Msg("descr", "fan: Entering fluid temperature is too high")
+				.Msg("msg", "fan {ip}: Entering fluid temperature is too high: {airWarningCondition_39_descr}")
+			, Recover("tag", "TEMPERATURE")
+				.Msg("descr", "fan: Entering fluid temperature is ok")),
+				.Msg("msg", "fan {ip}: Entering fluid temperature is ok: {airWarningCondition_39_descr}")),
 
 		Equals("fluid_temp_sensor_fault", True) :
-			(Warning("INFRASTRUCTURE", "Entering fluid tempereature sensor failed: {airWarningCondition_40_descr}")
-				, Recover("Entering fluid tempereature sensor is ok: {airWarningCondition_40_descr}")),
+			( Warning("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Entering fluid tempereature sensor failed")
+				.Msg("msg", "fan {ip}: Entering fluid tempereature sensor failed: {airWarningCondition_40_descr}")
+			, Recover("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Entering fluid tempereature sensor is ok")),
+				.Msg("msg", "fan {ip}: Entering fluid tempereature sensor is ok: {airWarningCondition_40_descr}")),
 
 		Equals("communication_lost", True) :
-			(Warning("INFRASTRUCTURE", "Group communication lost: {airWarningCondition_54_descr}")
-				, Recover("Group communication restored: {airWarningCondition_54_descr}")),
+			( Warning("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Group communication lost")
+				.Msg("msg", "fan {ip}: Group communication lost: {airWarningCondition_54_descr}")
+			, Recover("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Group communication restored")),
+				.Msg("msg", "fan {ip}: Group communication restored: {airWarningCondition_54_descr}")),
 
 		Equals("relay_output_fault", True) :
-			(Info("INFRASTRUCTURE", "Relay output abnormal state: {airInformationalCondition_3_descr}")
-				, Recover("Relay output is ok: {airInformationalCondition_3_descr}"))
+			( Info("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Relay output abnormal state")
+				.Msg("msg", "fan {ip}: Relay output abnormal state: {airInformationalCondition_3_descr}")
+			, Recover("tag", "INFRASTRUCTURE")
+				.Msg("descr", "fan: Relay output is ok"))
+				.Msg("msg", "fan {ip}: Relay output is ok: {airInformationalCondition_3_descr}"))
 	}
 }

@@ -66,7 +66,7 @@ disk_module = {
 				.Msg("msg", "disk temperature on {in_n:node} is above threshol({temperature_celsius})"),
 			, Recover("tag", "TEMPERATURE")
 				.Msg("descr", "disk temperature is back to normal"))
-				.Msg("msg", "disk temperature on {in_n:node}is back to normal({temperature_celsius})")),
+				.Msg("msg", "disk temperature on {in_n:node} is back to normal({temperature_celsius})")),
 	}
 }
 
@@ -386,31 +386,31 @@ eth_module = {
 		Equals("speed_ok", False) :
 			Danger("tag", "ETH")
 				.Msg("descr", "speed does not match requred speed")
-				.Msg("msg", "speed({speed}) does not match requred speed({_static_eth_speed_req})"),
+				.Msg("msg", "speed({speed}) does not match requred speed({_static_eth_speed_req}) on {in_n:node}"),
 
 		Equals("duplex_ok", False) :
 			Danger("tag", "ETH")
 				.Msg("descr", "duplex mode does not match requred mode")
-				.Msg("msg", "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req})"),
+				.Msg("msg", "duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req}) on {in_n:node}"),
 
 		Equals("check_rx_errors", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "recieve errors growing fast for last 1000 seconds")
-				.Msg("msg", "recieve errors({rx_errors}) growing fast for last 1000 seconds"),
+				.Msg("msg", "recieve errors({rx_errors}) growing fast for last 1000 seconds on {in_n:node}"),
 
 		Equals("check_tx_errors", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "transm errors growing fast for last 1000 seconds")
-				.Msg("msg", "transm errors({tx_errors}) growing fast for last 1000 seconds"),
+				.Msg("msg", "transm errors({tx_errors}) growing fast for last 1000 seconds on {in_n:node}"),
 
 		Equals("check_tx_dropped", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "tranms dropped growing fast for last 1000 seconds")
-				.Msg("msg", "tranms dropped({tx_dropped}) growing fast for last 1000 seconds"),
+				.Msg("msg", "tranms dropped({tx_dropped}) growing fast for last 1000 seconds on {in_n:node}"),
 
 		Equals("check_collisions", False).Delay(1000) :
 			Warning("tag", "ETH")
 				.Msg("descr", "collisions growing fast for last 1000 seconds")
-				.Msg("msg", "collisions({collisions}) growing fast for last 1000 seconds"),
+				.Msg("msg", "collisions({collisions}) growing fast for last 1000 seconds on {in_n:node}"),
 	}
 }

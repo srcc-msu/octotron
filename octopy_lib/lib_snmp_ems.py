@@ -294,12 +294,18 @@ ems_snmp_trap_module = {
 				.Msg("msg", "ems: envLowHumidityThresholdViolation is OK {ip}")),
 
 		Equals("iemContactFault", True).Repeatable() :
-			Danger("INFRASTRUCTURE", "ems trap: iemContactFault"),
+			Danger("tag", "INFRASTRUCTURE")
+				.Msg("descr", "ems trap: iemContactFault")
+				.Msg("msg", "ems trap: iemContactFault {ip}"),
 
 		Equals("contactFault", True).Repeatable() :
-			Danger("INFRASTRUCTURE", "ems trap: contactFault"),
+			Danger("tag", "INFRASTRUCTURE")
+				.Msg("descr", "ems trap: contactFault")
+				.Msg("msg", "ems trap: contactFault {ip}"),
 
 		Equals("emsSensorFault", True).Repeatable() :
-			Danger("INFRASTRUCTURE", "ems trap: emsSensorFault"),
+			Danger("tag", "INFRASTRUCTURE")
+				.Msg("descr", "ems trap: emsSensorFault")
+				.Msg("msg", "ems trap: emsSensorFault {ip}"),
 	}
 }
