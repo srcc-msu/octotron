@@ -13,6 +13,10 @@ from octopy import *
 #
 
 cleo_module = {
+	"const" : {
+		"type" : "queue"
+	},
+
 	"sensor" : {
 		"tasks_total"   : 0,
 		"tasks_running" : 0,

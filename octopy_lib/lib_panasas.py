@@ -54,7 +54,7 @@ panasas_blade_module = {
 		"perf_out_kbs"  : 0
 	},
 
-	"reaction" : {
+	"react" : {
 		Equals("status", "warning") :
 			( Danger("tag", "STORAGE").Msg("loc", "{uid}")
 				.Msg("descr", "warning on panasas blade uid")

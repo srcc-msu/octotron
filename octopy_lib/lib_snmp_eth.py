@@ -2,6 +2,7 @@ from octopy import *
 
 eth_port_snmp_module = {
 	"const" : {
+		"type" : "port",
 		"_static_eth_port_error_speed_max" : 10.0
 	},
 
