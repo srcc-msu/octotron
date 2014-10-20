@@ -1,10 +1,6 @@
 from octopy import *
 
 ems_sensor_module = {
-	"const" : {
-		"type" : "ems_sensor"
-	},
-
 	"static" : {
 		"_static_ems_sensor_front_temp_max" : 30,
 		"_static_ems_sensor_back_temp_max" : 50,
@@ -86,10 +82,6 @@ ems_sensor_module = {
 }
 
 ems_contact_module = {
-	"const" : {
-		"type" : "ems_contact"
-	},
-
 	"sensor" : {
 		"state" : "",
 		"normal_state" : ""
