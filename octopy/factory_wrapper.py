@@ -10,6 +10,8 @@ def CreateObject(*modules):
 def CreateObjects(count, *modules):
 	params = MergeDicts(modules)
 
+	CheckAllowed(params)
+
 	factory = ObjectFactory(context.model_service)
 
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
@@ -23,6 +25,8 @@ def CreateObjects(count, *modules):
 
 def UpdateObject(object, *modules):
 	params = MergeDicts(modules)
+
+	CheckAllowed(params)
 
 	object.GetBuilder(context.model_service).DeclareConst(ConvertAttributes(MergeDicts(params["const"])))
 	object.GetBuilder(context.model_service).DeclareConst(ConvertAttributes(MergeDicts(params["static"])))

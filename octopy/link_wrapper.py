@@ -9,6 +9,8 @@ import jarray
 def GetLinkFactory(params, type):
 	factory = LinkFactory(context.model_service)
 
+	CheckAllowed(params)
+
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
 	factory = factory.Sensors  (ConvertAttributes(MergeDicts(params["sensor"])))

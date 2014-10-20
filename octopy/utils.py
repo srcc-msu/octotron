@@ -77,6 +77,15 @@ def MergeDicts(dicts):
 
 	return result
 
+__allowed = ["const", "static", "sensor", "var", "react"]
+
+def CheckAllowed(params):
+
+	for param in params.keys():
+		if param not in __allowed:
+			raise RuntimeError("unknown key: " + param)
+
+
 def MergeUniqueDicts(dicts):
 	result = collections.defaultdict(list)
 
