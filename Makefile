@@ -15,7 +15,6 @@ run: $(OCTO_LIB) $(MODEL_CFG)
 clean:
 	rm -f octopy/*.class
 	rm -f octopy_lib/*.class
-	rm -f $(MODEL_DIR)/*.class
 
 .PHONY: model run clean
 

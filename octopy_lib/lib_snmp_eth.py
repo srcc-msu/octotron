@@ -53,7 +53,7 @@ eth_port_snmp_module = {
 		Equals("duplex_match", False) :
 			( Danger("tag", "ETH")
 				.Msg("descr", "port has wrong duplex mode({duplex})")
-				.Msg("msg"  , "{in_n:type} {in_n:ip}: port({if_id}) has wrong duplex mode({duplex}")
+				.Msg("msg"  , "{in_n:type} {in_n:ip}: port({if_id}) has wrong duplex mode({duplex})")
 			, Recover("tag", "ETH")
 				.Msg("descr", "port duplex is ok")
 				.Msg("msg"  , "{in_n:type} {in_n:ip}: port({if_id}) duplex is ok")),
@@ -61,7 +61,7 @@ eth_port_snmp_module = {
 		Equals("speed_match", False) :
 			( Danger("tag", "ETH")
 				.Msg("descr", "port({if_id}) has a wrong speed({speed})")
-				.Msg("msg"  , "port({if_id}) has a wrong speed({speed}")
+				.Msg("msg"  , "port({if_id}) has a wrong speed({speed})")
 			, Recover("tag", "ETH")
 				.Msg("descr", "port speed is good")
 				.Msg("msg"  , "{in_n:type} {in_n:ip}: port({if_id}) speed is good")),
