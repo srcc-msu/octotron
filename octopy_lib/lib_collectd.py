@@ -76,13 +76,7 @@ node_module = {
 	"static" :
 	{
 		"_static_fork_rate_thr" : 50.0,
-		"_static_la_thr1" : 9.0,
-		"_static_la_thr2" : 17.0,
-		"_static_system_ntpd_thr_neg" :  -2.0,
-		"_static_system_ntpd_thr_pos" :  2.0,
 
-		"_static_system_thr1" :  40,
-		"_static_system_thr2" :  50,
 	},
 
 	"sensor" : {
@@ -101,8 +95,9 @@ node_module = {
 	},
 
 	"var" : {
-		"la_1_acceptable" : UpperArgThreshold("la_1", "_static_la_thr1"),
-		"la_1_sane"       : UpperArgThreshold("la_1", "_static_la_thr2"),
+		"la_1_state" : Interval("la_1", 9.0, 17.0, 33.0),
+		"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
+		"temp_state" : Interval("temp", 40, 50),
 
 		"fork_rate" : CalcSpeed("forks"),
 		"fork_rate_ok" : UpperArgThreshold("fork_rate", "_static_fork_rate_thr"),
@@ -114,12 +109,6 @@ node_module = {
 		"check_clean_ok" : Match("check_clean", 0),
 
 		"check_nmond_ok" : Match("check_nmond", 0),
-
-		"ntpd_drift_ok_1" : UpperArgThreshold("ntpd_drift", "_static_system_ntpd_thr_pos"),
-		"ntpd_drift_ok_2" : LowerArgThreshold("ntpd_drift", "_static_system_ntpd_thr_neg"),
-
-		"temp_ok" : UpperArgThreshold("temp", "_static_system_thr1"),
-		"temp_acceptable" : UpperArgThreshold("temp", "_static_system_thr2"),
 	},
 
 	"react" : {
@@ -133,18 +122,20 @@ node_module = {
 				.Msg("descr", "zombies present on node for last 1000 seconds")
 				.Msg("msg"  , "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
 
-		Equals("la_1_acceptable", False).Delay(1000) :
-			( Warning("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "LA on node exceeded threshold 1 for last 1000 seconds")
-				.Msg("msg"  , "LA({la_1}) on {node} exceeded {_static_la_thr1} for last 1000 seconds")
-			, Recover("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "LA on node is back to normal")
-				.Msg("msg"  , "LA({la_1}) on {node} is back to normal")),
+		Equals("la_1_state", 1).Delay(1000) :
+			Warning("tag", "NODE").Msg("loc", "{node}")
+				.Msg("descr", "LA on node exceeded 9.0 for last 1000 seconds")
+				.Msg("msg"  , "LA({la_1}) on {node} exceeded 9.0 for last 1000 seconds"),
 
-		Equals("la_1_sane", False) :
+		Equals("la_1_state", 2).Delay(1000) :
+			Warning("tag", "NODE").Msg("loc", "{node}")
+				.Msg("descr", "LA on node exceeded 17.0 for last 1000 seconds")
+				.Msg("msg"  , "LA({la_1}) on {node} exceeded 17.0 for last 1000 seconds"),
+
+		Equals("la_1_state", 3).Delay(1000) :
 			Danger("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "LA on node exceeded threshold 2 for last 1000 seconds")
-				.Msg("msg"  , "LA({la_1}) on {node} exceeded {_static_la_thr2} for last 1000 seconds"),
+				.Msg("descr", "LA on node exceeded 33.0 for last 1000 seconds")
+				.Msg("msg"  , "LA({la_1}) on {node} exceeded 33.0 for last 1000 seconds"),
 
 		Equals("check_tmp_ok", False) :
 			( Danger("tag", "NODE").Msg("loc", "{node}")
@@ -176,7 +167,7 @@ node_module = {
 				.Msg("descr", "hopsa agent(nmond) found on node")
 				.Msg("msg"  , "hopsa agent(nmond) found on {node}")),
 
-		Equals("ntpd_drift_ok_1", False) :
+		NotEquals("ntpd_drift_state", 1) :
 			( Danger("tag", "NODE").Msg("loc", "{node}")
 				.Msg("descr", "ntpd drift on node is too big")
 				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is too big")
@@ -184,15 +175,7 @@ node_module = {
 				.Msg("descr", "ntpd drift on node is ok")
 				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is ok")),
 
-		Equals("ntpd_drift_ok_2", False) :
-			( Danger("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "ntpd drift on node is too big")
-				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is too big")
-			, Recover("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "ntpd drift on node is ok")
-				.Msg("msg"  , "ntpd drift({ntpd_drift}) on {node} is ok")),
-
-		Equals("temp_ok", False) :
+		NotEquals("temp_state", 0) :
 			( Warning("tag", "TEMPERATURE").Msg("loc", "{node}")
 				.Msg("descr", "bad system temp on node")
 				.Msg("msg"  , "bad system temp on {node}")
@@ -200,7 +183,7 @@ node_module = {
 				.Msg("descr", "system temp on node is ok")
 				.Msg("msg"  , "system temp on {node} is ok")),
 
-		Equals("temp_acceptable", False) :
+		Equals("temp_state", 2) :
 			Critical("tag", "TEMPERATURE").Msg("loc", "{node}")
 				.Msg("descr", "critical system temp on node")
 				.Msg("msg"  , "critical system temp on {node}"),
@@ -210,22 +193,16 @@ node_module = {
 #// ----------------------------------------- CPU --------------------------------------------
 
 cpu_module = {
-	"static" : {
-		"_static_temp_thr1" : 75,
-		"_static_temp_thr2" : 80
-	},
-
 	"sensor" : {
 		"temp" : 0,
 	},
 
 	"var" : {
-		"cpu_temp_ok"         : UpperArgThreshold("temp", "_static_temp_thr1"),
-		"cpu_temp_acceptable" : UpperArgThreshold("temp", "_static_temp_thr2"),
+		"temp_state" : Interval("temp", 75, 80),
 	},
 
 	"react" : {
-		Equals("cpu_temp_ok", False) :
+		NotEquals("temp_state", 0) :
 			( Warning("tag", "TEMPERATURE").Msg("loc", "{in_n:node}")
 				.Msg("descr", "bad cpu temp")
 				.Msg("msg"  , "bad cpu temp({temp})  node {in_n:node}")
@@ -233,7 +210,7 @@ cpu_module = {
 				.Msg("descr", "cpu temp({temp}) is ok now ")
 				.Msg("msg"  , "cpu temp({temp})  node {in_n:node} is ok now ")),
 
-		Equals("cpu_temp_acceptable", False) :
+		Equals("temp_state", 2) :
 			Critical("tag", "TEMPERATURE").Msg("loc", "{in_n:node}")
 				.Msg("descr", "critical cpu temp")
 				.Msg("msg"  , "critical cpu temp({temp})  node {in_n:node}"),

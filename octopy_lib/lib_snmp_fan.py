@@ -106,25 +106,25 @@ fan_snmp_module = {
 fan_snmp_trap_module = {
 	# False = no trap
 	"sensor" : {
-		"airCriticalCondition_29" : False,
+		"airCriticalCondition_29" : True,
 		"airCriticalCondition_29_descr" : "",
 
-		"airWarningCondition_24" : False,
+		"airWarningCondition_24" : True,
 		"airWarningCondition_24_descr" : "",
-		"airWarningCondition_27" : False,
+		"airWarningCondition_27" : True,
 		"airWarningCondition_27_descr" : "",
-		"airWarningCondition_28" : False,
+		"airWarningCondition_28" : True,
 		"airWarningCondition_28_descr" : "",
-		"airWarningCondition_32" : False,
+		"airWarningCondition_32" : True,
 		"airWarningCondition_32_descr" : "",
-		"airWarningCondition_39" : False,
+		"airWarningCondition_39" : True,
 		"airWarningCondition_39_descr" : "",
-		"airWarningCondition_40" : False,
+		"airWarningCondition_40" : True,
 		"airWarningCondition_40_descr" : "",
-		"airWarningCondition_54" : False,
+		"airWarningCondition_54" : True,
 		"airWarningCondition_54_descr" : "",
 
-		"airInformationalCondition_3" : False,
+		"airInformationalCondition_3" : True,
 		"airInformationalCondition_3_descr" : "",
 	},
 
@@ -147,7 +147,7 @@ fan_snmp_trap_module = {
 	},
 
 	"react" : {
-		Equals("airWarningCondition_24", True).Repeatable() :
+		Equals("airWarningCondition_24", False).Repeatable() :
 			Warning("tag", "INFRASTRUCTURE").Msg("loc", "{ip}")
 				.Msg("descr", "fan: Frequent Humidifier faults")
 				.Msg("msg"  , "fan: Frequent Humidifier faults: {airWarningCondition_24_descr}"),

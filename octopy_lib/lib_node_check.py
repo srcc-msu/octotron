@@ -5,10 +5,7 @@ node_check_module = {
 		"chk_ssh" : True,
 		"chk_ping" : True,
 		"chk_mpi" : True,
-		"chk_mem" : True,
 		"chk_ib" : True,
-		"chk_disk" : True,
-		"chk_tmp" : True,
 		"ib_visible" : True
 	},
 
@@ -37,14 +34,6 @@ node_check_module = {
 				.Msg("descr", "node is good: mpi")
 				.Msg("msg"  , "{node} is good: mpi")),
 
-		Equals("chk_mem", False) :
-			( Critical("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node failure: mem")
-				.Msg("msg"  , "{node} failure: mem")
-			, Recover("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node is good: mem")
-				.Msg("msg"  , "{node} is good: mem")),
-
 		Equals("chk_ib", False) :
 			( Critical("tag", "NODE").Msg("loc", "{node}")
 				.Msg("descr", "node failure: ib")
@@ -52,22 +41,6 @@ node_check_module = {
 			, Recover("tag", "NODE").Msg("loc", "{node}")
 				.Msg("descr", "node is good: ib")
 				.Msg("msg"  , "{node} is good: ib")),
-
-		Equals("chk_disk", False) :
-			( Critical("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node failure: disk")
-				.Msg("msg"  , "{node} failure: disk")
-			, Recover("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node is good: disk")
-				.Msg("msg"  , "{node} is good: disk")),
-
-		Equals("chk_tmp", False) :
-			( Critical("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node failure: tmp")
-				.Msg("msg"  , "{node} failure: tmp")
-			, Recover("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node is good: tmp")
-				.Msg("msg"  , "{node} is good: tmp")),
 
 		Equals("ib_visible", False) :
 			( Critical("tag", "NODE").Msg("loc", "{node}")
