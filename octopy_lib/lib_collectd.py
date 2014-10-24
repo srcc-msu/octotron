@@ -92,10 +92,20 @@ node_module = {
 		"check_nmond" : 0,
 
 		"ntpd_drift" : 0.0,
+
+		"task_id" : -1,
 	},
 
 	"var" : {
-		"la_1_state" : Interval("la_1", 9.0, 17.0, 33.0),
+		"task_not_present" : Match("task_id", -1),
+		"task_present" : NotMatch("task_id", -1),
+
+		"la_1_free_state" : Interval("la_1", 3.0), "la_1_free_ok" : Match("la_1_free_state", 0),
+		"la_1_busy_state" : Interval("la_1", 33.0), "la_1_busy_ok" : Match("la_1_busy_state", 0),
+
+		"node_free_ok" : LogicalAnd("task_not_present", "la_1_free_ok"),
+		"node_busy_ok" : LogicalAnd("task_present", "la_1_busy_ok"),
+
 		"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
 		"temp_state" : Interval("temp", 40, 50),
 
@@ -122,20 +132,15 @@ node_module = {
 				.Msg("descr", "zombies present on node for last 1000 seconds")
 				.Msg("msg"  , "({zombies}) zombies present on {node} for last 1000 seconds, run for your life!"),
 
-		Equals("la_1_state", 1).Delay(1000) :
+		Equals("node_free_ok", False).Delay(1000) :
 			Warning("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "LA on node exceeded 9.0 for last 1000 seconds")
-				.Msg("msg"  , "LA({la_1}) on {node} exceeded 9.0 for last 1000 seconds"),
+				.Msg("descr", "LA on *free* node exceeded 3.0 for last 1000 seconds")
+				.Msg("msg"  , "LA({la_1}) on *free* {node} exceeded 3.0 for last 1000 seconds"),
 
-		Equals("la_1_state", 2).Delay(1000) :
+		Equals("node_busy_ok", False).Delay(1000) :
 			Warning("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "LA on node exceeded 17.0 for last 1000 seconds")
-				.Msg("msg"  , "LA({la_1}) on {node} exceeded 17.0 for last 1000 seconds"),
-
-		Equals("la_1_state", 3).Delay(1000) :
-			Danger("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "LA on node exceeded 33.0 for last 1000 seconds")
-				.Msg("msg"  , "LA({la_1}) on {node} exceeded 33.0 for last 1000 seconds"),
+				.Msg("descr", "LA on node with task exceeded 33.0 for last 1000 seconds")
+				.Msg("msg"  , "LA({la_1}) on {node} with task(id: {task_id}) exceeded 33.0 for last 1000 seconds"),
 
 		Equals("check_tmp_ok", False) :
 			( Danger("tag", "NODE").Msg("loc", "{node}")
@@ -224,24 +229,23 @@ memory_module = {
 		"buffered" : 0,
 		"cached" : 0,
 		"free" : 0,
-		"used" : 0
+		"used" : 0,
+		"total" : 0
 	},
 
 	"var" : {
-		"total_mem" : AggregateLongSum(EDependencyType.SELF
-			, "buffered", "cached", "free", "used"),
-		"total_mem_ok" : LowerArgThreshold("total_mem", "req_mem"),
+		"total_memory_ok" : LowerArgThreshold("total", "req_mem"),
 
 	},
 
 	"react" : {
-		Equals("total_mem_ok", False) :
+		Equals("total_memory_ok", False) :
 			( Danger("tag", "MEM").Msg("loc", "{in_n:node}")
-				.Msg("descr", "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem})")
-				.Msg("msg"  , "total mem({total_mem})  node {in_n:node} reduced below check value({req_mem}")
+				.Msg("descr", "total mem on node reduced below check value")
+				.Msg("msg"  , "total mem({total}) on node {in_n:node} reduced below check value({req_mem})")
 			, Recover("tag", "MEM").Msg("loc", "{in_n:node}")
-				.Msg("descr", "total mem({total_mem})  node {in_n:node} is ok")
-				.Msg("msg"  , "total mem({total_mem})  node {in_n:node} is ok")),
+				.Msg("descr", "total mem on node is ok")
+				.Msg("msg"  , "total mem({total}) on node {in_n:node} is ok")),
 	}
 }
 

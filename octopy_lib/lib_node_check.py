@@ -3,7 +3,6 @@ from octopy import *
 node_check_module = {
 	"sensor" : {
 		"chk_ssh" : True,
-		"chk_ping" : True,
 		"chk_mpi" : True,
 		"chk_ib" : True,
 		"ib_visible" : True
@@ -17,14 +16,6 @@ node_check_module = {
 			, Recover("tag", "NODE").Msg("loc", "{node}")
 				.Msg("descr", "node is good: ssh")
 				.Msg("msg"  , "{node} is good: ssh")),
-
-		Equals("chk_ping", False) :
-			( Critical("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node failure: ping")
-				.Msg("msg"  , "{node} failure: ping")
-			, Recover("tag", "NODE").Msg("loc", "{node}")
-				.Msg("descr", "node is good: ping")
-				.Msg("msg"  , "{node} is good: ping")),
 
 		Equals("chk_mpi", False) :
 			( Critical("tag", "NODE").Msg("loc", "{node}")
