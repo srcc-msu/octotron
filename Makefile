@@ -7,10 +7,13 @@ include Makefile.config
 OCTO_LIB=lib/octotron.jar
 JAVA_PARAM=-d64 -Dsun.net.httpserver.nodelay=true -cp $(OCTO_LIB)
 
-all : run
+all: run
 
 run: $(OCTO_LIB) $(MODEL_CFG)
 	java $(JAVA_PARAM) $(USR_JAVA_PARAM) ru.parallel.octotron.exec.Start $(MODEL_CFG)
+
+$(OCTO_LIB):
+	wget -P lib 'https://github.com/srcc-msu/octotron_core/releases/download/v3.1.4/octotron.jar'
 
 clean:
 	rm -f octopy/*.class
