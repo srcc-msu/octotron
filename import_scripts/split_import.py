@@ -34,8 +34,10 @@ def split_import(ip, port, max_lines, fname, usr, pwd):
 			lines = 0
 			file = None
 
-	# import leftovers, when stream ends
+# import leftovers, when stream ends
 	if file is not None:
+		file.close()
+
 		print "importing", lines
 		import_url_file.import_file(ip, port, fname, usr, pwd)
 
