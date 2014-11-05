@@ -212,7 +212,7 @@ cpu_module = {
 				.Msg("descr", "bad cpu temp")
 				.Msg("msg"  , "bad cpu temp({temp})  node {in_n:node}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{in_n:node}")
-				.Msg("descr", "cpu temp({temp}) is ok now ")
+				.Msg("descr", "cpu temp is ok now ")
 				.Msg("msg"  , "cpu temp({temp})  node {in_n:node} is ok now ")),
 
 		Equals("temp_state", 2) :

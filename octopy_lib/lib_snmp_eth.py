@@ -52,7 +52,7 @@ eth_port_snmp_module = {
 
 		Equals("duplex_match", False) :
 			( Danger("tag", "ETH").Msg("loc", "{in_n:ip}")
-				.Msg("descr", "port has wrong duplex mode({duplex})")
+				.Msg("descr", "port has wrong duplex mode")
 				.Msg("msg"  , "{in_n:ip}: port({if_id}) has wrong duplex mode({duplex})")
 			, Recover("tag", "ETH").Msg("loc", "{in_n:ip}")
 				.Msg("descr", "port duplex is ok")
@@ -60,7 +60,7 @@ eth_port_snmp_module = {
 
 		Equals("speed_match", False) :
 			( Danger("tag", "ETH").Msg("loc", "{in_n:ip}")
-				.Msg("descr", "port({if_id}) has a wrong speed({speed})")
+				.Msg("descr", "port has a wrong speed")
 				.Msg("msg"  , "port({if_id}) has a wrong speed({speed})")
 			, Recover("tag", "ETH").Msg("loc", "{in_n:ip}")
 				.Msg("descr", "port speed is good")
@@ -73,12 +73,12 @@ eth_port_snmp_module = {
 
 		Equals("in_errors_ok", False).Delay(1000) :
 			Warning("tag", "ETH").Msg("loc", "{in_n:ip}")
-				.Msg("descr", "port in errors growing fast for last 1000 seconds: in_errors : {in_errors}, eth_in_errors_speed: {eth_in_errors_speed}")
+				.Msg("descr", "port in errors growing fast for last 1000 seconds")
 				.Msg("msg"  , "{in_n:ip}: port({if_id}) in errors growing fast for last 1000 seconds: in_errors : {in_errors}, eth_in_errors_speed: {eth_in_errors_speed}"),
 
 		Equals("out_errors_ok", False).Delay(1000) :
 			Warning("tag", "ETH").Msg("loc", "{in_n:ip}")
-				.Msg("descr", "port out errors growing fast for last 1000 seconds: out_errors : {out_errors}, eth_out_errors_speed: {eth_out_errors_speed}")
+				.Msg("descr", "port out errors growing fast for last 1000 seconds")
 				.Msg("msg"  , "{in_n:ip}: port({if_id}) out errors growing fast for last 1000 seconds: out_errors : {out_errors}, eth_out_errors_speed: {eth_out_errors_speed}"),
 	}
 }
