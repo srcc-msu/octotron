@@ -129,6 +129,9 @@ ems_snmp_trap_module = {
 		"envHighHumidityThresholdViolation" : True, "envHighHumidityThresholdViolation_descr" : "",
 		"envLowHumidityThresholdViolation" : True, "envLowHumidityThresholdViolation_descr" : "",
 
+		"apcInformationalDiscreteInputContactStateAbnormal" : True, "apcInformationalDiscreteInputContactStateAbnormal_descr" : "",
+		"apcInformationalDiscreteInputContactStateNormal" : True, "apcInformationalDiscreteInputContactStateNormal_descr" : "",
+
 		"iemContactFault" : True, "iemContactFault_descr" : "",
 		"contactFault" : True, "contactFault_descr" : "",
 		"emsSensorFault" : True, "emsSensorFault_descr" : "",
