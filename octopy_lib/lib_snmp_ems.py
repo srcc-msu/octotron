@@ -139,10 +139,10 @@ ems_snmp_trap_module = {
 
 	"react" : {
 		Equals("emsCommunicationLost", False).Repeatable() :
-			( Danger("tag", "ems").Msg("loc", "{ip}")
+			( Danger("tag", "EMS").Msg("loc", "{ip}")
 				.Msg("descr", "emsCommunicationLost")
 				.Msg("msg"  , "emsCommunicationLost")
-			, Recover("tag", "ems").Msg("loc", "{ip}")
+			, Recover("tag", "EMS").Msg("loc", "{ip}")
 				.Msg("descr", "ems: emsCommunicationLost is OK")
 				.Msg("msg"  , "ems: emsCommunicationLost is OK")),
 
