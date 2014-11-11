@@ -1,5 +1,7 @@
 from octopy import *
 
+EMS_UPDATE_TIME = Minutes(1)
+
 ems_sensor_module = {
 	"static" : {
 		"_static_ems_sensor_front_temp_max" : 30,
@@ -11,12 +13,12 @@ ems_sensor_module = {
 
 	"sensor" : {
 	# cold
-		"front_humidity" : 0,
-		"front_temp" : 0,
+		"front_humidity" : Long(0, EMS_UPDATE_TIME),
+		"front_temp" : Long(0, EMS_UPDATE_TIME),
 
 	# hot
-		"back_humidity" : 0,
-		"back_temp" : 0,
+		"back_humidity" : Long(0, EMS_UPDATE_TIME),
+		"back_temp" : Long(0, EMS_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -83,8 +85,8 @@ ems_sensor_module = {
 
 ems_contact_module = {
 	"sensor" : {
-		"state" : "",
-		"normal_state" : ""
+		"state" : String("", EMS_UPDATE_TIME),
+		"normal_state" : String("", EMS_UPDATE_TIME),
 	},
 
 	"var" : {

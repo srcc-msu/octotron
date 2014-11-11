@@ -1,26 +1,28 @@
 from octopy import *
 
+SNMP_ETH_UPDATE_TIME = Minutes(10)
+
 eth_port_snmp_module = {
 	"const" : {
-		"_static_eth_port_error_speed_max" : 10.0
+		"_static_eth_port_error_speed_max" : 10.0,
+		"_static_duplex_req" : "full",
 	},
 
 	"sensor" : {
-		"out_frames" : 0,
-		"in_frames" : 0,
+		"out_frames" : Long(0, SNMP_ETH_UPDATE_TIME),
+		"in_frames" : Long(0, SNMP_ETH_UPDATE_TIME),
 
-		"admin_status" : "up",
-		"oper_status" : "up",
+		"admin_status" : String("up", SNMP_ETH_UPDATE_TIME),
+		"oper_status" : String("up", SNMP_ETH_UPDATE_TIME),
 
-		"duplex" : "full",
-		"_static_duplex_req" : "full",
+		"duplex" : String("full", SNMP_ETH_UPDATE_TIME),
 
-		"speed" : 0,
+		"speed" : Long(0, SNMP_ETH_UPDATE_TIME),
 
-		"in_errors" : 0,
-		"out_errors" : 0,
+		"in_errors" : Long(0, SNMP_ETH_UPDATE_TIME),
+		"out_errors" : Long(0, SNMP_ETH_UPDATE_TIME),
 
-		"q_len" : 0
+		"q_len" : Long(0, SNMP_ETH_UPDATE_TIME),
 	},
 
 	"var" : {

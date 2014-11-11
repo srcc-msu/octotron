@@ -12,26 +12,28 @@ from octopy import *
 # TODO: make more clear
 #
 
+CLEO_UPDATE_TIME = Minutes(10)
+
 cleo_module = {
 	"const" : {
 		"type" : "queue"
 	},
 
 	"sensor" : {
-		"tasks_total"   : 0,
-		"tasks_running" : 0,
-		"tasks_blocked" : 0,
-		"tasks_queued"  : 0,
-		"tasks_prerun"  : 0,
+		"tasks_total"   : Long(0, CLEO_UPDATE_TIME),
+		"tasks_running" : Long(0, CLEO_UPDATE_TIME),
+		"tasks_blocked" : Long(0, CLEO_UPDATE_TIME),
+		"tasks_queued"  : Long(0, CLEO_UPDATE_TIME),
+		"tasks_prerun"  : Long(0, CLEO_UPDATE_TIME),
 
-		"tasks_completition" : 0,
+		"tasks_completition" : Long(0, CLEO_UPDATE_TIME),
 
-		"can_run_tasks"   : 0,
-		"can_queue_tasks" : 0,
+		"can_run_tasks"   : Long(0, CLEO_UPDATE_TIME),
+		"can_queue_tasks" : Long(0, CLEO_UPDATE_TIME),
 
-		"cpus_total_free"    : 0,
-		"cpus_total_number"  : 0,
-		"cpus_blocked_count" : 0
+		"cpus_total_free"    : Long(0, CLEO_UPDATE_TIME),
+		"cpus_total_number"  : Long(0, CLEO_UPDATE_TIME),
+		"cpus_blocked_count" : Long(0, CLEO_UPDATE_TIME),
 	},
 
 	"var" : {

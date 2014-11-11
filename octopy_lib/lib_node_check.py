@@ -1,11 +1,13 @@
 from octopy import *
 
+NODE_CHECK_UPDATE_TIME = Hours(1)
+
 node_check_module = {
 	"sensor" : {
-		"chk_ssh" : True,
-		"chk_mpi" : True,
-		"chk_ib" : True,
-		"ib_visible" : True
+		"chk_ssh" : Boolean(True, NODE_CHECK_UPDATE_TIME),
+		"chk_mpi" : Boolean(True, NODE_CHECK_UPDATE_TIME),
+		"chk_ib" : Boolean(True, NODE_CHECK_UPDATE_TIME),
+		"ib_visible" : Boolean(True, NODE_CHECK_UPDATE_TIME),
 	},
 
 	"react" : {

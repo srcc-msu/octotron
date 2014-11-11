@@ -109,3 +109,27 @@ class Enumerator:
 	@staticmethod
 	def Sequence(*params):
 		Enumerator_java.Sequence(context.model_service, *params)
+
+def Seconds(t):
+	return t
+
+def Minutes(t):
+	return Seconds(t * 60)
+
+def Hours(t):
+	return Minutes(t * 60)
+
+def Days(t):
+	return Hours(t * 24)
+
+def Long(default, time):
+	pass
+
+def Double(default, time):
+	pass
+
+def Boolean(default, time):
+	pass
+
+def String(default, time):
+	pass

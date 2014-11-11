@@ -1,16 +1,18 @@
 from octopy import *
 
+PANASAS_UPDATE_TIME = Minutes(10)
+
 panasas_system_module = {
 	"const" : {
 		"type" : "panasas_system"
 	},
 
 	"sensor" : {
-		"capacity_total" : 0,
-		"capacity_used"  : 0,
-		"capacity_avail" : 0,
-		"nfs_perf_ops" : 0,
-		"nfs_perf_mbs" : 0
+		"capacity_total" : Long(0, PANASAS_UPDATE_TIME),
+		"capacity_used"  : Long(0, PANASAS_UPDATE_TIME),
+		"capacity_avail" : Long(0, PANASAS_UPDATE_TIME),
+		"nfs_perf_ops" : Long(0, PANASAS_UPDATE_TIME),
+		"nfs_perf_mbs" : Long(0, PANASAS_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -44,14 +46,14 @@ panasas_blade_module = {
 	},
 
 	"sensor" : {
-		"status" : "good",
-		"blade_type" : "",
-		"cpu_util"  : 0,
-		"disk_util" : 0,
-		"perf_ops"      : 0,
-		"perf_response" : 0,
-		"perf_in_kbs"   : 0,
-		"perf_out_kbs"  : 0
+		"status" : String("good", PANASAS_UPDATE_TIME),
+		"blade_type" : String("", PANASAS_UPDATE_TIME),
+		"cpu_util"  : Long(0, PANASAS_UPDATE_TIME),
+		"disk_util" : Long(0, PANASAS_UPDATE_TIME),
+		"perf_ops"      : Long(0, PANASAS_UPDATE_TIME),
+		"perf_response" : Long(0, PANASAS_UPDATE_TIME),
+		"perf_in_kbs"   : Long(0, PANASAS_UPDATE_TIME),
+		"perf_out_kbs"  : Long(0, PANASAS_UPDATE_TIME),
 	},
 
 	"react" : {

@@ -1,5 +1,7 @@
 from octopy import *
 
+SNMP_FAN_UPDATE_TIME = Minutes(1)
+
 fan_snmp_module = {
 	"static" :
 	{
@@ -12,15 +14,15 @@ fan_snmp_module = {
 	},
 
 	"sensor" : {
-		"inlet_1" : 0,
-		"inlet_2" : 0,
-		"inlet_3" : 0,
-		"humidity_in"  : 0,
-		"humidity_out" : 0,
-		"air_in"  : 0,
-		"air_out" : 0,
-		"fluid_in"  : 0,
-		"fluid_out" : 0,
+		"inlet_1" : Long(0, SNMP_FAN_UPDATE_TIME),
+		"inlet_2" : Long(0, SNMP_FAN_UPDATE_TIME),
+		"inlet_3" : Long(0, SNMP_FAN_UPDATE_TIME),
+		"humidity_in"  : Long(0, SNMP_FAN_UPDATE_TIME),
+		"humidity_out" : Long(0, SNMP_FAN_UPDATE_TIME),
+		"air_in"  : Long(0, SNMP_FAN_UPDATE_TIME),
+		"air_out" : Long(0, SNMP_FAN_UPDATE_TIME),
+		"fluid_in"  : Long(0, SNMP_FAN_UPDATE_TIME),
+		"fluid_out" : Long(0, SNMP_FAN_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -106,26 +108,26 @@ fan_snmp_module = {
 fan_snmp_trap_module = {
 	# False = no trap
 	"sensor" : {
-		"airCriticalCondition_29" : True,
-		"airCriticalCondition_29_descr" : "",
+		"airCriticalCondition_29" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airCriticalCondition_29_descr" : String("", SNMP_FAN_UPDATE_TIME),
 
-		"airWarningCondition_24" : True,
-		"airWarningCondition_24_descr" : "",
-		"airWarningCondition_27" : True,
-		"airWarningCondition_27_descr" : "",
-		"airWarningCondition_28" : True,
-		"airWarningCondition_28_descr" : "",
-		"airWarningCondition_32" : True,
-		"airWarningCondition_32_descr" : "",
-		"airWarningCondition_39" : True,
-		"airWarningCondition_39_descr" : "",
-		"airWarningCondition_40" : True,
-		"airWarningCondition_40_descr" : "",
-		"airWarningCondition_54" : True,
-		"airWarningCondition_54_descr" : "",
+		"airWarningCondition_24" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_24_descr" : String("", SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_27" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_27_descr" : String("", SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_28" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_28_descr" : String("", SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_32" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_32_descr" : String("", SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_39" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_39_descr" : String("", SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_40" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_40_descr" : String("", SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_54" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airWarningCondition_54_descr" : String("", SNMP_FAN_UPDATE_TIME),
 
-		"airInformationalCondition_3" : True,
-		"airInformationalCondition_3_descr" : "",
+		"airInformationalCondition_3" : Boolean(True, SNMP_FAN_UPDATE_TIME),
+		"airInformationalCondition_3_descr" : String("", SNMP_FAN_UPDATE_TIME),
 	},
 
 	"var" : {

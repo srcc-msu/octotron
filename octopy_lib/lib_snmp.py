@@ -1,11 +1,13 @@
 from octopy import *
 
+SNMP_UPDATE_TIME = Minutes(1)
+
 snmp_general_module = {
 	"sensor" : {
-		"configChangeSNMP" : True,
-		"accessViolationConsole" : True,
-		"accessViolationHTTP" : True,
-		"passwordChange" : True,
+		"configChangeSNMP" : Boolean(True, SNMP_UPDATE_TIME),
+		"accessViolationConsole" : Boolean(True, SNMP_UPDATE_TIME),
+		"accessViolationHTTP" : Boolean(True, SNMP_UPDATE_TIME),
+		"passwordChange" : Boolean(True, SNMP_UPDATE_TIME),
 	},
 
 	"react" : {
