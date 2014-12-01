@@ -8,16 +8,16 @@ disk_module = {
 	},
 
 	"sensor" : {
-		"current_pending_sector" : Long(0, CD_DISK_UPDATE_TIME),
-		"hardware_ecc_recovered" : Long(0, CD_DISK_UPDATE_TIME),
-		"offline_uncorrectable"  : Long(0, CD_DISK_UPDATE_TIME),
-		"reallocated_sector_ct"  : Long(0, CD_DISK_UPDATE_TIME),
-		"reported_uncorrect"     : Long(0, CD_DISK_UPDATE_TIME),
-		"seek_error_rate"        : Long(0, CD_DISK_UPDATE_TIME),
-		"spin_retry_count"       : Long(0, CD_DISK_UPDATE_TIME),
-		"udma_crc_error_count"   : Long(0, CD_DISK_UPDATE_TIME),
+		"current_pending_sector" : Long(CD_DISK_UPDATE_TIME),
+		"hardware_ecc_recovered" : Long(CD_DISK_UPDATE_TIME),
+		"offline_uncorrectable"  : Long(CD_DISK_UPDATE_TIME),
+		"reallocated_sector_ct"  : Long(CD_DISK_UPDATE_TIME),
+		"reported_uncorrect"     : Long(CD_DISK_UPDATE_TIME),
+		"seek_error_rate"        : Long(CD_DISK_UPDATE_TIME),
+		"spin_retry_count"       : Long(CD_DISK_UPDATE_TIME),
+		"udma_crc_error_count"   : Long(CD_DISK_UPDATE_TIME),
 
-		"temperature_celsius"    : Long(0, CD_DISK_UPDATE_TIME),
+		"temperature_celsius"    : Long(CD_DISK_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -84,19 +84,19 @@ node_module = {
 	},
 
 	"sensor" : {
-		"temp" : Long(0, CD_NODE_UPDATE_TIME),
-		"forks" : Long(0, CD_NODE_UPDATE_TIME),
-		"zombies" : Long(0, CD_NODE_UPDATE_TIME),
+		"temp" : Long(CD_NODE_UPDATE_TIME),
+		"forks" : Long(CD_NODE_UPDATE_TIME),
+		"zombies" : Long(CD_NODE_UPDATE_TIME),
 
-		"check_tmp"   : Long(0, CD_NODE_UPDATE_TIME),
-		"check_home"  : Long(0, CD_NODE_UPDATE_TIME),
-		"check_clean" : Long(0, CD_NODE_UPDATE_TIME),
-		"check_nmond" : Long(0, CD_NODE_UPDATE_TIME),
+		"check_tmp"   : Long(CD_NODE_UPDATE_TIME),
+		"check_home"  : Long(CD_NODE_UPDATE_TIME),
+		"check_clean" : Long(CD_NODE_UPDATE_TIME),
+		"check_nmond" : Long(CD_NODE_UPDATE_TIME),
 
-		"ntpd_drift" : Double(0.0, CD_NODE_UPDATE_TIME),
-		"la_1" : Double(0.0, CD_NODE_UPDATE_TIME),
+		"ntpd_drift" : Double(CD_NODE_UPDATE_TIME),
+		"la_1" : Double(CD_NODE_UPDATE_TIME),
 
-		"task_id" : Long(0, CD_NODE_UPDATE_TIME),
+		"task_id" : Long(CD_NODE_UPDATE_TIME, -1),
 	},
 
 	"var" : {
@@ -204,7 +204,7 @@ CD_CPU_UPDATE_TIME = Minutes(10)
 
 cpu_module = {
 	"sensor" : {
-		"temp" : Long(0, CD_CPU_UPDATE_TIME),
+		"temp" : Long(CD_CPU_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -233,11 +233,11 @@ CD_MEM_UPDATE_TIME = Minutes(10)
 
 memory_module = {
 	"sensor" : {
-		"buffered" : Long(0, CD_MEM_UPDATE_TIME),
-		"cached" : Long(0, CD_MEM_UPDATE_TIME),
-		"free" : Long(0, CD_MEM_UPDATE_TIME),
-		"used" : Long(0, CD_MEM_UPDATE_TIME),
-		"total" : Long(0, CD_MEM_UPDATE_TIME),
+		"buffered" : Long(CD_MEM_UPDATE_TIME),
+		"cached" : Long(CD_MEM_UPDATE_TIME),
+		"free" : Long(CD_MEM_UPDATE_TIME),
+		"used" : Long(CD_MEM_UPDATE_TIME),
+		"total" : Long(CD_MEM_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -262,26 +262,26 @@ CD_IB_UPDATE_TIME = Minutes(10)
 
 ib_module = {
 	"sensor" : {
-		"state" : Long(0, CD_IB_UPDATE_TIME),
-		"physical_state" : Long(0, CD_IB_UPDATE_TIME),
+		"state" : Long(CD_IB_UPDATE_TIME),
+		"physical_state" : Long(CD_IB_UPDATE_TIME),
 
-		"LinkRecovers" : Long(0, CD_IB_UPDATE_TIME),
-		"LinkDowned" : Long(0, CD_IB_UPDATE_TIME),
+		"LinkRecovers" : Long(CD_IB_UPDATE_TIME),
+		"LinkDowned" : Long(CD_IB_UPDATE_TIME),
 
-		"SymbolErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"RcvErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"RcvRemotePhysErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"RcvSwRelayErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"XmtDiscards" : Long(0, CD_IB_UPDATE_TIME),
-		"XmtConstraintErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"RcvConstraintErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"LinkIntegrityErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"ExcBufOverrunErrors" : Long(0, CD_IB_UPDATE_TIME),
-		"VL15Dropped" : Long(0, CD_IB_UPDATE_TIME),
-		"PortXmitData" : Long(0, CD_IB_UPDATE_TIME),
-		"PortRcvData" : Long(0, CD_IB_UPDATE_TIME),
-		"PortXmitPkts" : Long(0, CD_IB_UPDATE_TIME),
-		"PortRcvPkts" : Long(0, CD_IB_UPDATE_TIME),
+		"SymbolErrors" : Long(CD_IB_UPDATE_TIME),
+		"RcvErrors" : Long(CD_IB_UPDATE_TIME),
+		"RcvRemotePhysErrors" : Long(CD_IB_UPDATE_TIME),
+		"RcvSwRelayErrors" : Long(CD_IB_UPDATE_TIME),
+		"XmtDiscards" : Long(CD_IB_UPDATE_TIME),
+		"XmtConstraintErrors" : Long(CD_IB_UPDATE_TIME),
+		"RcvConstraintErrors" : Long(CD_IB_UPDATE_TIME),
+		"LinkIntegrityErrors" : Long(CD_IB_UPDATE_TIME),
+		"ExcBufOverrunErrors" : Long(CD_IB_UPDATE_TIME),
+		"VL15Dropped" : Long(CD_IB_UPDATE_TIME),
+		"PortXmitData" : Long(CD_IB_UPDATE_TIME),
+		"PortRcvData" : Long(CD_IB_UPDATE_TIME),
+		"PortXmitPkts" : Long(CD_IB_UPDATE_TIME),
+		"PortRcvPkts" : Long(CD_IB_UPDATE_TIME),
 	},
 
 	"react" : {
@@ -348,13 +348,13 @@ eth_module = {
 	},
 
 	"sensor" : {
-		"speed" : Long(0, CD_ETH_UPDATE_TIME),
+		"speed" : Long(CD_ETH_UPDATE_TIME),
 
-		"rx_errors" : Long(0, CD_ETH_UPDATE_TIME),
-		"tx_errors" : Long(0, CD_ETH_UPDATE_TIME),
+		"rx_errors" : Long(CD_ETH_UPDATE_TIME),
+		"tx_errors" : Long(CD_ETH_UPDATE_TIME),
 
-		"tx_dropped" : Long(0, CD_ETH_UPDATE_TIME),
-		"collisions" : Long(0, CD_ETH_UPDATE_TIME),
+		"tx_dropped" : Long(CD_ETH_UPDATE_TIME),
+		"collisions" : Long(CD_ETH_UPDATE_TIME),
 
 		"duplex" : String("full", CD_ETH_UPDATE_TIME),
 	},

@@ -8,11 +8,11 @@ panasas_system_module = {
 	},
 
 	"sensor" : {
-		"capacity_total" : Long(0, PANASAS_UPDATE_TIME),
-		"capacity_used"  : Long(0, PANASAS_UPDATE_TIME),
-		"capacity_avail" : Long(0, PANASAS_UPDATE_TIME),
-		"nfs_perf_ops" : Long(0, PANASAS_UPDATE_TIME),
-		"nfs_perf_mbs" : Long(0, PANASAS_UPDATE_TIME),
+		"capacity_total" : Long(PANASAS_UPDATE_TIME),
+		"capacity_used"  : Long(PANASAS_UPDATE_TIME),
+		"capacity_avail" : Long(PANASAS_UPDATE_TIME),
+		"nfs_perf_ops" : Long(PANASAS_UPDATE_TIME),
+		"nfs_perf_mbs" : Long(PANASAS_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -46,14 +46,14 @@ panasas_blade_module = {
 	},
 
 	"sensor" : {
-		"status" : String("good", PANASAS_UPDATE_TIME),
-		"blade_type" : String("", PANASAS_UPDATE_TIME),
-		"cpu_util"  : Long(0, PANASAS_UPDATE_TIME),
-		"disk_util" : Long(0, PANASAS_UPDATE_TIME),
-		"perf_ops"      : Long(0, PANASAS_UPDATE_TIME),
-		"perf_response" : Long(0, PANASAS_UPDATE_TIME),
-		"perf_in_kbs"   : Long(0, PANASAS_UPDATE_TIME),
-		"perf_out_kbs"  : Long(0, PANASAS_UPDATE_TIME),
+		"status"     : String(PANASAS_UPDATE_TIME),
+		"blade_type" : String(PANASAS_UPDATE_TIME),
+		"cpu_util"  : Long(PANASAS_UPDATE_TIME),
+		"disk_util" : Long(PANASAS_UPDATE_TIME),
+		"perf_ops"      : Long(PANASAS_UPDATE_TIME),
+		"perf_response" : Long(PANASAS_UPDATE_TIME),
+		"perf_in_kbs"   : Long(PANASAS_UPDATE_TIME),
+		"perf_out_kbs"  : Long(PANASAS_UPDATE_TIME),
 	},
 
 	"react" : {

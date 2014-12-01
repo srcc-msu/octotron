@@ -9,20 +9,20 @@ eth_port_snmp_module = {
 	},
 
 	"sensor" : {
-		"out_frames" : Long(0, SNMP_ETH_UPDATE_TIME),
-		"in_frames" : Long(0, SNMP_ETH_UPDATE_TIME),
+		"out_frames" : Long(SNMP_ETH_UPDATE_TIME),
+		"in_frames" : Long(SNMP_ETH_UPDATE_TIME),
 
-		"admin_status" : String("up", SNMP_ETH_UPDATE_TIME),
-		"oper_status" : String("up", SNMP_ETH_UPDATE_TIME),
+		"admin_status" : String(SNMP_ETH_UPDATE_TIME),
+		"oper_status" : String(SNMP_ETH_UPDATE_TIME),
 
-		"duplex" : String("full", SNMP_ETH_UPDATE_TIME),
+		"duplex" : String(SNMP_ETH_UPDATE_TIME),
 
-		"speed" : Long(0, SNMP_ETH_UPDATE_TIME),
+		"speed" : Long(SNMP_ETH_UPDATE_TIME),
 
-		"in_errors" : Long(0, SNMP_ETH_UPDATE_TIME),
-		"out_errors" : Long(0, SNMP_ETH_UPDATE_TIME),
+		"in_errors" : Long(SNMP_ETH_UPDATE_TIME),
+		"out_errors" : Long(SNMP_ETH_UPDATE_TIME),
 
-		"q_len" : Long(0, SNMP_ETH_UPDATE_TIME),
+		"q_len" : Long(SNMP_ETH_UPDATE_TIME),
 	},
 
 	"var" : {

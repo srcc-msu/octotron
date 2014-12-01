@@ -2,6 +2,9 @@ import collections
 
 from ru.parallel.octotron.core.primitive import SimpleAttribute
 
+from ru.parallel.octotron.generators.tmpl import SensorTemplate
+from ru.parallel.octotron.generators.tmpl import VarTemplate
+
 import ru.parallel.octotron.generators.CSVReader as CSVReader_java
 import ru.parallel.octotron.generators.Enumerator as Enumerator_java
 
@@ -22,21 +25,31 @@ def AttributesFromDict(attributes_dict):
 	for name, value in attributes_dict.items():
 		if len(value) > 1:
 			raise RuntimeError("duplicated attribute: " + name + " : " + str(value))
-		value = value[0]
 
-		res.append(SimpleAttribute(name, value))
+		res.append(SimpleAttribute(name, value[0]))
 
 	return res
 
-def VaryingsFromDict(varyings_dict):
+
+def SensorsFromDict(sensors_dict):
+	res = []
+
+	for name, sensor in sensors_dict.items():
+		if len(sensor) > 1:
+			raise RuntimeError("duplicated sensor: " + name + " : " + str(sensor))
+
+		res.append(SensorTemplate(name, sensor[0].time, sensor[0].value))
+
+	return res
+
+def VarsFromDict(varyings_dict):
 	res = []
 
 	for name, rule in varyings_dict.items():
 		if len(rule) > 1:
 			raise RuntimeError("duplicated var: " + name + " : " + str(rule))
-		rule = rule[0]
 
-		res.append(SimpleAttribute(name, rule.GetOcto()))
+		res.append(VarTemplate(name, rule[0].GetOcto()))
 
 	return res
 
@@ -58,8 +71,11 @@ def ReactionsFromDict(react_dict):
 def ConvertAttributes(attributes):
 	return AttributesFromDict(attributes)
 
+def ConvertSensors(var):
+	return SensorsFromDict(var)
+
 def ConvertVars(var):
-	return VaryingsFromDict(var)
+	return VarsFromDict(var)
 
 def ConvertReacts(react):
 	return ReactionsFromDict(react)
@@ -122,14 +138,25 @@ def Hours(t):
 def Days(t):
 	return Hours(t * 24)
 
-def Long(default, time):
-	pass
+class Sensor(object):
+	def __init__(self, value, time):
+		self.value = value
+		self.time = time
 
-def Double(default, time):
-	pass
+class Long(Sensor):
+	def __init__(self, time, value = None):
+		super(Long, self).__init__(time, value)
 
-def Boolean(default, time):
-	pass
+class Double(Sensor):
+	def __init__(self, time, value = None):
+		super(Double, self).__init__(time, value)
 
-def String(default, time):
-	pass
+class Boolean(Sensor):
+	def __init__(self, time, value = None):
+		super(Boolean, self).__init__(time, value)
+
+class String(Sensor):
+	def __init__(self, time, value = None):
+		super(String, self).__init__(time, value)
+
+UPDATE_TIME_NOT_SPECIFIED = -1

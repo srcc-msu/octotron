@@ -13,8 +13,8 @@ def GetLinkFactory(params, type):
 
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
 	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
-	factory = factory.Sensors  (ConvertAttributes(MergeDicts(params["sensor"])))
-	factory = factory.Varyings (ConvertVars(MergeDicts(params["var"])))
+	factory = factory.Sensors  (ConvertSensors(MergeDicts(params["sensor"])))
+	factory = factory.Vars (ConvertVars(MergeDicts(params["var"])))
 	factory = factory.Reactions(ConvertReacts(MergeDicts(params["react"])))
 
 	return factory.Constants(SimpleAttribute("type", type))

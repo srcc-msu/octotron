@@ -4,10 +4,10 @@ NODE_CHECK_UPDATE_TIME = Hours(1)
 
 node_check_module = {
 	"sensor" : {
-		"chk_ssh" : Boolean(True, NODE_CHECK_UPDATE_TIME),
-		"chk_mpi" : Boolean(True, NODE_CHECK_UPDATE_TIME),
-		"chk_ib" : Boolean(True, NODE_CHECK_UPDATE_TIME),
-		"ib_visible" : Boolean(True, NODE_CHECK_UPDATE_TIME),
+		"chk_ssh" : Boolean(NODE_CHECK_UPDATE_TIME),
+		"chk_mpi" : Boolean(NODE_CHECK_UPDATE_TIME),
+		"chk_ib" : Boolean(NODE_CHECK_UPDATE_TIME),
+		"ib_visible" : Boolean(NODE_CHECK_UPDATE_TIME),
 	},
 
 	"react" : {

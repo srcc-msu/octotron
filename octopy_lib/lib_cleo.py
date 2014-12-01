@@ -20,20 +20,20 @@ cleo_module = {
 	},
 
 	"sensor" : {
-		"tasks_total"   : Long(0, CLEO_UPDATE_TIME),
-		"tasks_running" : Long(0, CLEO_UPDATE_TIME),
-		"tasks_blocked" : Long(0, CLEO_UPDATE_TIME),
-		"tasks_queued"  : Long(0, CLEO_UPDATE_TIME),
-		"tasks_prerun"  : Long(0, CLEO_UPDATE_TIME),
+		"tasks_total"   : Long(CLEO_UPDATE_TIME),
+		"tasks_running" : Long(CLEO_UPDATE_TIME),
+		"tasks_blocked" : Long(CLEO_UPDATE_TIME),
+		"tasks_queued"  : Long(CLEO_UPDATE_TIME),
+		"tasks_prerun"  : Long(CLEO_UPDATE_TIME),
 
-		"tasks_completition" : Long(0, CLEO_UPDATE_TIME),
+		"tasks_completition" : Long(CLEO_UPDATE_TIME),
 
-		"can_run_tasks"   : Long(0, CLEO_UPDATE_TIME),
-		"can_queue_tasks" : Long(0, CLEO_UPDATE_TIME),
+		"can_run_tasks"   : Long(CLEO_UPDATE_TIME),
+		"can_queue_tasks" : Long(CLEO_UPDATE_TIME),
 
-		"cpus_total_free"    : Long(0, CLEO_UPDATE_TIME),
-		"cpus_total_number"  : Long(0, CLEO_UPDATE_TIME),
-		"cpus_blocked_count" : Long(0, CLEO_UPDATE_TIME),
+		"cpus_total_free"    : Long(CLEO_UPDATE_TIME),
+		"cpus_total_number"  : Long(CLEO_UPDATE_TIME),
+		"cpus_blocked_count" : Long(CLEO_UPDATE_TIME),
 	},
 
 	"var" : {

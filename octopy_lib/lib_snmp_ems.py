@@ -13,12 +13,12 @@ ems_sensor_module = {
 
 	"sensor" : {
 	# cold
-		"front_humidity" : Long(0, EMS_UPDATE_TIME),
-		"front_temp" : Long(0, EMS_UPDATE_TIME),
+		"front_humidity" : Long(EMS_UPDATE_TIME),
+		"front_temp" : Long(EMS_UPDATE_TIME),
 
 	# hot
-		"back_humidity" : Long(0, EMS_UPDATE_TIME),
-		"back_temp" : Long(0, EMS_UPDATE_TIME),
+		"back_humidity" : Long(EMS_UPDATE_TIME),
+		"back_temp" : Long(EMS_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -85,8 +85,8 @@ ems_sensor_module = {
 
 ems_contact_module = {
 	"sensor" : {
-		"state" : String("", EMS_UPDATE_TIME),
-		"normal_state" : String("", EMS_UPDATE_TIME),
+		"state" : String(EMS_UPDATE_TIME),
+		"normal_state" : String(EMS_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -104,39 +104,67 @@ ems_contact_module = {
 	}
 }
 
+EMS_TRAP_UPDATE_TIME = UPDATE_TIME_NOT_SPECIFIED
+
 ems_snmp_trap_module = {
 	"sensor" : {
-		"iemHighTempThresholdViolation" : True, "iemHighTempThresholdViolation_descr" : "",
-		"iemLowTempThresholdViolation" : True, "iemLowTempThresholdViolation_descr" : "",
-		"iemHighHumidThresholdViolation" : True, "iemHighHumidThresholdViolation_descr" : "",
-		"iemLowHumidThresholdViolation" : True, "iemLowHumidThresholdViolation_descr" : "",
+		"iemHighTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"iemHighTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"iemLowTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"iemLowTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"iemHighHumidThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"iemHighHumidThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"iemLowHumidThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"iemLowHumidThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
 
-		"emsCommunicationLost" : True, "emsCommunicationLost_descr" : "",
+		"emsCommunicationLost" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"emsCommunicationLost_descr" : String(EMS_TRAP_UPDATE_TIME),
 
-		"envMaxTempThresholdViolation" : True, "envMaxTempThresholdViolation_descr" : "",
-		"envMinTempThresholdViolation" : True, "envMinTempThresholdViolation_descr" : "",
-		"envMaxHumidityThresholdViolation" : True, "envMaxHumidityThresholdViolation_descr" : "",
-		"envMinHumidityThresholdViolation" : True, "envMinHumidityThresholdViolation_descr" : "",
-		"apcEnvMaxTempThresholdViolation" : True, "apcEnvMaxTempThresholdViolation_descr" : "",
-		"apcEnvHighTempThresholdViolation" : True, "apcEnvHighTempThresholdViolation_descr" : "",
-		"apcEnvLowTempThresholdViolation" : True, "apcEnvLowTempThresholdViolation_descr" : "",
-		"apcEnvMinTempThresholdViolation" : True, "apcEnvMinTempThresholdViolation_descr" : "",
-		"apcEnvMaxHumidityThresholdViolation" : True, "apcEnvMaxHumidityThresholdViolation_descr" : "",
-		"apcEnvHighHumidityThresholdViolation" : True, "apcEnvHighHumidityThresholdViolation_descr" : "",
-		"apcEnvLowHumidityThresholdViolation" : True, "apcEnvLowHumidityThresholdViolation_descr" : "",
-		"apcEnvMinHumidityThresholdViolation" : True, "apcEnvMinHumidityThresholdViolation_descr" : "",
+		"envMaxTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envMaxTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"envMinTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envMinTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"envMaxHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envMaxHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"envMinHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envMinHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMaxTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMaxTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvHighTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvHighTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvLowTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvLowTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMinTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMinTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMaxHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMaxHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvHighHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvHighHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvLowHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvLowHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMinHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcEnvMinHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
 
-		"envHighTempThresholdViolation" : True, "envHighTempThresholdViolation_descr" : "",
-		"envLowTempThresholdViolation" : True, "envLowTempThresholdViolation_descr" : "",
-		"envHighHumidityThresholdViolation" : True, "envHighHumidityThresholdViolation_descr" : "",
-		"envLowHumidityThresholdViolation" : True, "envLowHumidityThresholdViolation_descr" : "",
+		"envHighTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envHighTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"envLowTempThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envLowTempThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"envHighHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envHighHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"envLowHumidityThresholdViolation" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"envLowHumidityThresholdViolation_descr" : String(EMS_TRAP_UPDATE_TIME),
 
-		"apcInformationalDiscreteInputContactStateAbnormal" : True, "apcInformationalDiscreteInputContactStateAbnormal_descr" : "",
-		"apcInformationalDiscreteInputContactStateNormal" : True, "apcInformationalDiscreteInputContactStateNormal_descr" : "",
+		"apcInformationalDiscreteInputContactStateAbnormal" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcInformationalDiscreteInputContactStateAbnormal_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"apcInformationalDiscreteInputContactStateNormal" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"apcInformationalDiscreteInputContactStateNormal_descr" : String(EMS_TRAP_UPDATE_TIME),
 
-		"iemContactFault" : True, "iemContactFault_descr" : "",
-		"contactFault" : True, "contactFault_descr" : "",
-		"emsSensorFault" : True, "emsSensorFault_descr" : "",
+		"iemContactFault" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"iemContactFault_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"contactFault" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"contactFault_descr" : String(EMS_TRAP_UPDATE_TIME),
+		"emsSensorFault" : Boolean(EMS_TRAP_UPDATE_TIME),
+		"emsSensorFault_descr" : String(EMS_TRAP_UPDATE_TIME),
 	},
 
 	"react" : {

@@ -16,23 +16,23 @@ ups_snmp_module = {
 	},
 
 	"sensor" : {
-		"capacity" : Long(100, SNMP_UPS_UPDATE_TIME),
+		"capacity" : Long(SNMP_UPS_UPDATE_TIME),
 
-		"remaining_battery_time" : Long(0, SNMP_UPS_UPDATE_TIME),
+		"remaining_battery_time" : Long(SNMP_UPS_UPDATE_TIME),
 
-		"temp" : Long(0, SNMP_UPS_UPDATE_TIME),
-		"num_batteries" : Long(0, SNMP_UPS_UPDATE_TIME),
+		"temp" : Long(SNMP_UPS_UPDATE_TIME),
+		"num_batteries" : Long(SNMP_UPS_UPDATE_TIME),
 
-		"input_voltage" : Long(0, SNMP_UPS_UPDATE_TIME),
+		"input_voltage" : Long(SNMP_UPS_UPDATE_TIME),
 
-		"output_status" : String("", SNMP_UPS_UPDATE_TIME),
-		"battery_status" : String("", SNMP_UPS_UPDATE_TIME),
+		"output_status" : String(SNMP_UPS_UPDATE_TIME),
+		"battery_status" : String(SNMP_UPS_UPDATE_TIME),
 
-		"pm_ok"   : Long(0, SNMP_UPS_UPDATE_TIME),
-		"pm_not"  : Long(0, SNMP_UPS_UPDATE_TIME),
-		"pm_fail" : Long(0, SNMP_UPS_UPDATE_TIME),
+		"pm_ok"   : Long(SNMP_UPS_UPDATE_TIME),
+		"pm_not"  : Long(SNMP_UPS_UPDATE_TIME),
+		"pm_fail" : Long(SNMP_UPS_UPDATE_TIME),
 
-		"pm_fail_ref" : Long(0, SNMP_UPS_UPDATE_TIME),
+		"pm_fail_ref" : Long(SNMP_UPS_UPDATE_TIME),
 	},
 
 	"var" : {
@@ -102,79 +102,81 @@ ups_snmp_module = {
 	}
 }
 
+SNMP_TRAP_UPS_UPDATE_TIME = UPDATE_TIME_NOT_SPECIFIED
+
 ups_snmp_trap_module = {
 	"sensor" : {
-		"communicationLost" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"communicationLost_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"communicationLost" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"communicationLost_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsOnBattery" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsOnBattery_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsOnBattery" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsOnBattery_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"lowBattery" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"lowBattery_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"lowBattery" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"lowBattery_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"bypass" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"bypass_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"bypass" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"bypass_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"badVoltage" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"badVoltage_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"badVoltage" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"badVoltage_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"chargerFailure" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"chargerFailure_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"chargerFailure" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"chargerFailure_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"batteryOverTemperature" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"batteryOverTemperature_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"batteryOverTemperature" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"batteryOverTemperature_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"abnormalCondition" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"abnormalCondition_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"abnormalCondition" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"abnormalCondition_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsOverload" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsOverload_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsOverload" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsOverload_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsDiagnosticsFailed" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsDiagnosticsFailed_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsDiagnosticsFailed" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsDiagnosticsFailed_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsDischarged" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsDischarged_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsDischarged" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsDischarged_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsTurnedOff" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsTurnedOff_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsTurnedOff" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsTurnedOff_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsSleeping" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsSleeping_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsSleeping" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsSleeping_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsWokeUp" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsWokeUp_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsWokeUp" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsWokeUp_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsRebootStarted" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsRebootStarted_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsRebootStarted" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsRebootStarted_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsBatteryNeedsReplacement" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsBatteryNeedsReplacement_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsBatteryNeedsReplacement" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsBatteryNeedsReplacement_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"bypassPowerSupplyFailure" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"bypassPowerSupplyFailure_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"bypassPowerSupplyFailure" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"bypassPowerSupplyFailure_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"baseFanFailure" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"baseFanFailure_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"baseFanFailure" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"baseFanFailure_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"batteryPackCommLost" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"batteryPackCommLost_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"batteryPackCommLost" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"batteryPackCommLost_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"calibrationStart" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"calibrationStart_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"calibrationStart" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"calibrationStart_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsTurnedOn" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsTurnedOn_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsTurnedOn" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsTurnedOn_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"upsBatteryReplaced" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"upsBatteryReplaced_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"upsBatteryReplaced" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"upsBatteryReplaced_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"powerModuleIncrease" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"powerModuleIncrease_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"powerModuleIncrease" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"powerModuleIncrease_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 
-		"powerModuleDecrease" : Boolean(True, SNMP_UPS_UPDATE_TIME),
-		"powerModuleDecrease_descr" : String("", SNMP_UPS_UPDATE_TIME),
+		"powerModuleDecrease" : Boolean(SNMP_TRAP_UPS_UPDATE_TIME, True),
+		"powerModuleDecrease_descr" : String(SNMP_TRAP_UPS_UPDATE_TIME, ""),
 	},
 
 

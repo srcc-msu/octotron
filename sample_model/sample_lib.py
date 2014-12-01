@@ -12,7 +12,7 @@ my_module = {
 
 # declare sensors
 	"sensor" : {
-		"temperature" : 0,
+		"temperature" : Long(Minutes(1))
 	},
 
 # declare varying attrbiutes
@@ -37,12 +37,12 @@ my_module = {
 # separate declaration
 #
 my_const = {
-		"load_max" : 90,
+	"load_max" : 90,
 }
 
 # declare sensors
 my_sensor = {
-	"avg_load" : 0,
+	"avg_load" : Long(Minutes(1)),
 }
 
 # declare varying attrbiutes
