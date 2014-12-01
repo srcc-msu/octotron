@@ -356,7 +356,7 @@ eth_module = {
 		"tx_dropped" : Long(CD_ETH_UPDATE_TIME),
 		"collisions" : Long(CD_ETH_UPDATE_TIME),
 
-		"duplex" : String("full", CD_ETH_UPDATE_TIME),
+		"duplex" : String(CD_ETH_UPDATE_TIME),
 	},
 
 	"var" : {
