@@ -1,7 +1,8 @@
 from octopy.utils import *
+
 from ru.parallel.octotron.core.collections import ModelLinkList
-from ru.parallel.octotron.core.primitive import SimpleAttribute
 from ru.parallel.octotron.generators import LinkFactory
+from ru.parallel.octotron.generators.tmpl import ConstantTemplate
 
 import java.lang
 import jarray
@@ -11,13 +12,13 @@ def GetLinkFactory(params, type):
 
 	CheckAllowed(params)
 
-	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
-	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
+	factory = factory.Constants(ConvertConstants(MergeDicts(params["const"])))
+	factory = factory.Constants(ConvertConstants(MergeDicts(params["static"])))
 	factory = factory.Sensors  (ConvertSensors(MergeDicts(params["sensor"])))
-	factory = factory.Vars (ConvertVars(MergeDicts(params["var"])))
+	factory = factory.Vars     (ConvertVars(MergeDicts(params["var"])))
 	factory = factory.Reactions(ConvertReacts(MergeDicts(params["react"])))
 
-	return factory.Constants(SimpleAttribute("type", type))
+	return factory.Constants(ConstantTemplate("type", type))
 
 def CallFactoryMethod(factory, name, args):
 	arg_types = []

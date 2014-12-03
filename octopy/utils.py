@@ -1,7 +1,6 @@
 import collections
 
-from ru.parallel.octotron.core.primitive import SimpleAttribute
-
+from ru.parallel.octotron.generators.tmpl import ConstantTemplate
 from ru.parallel.octotron.generators.tmpl import SensorTemplate
 from ru.parallel.octotron.generators.tmpl import VarTemplate
 
@@ -19,14 +18,14 @@ def GetCollection(thing):
 	else:
 		return (thing,)
 
-def AttributesFromDict(attributes_dict):
+def ConstantsFromDict(attributes_dict):
 	res = []
 
 	for name, value in attributes_dict.items():
 		if len(value) > 1:
 			raise RuntimeError("duplicated attribute: " + name + " : " + str(value))
 
-		res.append(SimpleAttribute(name, value[0]))
+		res.append(ConstantTemplate(name, value[0]))
 
 	return res
 
@@ -68,8 +67,8 @@ def ReactionsFromDict(react_dict):
 
 	return res
 
-def ConvertAttributes(attributes):
-	return AttributesFromDict(attributes)
+def ConvertConstants(attributes):
+	return ConstantsFromDict(attributes)
 
 def ConvertSensors(var):
 	return SensorsFromDict(var)

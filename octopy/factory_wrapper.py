@@ -14,10 +14,10 @@ def CreateObjects(count, *modules):
 
 	factory = ObjectFactory(context.model_service)
 
-	factory = factory.Constants(ConvertAttributes(MergeDicts(params["const"])))
-	factory = factory.Constants(ConvertAttributes(MergeDicts(params["static"])))
+	factory = factory.Constants(ConvertConstants(MergeDicts(params["const"])))
+	factory = factory.Constants(ConvertConstants(MergeDicts(params["static"])))
 	factory = factory.Sensors  (ConvertSensors(MergeDicts(params["sensor"])))
-	factory = factory.Vars (ConvertVars(MergeDicts(params["var"])))
+	factory = factory.Vars     (ConvertVars(MergeDicts(params["var"])))
 
 	factory = factory.Reactions(ConvertReacts(MergeUniqueDicts(params["react"])))
 
@@ -28,8 +28,8 @@ def UpdateObject(object, *modules):
 
 	CheckAllowed(params)
 
-	object.GetBuilder(context.model_service).DeclareConst(ConvertAttributes(MergeDicts(params["const"])))
-	object.GetBuilder(context.model_service).DeclareConst(ConvertAttributes(MergeDicts(params["static"])))
+	object.GetBuilder(context.model_service).DeclareConst(ConvertConstants(MergeDicts(params["const"])))
+	object.GetBuilder(context.model_service).DeclareConst(ConvertConstants(MergeDicts(params["static"])))
 	object.GetBuilder(context.model_service).DeclareSensor(ConvertSensors(MergeDicts(params["sensor"])))
 	object.GetBuilder(context.model_service).DeclareVar(ConvertVars(MergeDicts(params["var"])))
 
