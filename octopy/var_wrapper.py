@@ -1,7 +1,10 @@
+from octopy.utils import *
+
 import java.lang
 import jarray
 
 from ru.parallel.octotron.core.primitive import EDependencyType
+from ru.parallel.octotron.generators.tmpl import VarTemplate
 
 OCTO_PACKAGE = "ru.parallel.octotron"
 
@@ -134,3 +137,17 @@ class VarArgMatch(Rule):
 class LinkedVarArgMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
+
+def VarsFromDict(varyings_dict):
+	res = []
+
+	for name, rule in varyings_dict.items():
+		if len(rule) > 1:
+			raise RuntimeError("duplicated var: " + name + " : " + str(rule))
+
+		res.append(VarTemplate(name, rule[0].GetOcto()))
+
+	return res
+
+def ConvertVars(var):
+	return VarsFromDict(MergeDicts(var))

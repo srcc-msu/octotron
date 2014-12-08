@@ -1,3 +1,7 @@
+from octopy.utils import *
+
+from ru.parallel.octotron.generators.tmpl import SensorTemplate
+
 def Seconds(t):
 	return t
 
@@ -32,3 +36,20 @@ class String(Sensor):
 		super(String, self).__init__(time, value)
 
 UPDATE_TIME_NOT_SPECIFIED = -1
+
+def SensorsFromDict(sensors_dict):
+	res = []
+
+	for name, sensor in sensors_dict.items():
+		if len(sensor) > 1:
+			raise RuntimeError("duplicated sensor: " + name + " : " + str(sensor))
+
+		if sensor[0].value is None:
+			res.append(SensorTemplate(name, sensor[0].time))
+		else:
+			res.append(SensorTemplate(name, sensor[0].time, sensor[0].value))
+
+	return res
+
+def ConvertSensors(var):
+	return SensorsFromDict(MergeDicts(var))

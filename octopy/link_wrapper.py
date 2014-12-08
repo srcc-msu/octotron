@@ -2,23 +2,27 @@ from octopy.utils import *
 
 from ru.parallel.octotron.core.collections import ModelLinkList
 from ru.parallel.octotron.generators import LinkFactory
-from ru.parallel.octotron.generators.tmpl import ConstantTemplate
 
 import java.lang
 import jarray
+
+from octopy.const_wrapper import *
+from octopy.sensor_wrapper import *
+from octopy.var_wrapper import *
+from octopy.react_wrapper import *
 
 def GetLinkFactory(params, type):
 	factory = LinkFactory(context.model_service)
 
 	CheckAllowed(params)
 
-	factory = factory.Constants(ConvertConstants(MergeDicts(params["const"])))
-	factory = factory.Constants(ConvertConstants(MergeDicts(params["static"])))
-	factory = factory.Sensors  (ConvertSensors(MergeDicts(params["sensor"])))
-	factory = factory.Vars     (ConvertVars(MergeDicts(params["var"])))
-	factory = factory.Reactions(ConvertReacts(MergeDicts(params["react"])))
+	factory = factory.Constants(ConvertConsts(params["const"]))
+	factory = factory.Constants(ConvertConsts(params["static"]))
+	factory = factory.Sensors  (ConvertSensors(params["sensor"]))
+	factory = factory.Vars     (ConvertVars(params["var"]))
+	factory = factory.Reactions(ConvertReacts(params["react"]))
 
-	return factory.Constants(ConstantTemplate("type", type))
+	return factory.Constants(ConvertConsts([{ "type" : type }]))
 
 def CallFactoryMethod(factory, name, args):
 	arg_types = []
