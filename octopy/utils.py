@@ -51,9 +51,9 @@ def MergeUniqueDicts(dicts):
 class CSVReader:
 	@staticmethod
 	def Declare(*params):
-		CSVReader_java.Declare(context.model_service, *params)
+		CSVReader_java.Declare(model_service, *params)
 
 class Enumerator:
 	@staticmethod
 	def Sequence(*params):
-		Enumerator_java.Sequence(context.model_service, *params)
+		Enumerator_java.Sequence(model_service, *params)

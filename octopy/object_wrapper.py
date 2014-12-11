@@ -15,7 +15,7 @@ def CreateObjects(count, *modules):
 
 	CheckAllowed(params)
 
-	factory = ObjectFactory(context.model_service)
+	factory = ObjectFactory(model_service)
 
 	factory = factory.Constants(ConvertConsts(params["const"]))
 	factory = factory.Constants(ConvertConsts(params["static"]))
@@ -31,9 +31,9 @@ def UpdateObject(object, *modules):
 
 	CheckAllowed(params)
 
-	object.GetBuilder(context.model_service).DeclareConst(ConvertConsts(params["const"]))
-	object.GetBuilder(context.model_service).DeclareConst(ConvertConsts(params["static"]))
-	object.GetBuilder(context.model_service).DeclareSensor(ConvertSensors(params["sensor"]))
-	object.GetBuilder(context.model_service).DeclareVar(ConvertVars(params["var"]))
+	object.GetBuilder(model_service).DeclareConst(ConvertConsts(params["const"]))
+	object.GetBuilder(model_service).DeclareConst(ConvertConsts(params["static"]))
+	object.GetBuilder(model_service).DeclareSensor(ConvertSensors(params["sensor"]))
+	object.GetBuilder(model_service).DeclareVar(ConvertVars(params["var"]))
 
-	object.GetBuilder(context.model_service).AddReaction(ConvertReacts(params["react"]))
+	object.GetBuilder(model_service).AddReaction(ConvertReacts(params["react"]))

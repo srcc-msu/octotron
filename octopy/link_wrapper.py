@@ -12,7 +12,7 @@ from octopy.var_wrapper import *
 from octopy.react_wrapper import *
 
 def GetLinkFactory(params, type):
-	factory = LinkFactory(context.model_service)
+	factory = LinkFactory(model_service)
 
 	CheckAllowed(params)
 
