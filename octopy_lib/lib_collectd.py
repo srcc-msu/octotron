@@ -106,8 +106,8 @@ node_module = {
 		"la_1_free_state" : Interval("la_1", 3.0), "la_1_free_ok" : Match("la_1_free_state", 0),
 		"la_1_busy_state" : Interval("la_1", 33.0), "la_1_busy_ok" : Match("la_1_busy_state", 0),
 
-		"node_free_ok" : LogicalAnd("task_not_present", "la_1_free_ok"),
-		"node_busy_ok" : LogicalAnd("task_present", "la_1_busy_ok"),
+		"node_free_ok" : StrictLogicalAnd("task_not_present", "la_1_free_ok"),
+		"node_busy_ok" : StrictLogicalAnd("task_present", "la_1_busy_ok"),
 
 		"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
 		"temp_state" : Interval("temp", 40, 50),

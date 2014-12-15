@@ -16,12 +16,12 @@ panasas_system_module = {
 	},
 
 	"var" : {
-		"sum_cpu_util"  : AggregateLongSum(EDependencyType.OUT, "sum_cpu_util"),
-		"sum_disk_util" : AggregateLongSum(EDependencyType.OUT, "sum_disk_util"),
-		"sum_perf_ops"      : AggregateLongSum(EDependencyType.OUT, "sum_perf_ops"),
-		"sum_perf_response" : AggregateLongSum(EDependencyType.OUT, "sum_perf_response"),
-		"sum_perf_in_kbs"   : AggregateLongSum(EDependencyType.OUT, "sum_perf_in_kbs"),
-		"sum_perf_out_kbs"  : AggregateLongSum(EDependencyType.OUT, "sum_perf_out_kbs")
+		"sum_cpu_util"  : ASoftLongSum(EDependencyType.OUT, "sum_cpu_util"),
+		"sum_disk_util" : ASoftLongSum(EDependencyType.OUT, "sum_disk_util"),
+		"sum_perf_ops"      : ASoftLongSum(EDependencyType.OUT, "sum_perf_ops"),
+		"sum_perf_response" : ASoftLongSum(EDependencyType.OUT, "sum_perf_response"),
+		"sum_perf_in_kbs"   : ASoftLongSum(EDependencyType.OUT, "sum_perf_in_kbs"),
+		"sum_perf_out_kbs"  : ASoftLongSum(EDependencyType.OUT, "sum_perf_out_kbs")
 	}
 }
 
@@ -31,12 +31,12 @@ panasas_shelf_module = {
 	},
 
 	"var" : {
-		"sum_cpu_util"  : AggregateLongSum(EDependencyType.OUT, "cpu_util"),
-		"sum_disk_util" : AggregateLongSum(EDependencyType.OUT, "disk_util"),
-		"sum_perf_ops"      : AggregateLongSum(EDependencyType.OUT, "perf_ops"),
-		"sum_perf_response" : AggregateLongSum(EDependencyType.OUT, "perf_response"),
-		"sum_perf_in_kbs"   : AggregateLongSum(EDependencyType.OUT, "perf_in_kbs"),
-		"sum_perf_out_kbs"  : AggregateLongSum(EDependencyType.OUT, "perf_out_kbs")
+		"sum_cpu_util"  : ASoftLongSum(EDependencyType.OUT, "cpu_util"),
+		"sum_disk_util" : ASoftLongSum(EDependencyType.OUT, "disk_util"),
+		"sum_perf_ops"      : ASoftLongSum(EDependencyType.OUT, "perf_ops"),
+		"sum_perf_response" : ASoftLongSum(EDependencyType.OUT, "perf_response"),
+		"sum_perf_in_kbs"   : ASoftLongSum(EDependencyType.OUT, "perf_in_kbs"),
+		"sum_perf_out_kbs"  : ASoftLongSum(EDependencyType.OUT, "perf_out_kbs")
 	}
 }
 
