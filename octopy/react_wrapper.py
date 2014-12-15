@@ -1,5 +1,6 @@
 from octopy.utils import *
 
+from ru.parallel.octotron.core.logic.impl import Invalid
 from ru.parallel.octotron.core.logic.impl import Equals
 from ru.parallel.octotron.core.logic.impl import NotEquals
 

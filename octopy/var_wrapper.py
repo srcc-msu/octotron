@@ -69,7 +69,15 @@ class RequireSomeValid(Rule):
 	def __init__(self, arg1, arg2, arg3, *arg4):
 		Rule.__init__(self, (arg1, arg2, arg3, jarray.array(arg4, java.lang.String)))
 
-class AInvalidCount(Rule):
+class RequireAllValid(Rule):
+	def __init__(self, arg1, arg2, *arg3):
+		Rule.__init__(self, (arg1, arg2, jarray.array(arg3, java.lang.String)))
+
+class ValueIfSomeValid(Rule):
+	def __init__(self, arg1, arg2, arg3, *arg4):
+		Rule.__init__(self, (arg1, arg2, arg3, jarray.array(arg4, java.lang.String)))
+
+class ValueIfAllValid(Rule):
 	def __init__(self, arg1, arg2, *arg3):
 		Rule.__init__(self, (arg1, arg2, jarray.array(arg3, java.lang.String)))
 
