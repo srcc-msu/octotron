@@ -8,8 +8,6 @@ fan_snmp_module = {
 		"_static_infra_air_in_temp"  : 35,
 		"_static_infra_air_out_temp" : 25,
 
-		"_static_infra_fluid_in_temp" : 20,
-
 		"_static_infra_humidity" : 70,
 	},
 
@@ -35,35 +33,35 @@ fan_snmp_module = {
 		"air_in_ok"  : UpperArgThreshold("air_in", "_static_infra_air_in_temp"),
 		"air_out_ok" : UpperArgThreshold("air_out", "_static_infra_air_out_temp"),
 
-		"fluid_in_ok"  : UpperArgThreshold("fluid_in", "_static_infra_fluid_in_temp"),
+		"fluid_in_state"  : CheckedInterval("fluid_in", 1, 20, 40),
 	},
 
 	"react" : {
-		Equals("inlet_1_ok", False) : 
+		Equals("inlet_1_ok", False) :
 			( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air temp 1 is too high")
-				.Msg("msg"  , "fan {ip}: air temp 1 is too high: {inlet_1}")
+				.Msg("descr", "fan: air temperature 1 is too high")
+				.Msg("msg"  , "fan {ip}: air temperature 1 is too high: {inlet_1}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air temp 1 is back to normal")
-				.Msg("msg"  , "fan {ip}: air temp 1 is back to normal")),
+				.Msg("descr", "fan: air temperature 1 is back to normal")
+				.Msg("msg"  , "fan {ip}: air temperature 1 is back to normal")),
 
 		Equals("inlet_2_ok", False) :	
 			( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air temp 2 is too high")
-				.Msg("msg"  , "fan {ip}: air temp 2 is too high: {inlet_2}")
+				.Msg("descr", "fan: air temperature 2 is too high")
+				.Msg("msg"  , "fan {ip}: air temperature 2 is too high: {inlet_2}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air temp 2 is back to normal")
-				.Msg("msg"  , "fan {ip}: air temp 2 is back to normal")),
+				.Msg("descr", "fan: air temperature 2 is back to normal")
+				.Msg("msg"  , "fan {ip}: air temperature 2 is back to normal")),
 
-		Equals("inlet_3_ok", False) : 
+		Equals("inlet_3_ok", False) :
 			( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air temp 3 is too high")
-				.Msg("msg"  , "fan {ip}: air temp 3 is too high: {inlet_3}")
+				.Msg("descr", "fan: air temperature 3 is too high")
+				.Msg("msg"  , "fan {ip}: air temperature 3 is too high: {inlet_3}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air temp 3 is back to normal")
-				.Msg("msg"  , "fan {ip}: air temp 3 is back to normal")),
+				.Msg("descr", "fan: air temperature 3 is back to normal")
+				.Msg("msg"  , "fan {ip}: air temperature 3 is back to normal")),
 
-		Equals("humidity_in_ok", False) : 
+		Equals("humidity_in_ok", False) :
 			( Danger("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 				.Msg("descr", "fan: air humidity_in is too high")
 				.Msg("msg"  , "fan {ip}: air humidity_in is too high: {humidity_in}")
@@ -71,7 +69,7 @@ fan_snmp_module = {
 				.Msg("descr", "fan: air humidity_in is back to normal")
 				.Msg("msg"  , "fan {ip}: air humidity_in is back to normal")),
 
-		Equals("humidity_out_ok", False) : 
+		Equals("humidity_out_ok", False) :
 			( Danger("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 				.Msg("descr", "fan: air humidity_out is too high")
 				.Msg("msg"  , "fan {ip}: air humidity_out is too high: {humidity_out}")
@@ -79,29 +77,34 @@ fan_snmp_module = {
 				.Msg("descr", "fan: air humidity_out is back to normal")
 				.Msg("msg"  , "fan {ip}: air humidity_out is back to normal")),
 
-		Equals("air_in_ok", False) : 
+		Equals("air_in_ok", False) :
 			( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air_in temp is too high")
-				.Msg("msg"  , "fan {ip}: air_in temp is too high: {air_in}")
+				.Msg("descr", "fan: air_in temperature is too high")
+				.Msg("msg"  , "fan {ip}: air_in temperature is too high: {air_in}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air_in temp is back to normal")
-				.Msg("msg"  , "fan {ip}: air_in temp is back to normal")),
+				.Msg("descr", "fan: air_in temperature is back to normal")
+				.Msg("msg"  , "fan {ip}: air_in temperature is back to normal")),
 
-		Equals("air_out_ok", False) : 
+		Equals("air_out_ok", False) :
 			( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air_out temp  is too high")
-				.Msg("msg"  , "fan {ip}: air_out temp  is too high: {air_out}")
+				.Msg("descr", "fan: air_out temperature is too high")
+				.Msg("msg"  , "fan {ip}: air_out temperature is too high: {air_out}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: air_out temp  is back to normal")
-				.Msg("msg"  , "fan {ip}: air_out temp  is back to normal")),
+				.Msg("descr", "fan: air_out temperature is back to normal")
+				.Msg("msg"  , "fan {ip}: air_out temperature is back to normal")),
 
-		Equals("fluid_in_ok", False) : 
+		Equals("fluid_in_state", 2) :
 			( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: fluid_in temp is too high")
-				.Msg("msg"  , "fan {ip}: fluid_in temp is too high: {fluid_in}")
+				.Msg("descr", "fan: fluid_in temperature is too high")
+				.Msg("msg"  , "fan {ip}: fluid_in temperature is too high: {fluid_in}")
 			, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-				.Msg("descr", "fan: fluid_in temp is back to normal")
-				.Msg("msg"  , "fan {ip}: fluid_in temp is back to normal")),
+				.Msg("descr", "fan: fluid_in temperature is back to normal")
+				.Msg("msg"  , "fan {ip}: fluid_in temperature is back to normal")),
+
+		Invalid("fluid_in_state") :
+			Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.Msg("descr", "fan: invalid fluid_in temperature")
+				.Msg("msg"  , "fan {ip}: invalid fluid_in temperature: {fluid_in}"),
 	}
 }
 

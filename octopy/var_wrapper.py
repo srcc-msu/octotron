@@ -133,6 +133,10 @@ class Interval(Rule):
 	def __init__(self, arg1, *arg2):
 		Rule.__init__(self, (arg1, jarray.array(arg2, java.lang.Object),))
 
+class CheckedInterval(Rule):
+	def __init__(self, arg1, *arg2):
+		Rule.__init__(self, (arg1, jarray.array(arg2, java.lang.Object),))
+
 class LowerArgThreshold(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)

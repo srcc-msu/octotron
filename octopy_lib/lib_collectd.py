@@ -242,7 +242,6 @@ memory_module = {
 
 	"var" : {
 		"total_memory_ok" : LowerArgThreshold("total", "req_mem"),
-
 	},
 
 	"react" : {
