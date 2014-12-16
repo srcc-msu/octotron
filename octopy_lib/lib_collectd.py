@@ -96,7 +96,7 @@ node_module = {
 		"ntpd_drift" : Double(CD_NODE_UPDATE_TIME),
 		"la_1" : Double(CD_NODE_UPDATE_TIME),
 
-		"task_id" : Long(CD_NODE_UPDATE_TIME, -1),
+		"task_id" : Long(CD_NODE_UPDATE_TIME),
 	},
 
 	"var" : {
