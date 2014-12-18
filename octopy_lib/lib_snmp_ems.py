@@ -1,6 +1,5 @@
 from octopy import *
 
-
 def EmsSensorModule(update_time = Minutes(1)):
 	return {
 		"static" : {

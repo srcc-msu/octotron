@@ -3,21 +3,12 @@ from octopy import *
 def NodeCheckModule(update_time = Hours(1)):
 	return {
 		"sensor" : {
-			"chk_ssh" : Boolean(update_time),
 			"chk_mpi" : Boolean(update_time),
 			"chk_ib" : Boolean(update_time),
 			"ib_visible" : Boolean(update_time),
 		},
 
 		"react" : {
-			Equals("chk_ssh", False) :
-				( Critical("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "node failure: ssh")
-					.Msg("msg"  , "{node} failure: ssh")
-				, Recover("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "node is good: ssh")
-					.Msg("msg"  , "{node} is good: ssh")),
-
 			Equals("chk_mpi", False) :
 				( Critical("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "node failure: mpi")
