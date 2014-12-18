@@ -1,6 +1,7 @@
 from octopy import *
 
-link_module = {
+def LinkModule():
+	return {
 	"var" : {
 		"duplex_match" : LinkedVarArgMatch("duplex"),
 		"speed_match" : LinkedVarArgMatch("speed"),

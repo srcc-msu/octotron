@@ -12,7 +12,7 @@ CPU_PER_NODE = 2
 
 # create 4 objects with "type" = "node" and assign
 # to them attributes from the collectd library module
-nodes = CreateObjects(NODES, lib_collectd.node_module
+nodes = CreateObjects(NODES, lib_collectd.NodeModule()
 	, { "const" : {"type" : "node"}})
 
 # assign to every object ip from the file
