@@ -1,22 +1,22 @@
 from octopy import *
 
-def DiskModule(update_time = Minutes(10)):
+def DiskModule(timeout = Minutes(10)):
 	return {
 	"static" : {
 		"_static_disk_temp_max" :  40,
 	},
 
 	"sensor" : {
-		"current_pending_sector" : Long(update_time),
-		"hardware_ecc_recovered" : Long(update_time),
-		"offline_uncorrectable"  : Long(update_time),
-		"reallocated_sector_ct"  : Long(update_time),
-		"reported_uncorrect"     : Long(update_time),
-		"seek_error_rate"        : Long(update_time),
-		"spin_retry_count"       : Long(update_time),
-		"udma_crc_error_count"   : Long(update_time),
+		"current_pending_sector" : Long(timeout),
+		"hardware_ecc_recovered" : Long(timeout),
+		"offline_uncorrectable"  : Long(timeout),
+		"reallocated_sector_ct"  : Long(timeout),
+		"reported_uncorrect"     : Long(timeout),
+		"seek_error_rate"        : Long(timeout),
+		"spin_retry_count"       : Long(timeout),
+		"udma_crc_error_count"   : Long(timeout),
 
-		"temperature_celsius"    : Long(update_time),
+		"temperature_celsius"    : Long(timeout),
 	},
 
 	"var" : {
@@ -73,7 +73,7 @@ def DiskModule(update_time = Minutes(10)):
 
 #// ----------------------------------------- NODE --------------------------------------------
 
-def NodeModule(update_time = Minutes(10)):
+def NodeModule(timeout = Minutes(10)):
 	return {
 		"static" :
 		{
@@ -81,19 +81,19 @@ def NodeModule(update_time = Minutes(10)):
 		},
 
 		"sensor" : {
-			"temp" : Long(update_time),
-			"forks" : Long(update_time),
-			"zombies" : Long(update_time),
+			"temp" : Long(timeout),
+			"forks" : Long(timeout),
+			"zombies" : Long(timeout),
 
-			"check_tmp"   : Long(update_time),
-			"check_home"  : Long(update_time),
-			"check_clean" : Long(update_time),
-			"check_nmond" : Long(update_time),
+			"check_tmp"   : Long(timeout),
+			"check_home"  : Long(timeout),
+			"check_clean" : Long(timeout),
+			"check_nmond" : Long(timeout),
 
-			"ntpd_drift" : Double(update_time),
-			"la_1" : Double(update_time),
+			"ntpd_drift" : Double(timeout),
+			"la_1" : Double(timeout),
 
-			"task_id" : Long(update_time),
+			"task_id" : Long(timeout),
 		},
 
 		"var" : {
@@ -199,10 +199,10 @@ def NodeModule(update_time = Minutes(10)):
 
 
 
-def CpuModule(update_time = Minutes(10)):
+def CpuModule(timeout = Minutes(10)):
 	return {
 		"sensor" : {
-			"temp" : Long(update_time),
+			"temp" : Long(timeout),
 		},
 
 		"var" : {
@@ -227,14 +227,14 @@ def CpuModule(update_time = Minutes(10)):
 
 #// ----------------------------------------- MEMORY --------------------------------------------
 
-def MemoryModule(update_time = Minutes(10)):
+def MemoryModule(timeout = Minutes(10)):
 	return {
 	"sensor" : {
-		"buffered" : Long(update_time),
-		"cached" : Long(update_time),
-		"free" : Long(update_time),
-		"used" : Long(update_time),
-		"total" : Long(update_time),
+		"buffered" : Long(timeout),
+		"cached" : Long(timeout),
+		"free" : Long(timeout),
+		"used" : Long(timeout),
+		"total" : Long(timeout),
 	},
 
 	"var" : {
@@ -254,29 +254,29 @@ def MemoryModule(update_time = Minutes(10)):
 
 #// ----------------------------------------- ETH --------------------------------------------
 
-def IBModule(update_time = Minutes(10)):
+def IBModule(timeout = Minutes(10)):
 	return {
 		"sensor" : {
-			"state" : Long(update_time),
-			"physical_state" : Long(update_time),
+			"state" : Long(timeout),
+			"physical_state" : Long(timeout),
 
-			"LinkRecovers" : Long(update_time),
-			"LinkDowned" : Long(update_time),
+			"LinkRecovers" : Long(timeout),
+			"LinkDowned" : Long(timeout),
 
-			"SymbolErrors" : Long(update_time),
-			"RcvErrors" : Long(update_time),
-			"RcvRemotePhysErrors" : Long(update_time),
-			"RcvSwRelayErrors" : Long(update_time),
-			"XmtDiscards" : Long(update_time),
-			"XmtConstraintErrors" : Long(update_time),
-			"RcvConstraintErrors" : Long(update_time),
-			"LinkIntegrityErrors" : Long(update_time),
-			"ExcBufOverrunErrors" : Long(update_time),
-			"VL15Dropped" : Long(update_time),
-			"PortXmitData" : Long(update_time),
-			"PortRcvData" : Long(update_time),
-			"PortXmitPkts" : Long(update_time),
-			"PortRcvPkts" : Long(update_time),
+			"SymbolErrors" : Long(timeout),
+			"RcvErrors" : Long(timeout),
+			"RcvRemotePhysErrors" : Long(timeout),
+			"RcvSwRelayErrors" : Long(timeout),
+			"XmtDiscards" : Long(timeout),
+			"XmtConstraintErrors" : Long(timeout),
+			"RcvConstraintErrors" : Long(timeout),
+			"LinkIntegrityErrors" : Long(timeout),
+			"ExcBufOverrunErrors" : Long(timeout),
+			"VL15Dropped" : Long(timeout),
+			"PortXmitData" : Long(timeout),
+			"PortRcvData" : Long(timeout),
+			"PortXmitPkts" : Long(timeout),
+			"PortRcvPkts" : Long(timeout),
 		},
 
 		"react" : {
@@ -332,7 +332,7 @@ def IBModule(update_time = Minutes(10)):
 		}
 	}
 
-def EthModule(update_time = Minutes(10)):
+def EthModule(timeout = Minutes(10)):
 	return {
 		"static" : {
 			"_static_eth_err_speed_thr" : 10.0,
@@ -342,15 +342,15 @@ def EthModule(update_time = Minutes(10)):
 		},
 
 		"sensor" : {
-			"speed" : Long(update_time),
+			"speed" : Long(timeout),
 
-			"rx_errors" : Long(update_time),
-			"tx_errors" : Long(update_time),
+			"rx_errors" : Long(timeout),
+			"tx_errors" : Long(timeout),
 
-			"tx_dropped" : Long(update_time),
-			"collisions" : Long(update_time),
+			"tx_dropped" : Long(timeout),
+			"collisions" : Long(timeout),
 
-			"duplex" : String(update_time),
+			"duplex" : String(timeout),
 		},
 
 		"var" : {

@@ -1,6 +1,6 @@
 from octopy import *
 
-def EthPortSnmpModule(update_time = Minutes(10)):
+def EthPortSnmpModule(timeout = Minutes(10)):
 	return {
 		"const" : {
 			"_static_eth_port_error_speed_max" : 10.0,
@@ -8,20 +8,20 @@ def EthPortSnmpModule(update_time = Minutes(10)):
 		},
 
 		"sensor" : {
-			"out_frames" : Long(update_time),
-			"in_frames" : Long(update_time),
+			"out_frames" : Long(timeout),
+			"in_frames" : Long(timeout),
 
-			"admin_status" : String(update_time),
-			"oper_status" : String(update_time),
+			"admin_status" : String(timeout),
+			"oper_status" : String(timeout),
 
-			"duplex" : String(update_time),
+			"duplex" : String(timeout),
 
-			"speed" : Long(update_time),
+			"speed" : Long(timeout),
 
-			"in_errors" : Long(update_time),
-			"out_errors" : Long(update_time),
+			"in_errors" : Long(timeout),
+			"out_errors" : Long(timeout),
 
-			"q_len" : Long(update_time),
+			"q_len" : Long(timeout),
 		},
 
 		"var" : {

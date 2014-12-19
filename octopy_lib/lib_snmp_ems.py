@@ -1,6 +1,6 @@
 from octopy import *
 
-def EmsSensorModule(update_time = Minutes(1)):
+def EmsSensorModule(timeout = Minutes(1)):
 	return {
 		"static" : {
 			"_static_ems_sensor_front_temp_max" : 30,
@@ -12,12 +12,12 @@ def EmsSensorModule(update_time = Minutes(1)):
 
 		"sensor" : {
 		# cold
-			"front_humidity" : Long(update_time),
-			"front_temp" : Long(update_time),
+			"front_humidity" : Long(timeout),
+			"front_temp" : Long(timeout),
 
 		# hot
-			"back_humidity" : Long(update_time),
-			"back_temp" : Long(update_time),
+			"back_humidity" : Long(timeout),
+			"back_temp" : Long(timeout),
 		},
 
 		"var" : {
@@ -82,11 +82,11 @@ def EmsSensorModule(update_time = Minutes(1)):
 		}
 	}
 
-def EmsContactModule(update_time = Minutes(1)):
+def EmsContactModule(timeout = Minutes(1)):
 	return {
 		"sensor" : {
-			"state" : String(update_time),
-			"normal_state" : String(update_time),
+			"state" : String(timeout),
+			"normal_state" : String(timeout),
 		},
 
 		"var" : {
@@ -104,66 +104,66 @@ def EmsContactModule(update_time = Minutes(1)):
 		}
 	}
 
-def EmsSnmpTrapModule(update_time = UPDATE_TIME_NOT_SPECIFIED):
+def EmsSnmpTrapModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
 	return {
 		"sensor" : {
-			"iemHighTempThresholdViolation" : Boolean(update_time, True),
-			"iemHighTempThresholdViolation_descr" : String(update_time, ""),
-			"iemLowTempThresholdViolation" : Boolean(update_time, True),
-			"iemLowTempThresholdViolation_descr" : String(update_time, ""),
-			"iemHighHumidThresholdViolation" : Boolean(update_time, True),
-			"iemHighHumidThresholdViolation_descr" : String(update_time, ""),
-			"iemLowHumidThresholdViolation" : Boolean(update_time, True),
-			"iemLowHumidThresholdViolation_descr" : String(update_time, ""),
+			"iemHighTempThresholdViolation" : Boolean(timeout, True),
+			"iemHighTempThresholdViolation_descr" : String(timeout, ""),
+			"iemLowTempThresholdViolation" : Boolean(timeout, True),
+			"iemLowTempThresholdViolation_descr" : String(timeout, ""),
+			"iemHighHumidThresholdViolation" : Boolean(timeout, True),
+			"iemHighHumidThresholdViolation_descr" : String(timeout, ""),
+			"iemLowHumidThresholdViolation" : Boolean(timeout, True),
+			"iemLowHumidThresholdViolation_descr" : String(timeout, ""),
 
-			"emsCommunicationLost" : Boolean(update_time, True),
-			"emsCommunicationLost_descr" : String(update_time, ""),
+			"emsCommunicationLost" : Boolean(timeout, True),
+			"emsCommunicationLost_descr" : String(timeout, ""),
 
-			"envMaxTempThresholdViolation" : Boolean(update_time, True),
-			"envMaxTempThresholdViolation_descr" : String(update_time, ""),
-			"envMinTempThresholdViolation" : Boolean(update_time, True),
-			"envMinTempThresholdViolation_descr" : String(update_time, ""),
-			"envMaxHumidityThresholdViolation" : Boolean(update_time, True),
-			"envMaxHumidityThresholdViolation_descr" : String(update_time, ""),
-			"envMinHumidityThresholdViolation" : Boolean(update_time, True),
-			"envMinHumidityThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvMaxTempThresholdViolation" : Boolean(update_time, True),
-			"apcEnvMaxTempThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvHighTempThresholdViolation" : Boolean(update_time, True),
-			"apcEnvHighTempThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvLowTempThresholdViolation" : Boolean(update_time, True),
-			"apcEnvLowTempThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvMinTempThresholdViolation" : Boolean(update_time, True),
-			"apcEnvMinTempThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvMaxHumidityThresholdViolation" : Boolean(update_time, True),
-			"apcEnvMaxHumidityThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvHighHumidityThresholdViolation" : Boolean(update_time, True),
-			"apcEnvHighHumidityThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvLowHumidityThresholdViolation" : Boolean(update_time, True),
-			"apcEnvLowHumidityThresholdViolation_descr" : String(update_time, ""),
-			"apcEnvMinHumidityThresholdViolation" : Boolean(update_time, True),
-			"apcEnvMinHumidityThresholdViolation_descr" : String(update_time, ""),
+			"envMaxTempThresholdViolation" : Boolean(timeout, True),
+			"envMaxTempThresholdViolation_descr" : String(timeout, ""),
+			"envMinTempThresholdViolation" : Boolean(timeout, True),
+			"envMinTempThresholdViolation_descr" : String(timeout, ""),
+			"envMaxHumidityThresholdViolation" : Boolean(timeout, True),
+			"envMaxHumidityThresholdViolation_descr" : String(timeout, ""),
+			"envMinHumidityThresholdViolation" : Boolean(timeout, True),
+			"envMinHumidityThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvMaxTempThresholdViolation" : Boolean(timeout, True),
+			"apcEnvMaxTempThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvHighTempThresholdViolation" : Boolean(timeout, True),
+			"apcEnvHighTempThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvLowTempThresholdViolation" : Boolean(timeout, True),
+			"apcEnvLowTempThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvMinTempThresholdViolation" : Boolean(timeout, True),
+			"apcEnvMinTempThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvMaxHumidityThresholdViolation" : Boolean(timeout, True),
+			"apcEnvMaxHumidityThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvHighHumidityThresholdViolation" : Boolean(timeout, True),
+			"apcEnvHighHumidityThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvLowHumidityThresholdViolation" : Boolean(timeout, True),
+			"apcEnvLowHumidityThresholdViolation_descr" : String(timeout, ""),
+			"apcEnvMinHumidityThresholdViolation" : Boolean(timeout, True),
+			"apcEnvMinHumidityThresholdViolation_descr" : String(timeout, ""),
 
-			"envHighTempThresholdViolation" : Boolean(update_time, True),
-			"envHighTempThresholdViolation_descr" : String(update_time, ""),
-			"envLowTempThresholdViolation" : Boolean(update_time, True),
-			"envLowTempThresholdViolation_descr" : String(update_time, ""),
-			"envHighHumidityThresholdViolation" : Boolean(update_time, True),
-			"envHighHumidityThresholdViolation_descr" : String(update_time, ""),
-			"envLowHumidityThresholdViolation" : Boolean(update_time, True),
-			"envLowHumidityThresholdViolation_descr" : String(update_time, ""),
+			"envHighTempThresholdViolation" : Boolean(timeout, True),
+			"envHighTempThresholdViolation_descr" : String(timeout, ""),
+			"envLowTempThresholdViolation" : Boolean(timeout, True),
+			"envLowTempThresholdViolation_descr" : String(timeout, ""),
+			"envHighHumidityThresholdViolation" : Boolean(timeout, True),
+			"envHighHumidityThresholdViolation_descr" : String(timeout, ""),
+			"envLowHumidityThresholdViolation" : Boolean(timeout, True),
+			"envLowHumidityThresholdViolation_descr" : String(timeout, ""),
 
-			"apcInformationalDiscreteInputContactStateAbnormal" : Boolean(update_time, True),
-			"apcInformationalDiscreteInputContactStateAbnormal_descr" : String(update_time, ""),
-			"apcInformationalDiscreteInputContactStateNormal" : Boolean(update_time, True),
-			"apcInformationalDiscreteInputContactStateNormal_descr" : String(update_time, ""),
+			"apcInformationalDiscreteInputContactStateAbnormal" : Boolean(timeout, True),
+			"apcInformationalDiscreteInputContactStateAbnormal_descr" : String(timeout, ""),
+			"apcInformationalDiscreteInputContactStateNormal" : Boolean(timeout, True),
+			"apcInformationalDiscreteInputContactStateNormal_descr" : String(timeout, ""),
 
-			"iemContactFault" : Boolean(update_time, True),
-			"iemContactFault_descr" : String(update_time, ""),
-			"contactFault" : Boolean(update_time, True),
-			"contactFault_descr" : String(update_time, ""),
-			"emsSensorFault" : Boolean(update_time, True),
-			"emsSensorFault_descr" : String(update_time, ""),
+			"iemContactFault" : Boolean(timeout, True),
+			"iemContactFault_descr" : String(timeout, ""),
+			"contactFault" : Boolean(timeout, True),
+			"contactFault_descr" : String(timeout, ""),
+			"emsSensorFault" : Boolean(timeout, True),
+			"emsSensorFault_descr" : String(timeout, ""),
 		},
 
 		"react" : {

@@ -1,6 +1,6 @@
 from octopy import *
 
-def FanSnmpModule(update_time = Minutes(1)):
+def FanSnmpModule(timeout = Minutes(1)):
 	return {
 		"static" :
 		{
@@ -11,15 +11,15 @@ def FanSnmpModule(update_time = Minutes(1)):
 		},
 
 		"sensor" : {
-			"inlet_1" : Long(update_time),
-			"inlet_2" : Long(update_time),
-			"inlet_3" : Long(update_time),
-			"humidity_in"  : Long(update_time),
-			"humidity_out" : Long(update_time),
-			"air_in"  : Long(update_time),
-			"air_out" : Long(update_time),
-			"fluid_in"  : Long(update_time),
-			"fluid_out" : Long(update_time),
+			"inlet_1" : Long(timeout),
+			"inlet_2" : Long(timeout),
+			"inlet_3" : Long(timeout),
+			"humidity_in"  : Long(timeout),
+			"humidity_out" : Long(timeout),
+			"air_in"  : Long(timeout),
+			"air_out" : Long(timeout),
+			"fluid_in"  : Long(timeout),
+			"fluid_out" : Long(timeout),
 		},
 
 		"var" : {
@@ -108,30 +108,30 @@ def FanSnmpModule(update_time = Minutes(1)):
 	}
 
 
-def FanSnmpTrapModule(update_time = UPDATE_TIME_NOT_SPECIFIED):
+def FanSnmpTrapModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
 	return {
 		# True = no trap
 		"sensor" : {
-			"airCriticalCondition_29" : Boolean(update_time, True),
-			"airCriticalCondition_29_descr" : String(update_time, ""),
+			"airCriticalCondition_29" : Boolean(timeout, True),
+			"airCriticalCondition_29_descr" : String(timeout, ""),
 
-			"airWarningCondition_24" : Boolean(update_time, True),
-			"airWarningCondition_24_descr" : String(update_time, ""),
-			"airWarningCondition_27" : Boolean(update_time, True),
-			"airWarningCondition_27_descr" : String(update_time, ""),
-			"airWarningCondition_28" : Boolean(update_time, True),
-			"airWarningCondition_28_descr" : String(update_time, ""),
-			"airWarningCondition_32" : Boolean(update_time, True),
-			"airWarningCondition_32_descr" : String(update_time, ""),
-			"airWarningCondition_39" : Boolean(update_time, True),
-			"airWarningCondition_39_descr" : String(update_time, ""),
-			"airWarningCondition_40" : Boolean(update_time, True),
-			"airWarningCondition_40_descr" : String(update_time, ""),
-			"airWarningCondition_54" : Boolean(update_time, True),
-			"airWarningCondition_54_descr" : String(update_time, ""),
+			"airWarningCondition_24" : Boolean(timeout, True),
+			"airWarningCondition_24_descr" : String(timeout, ""),
+			"airWarningCondition_27" : Boolean(timeout, True),
+			"airWarningCondition_27_descr" : String(timeout, ""),
+			"airWarningCondition_28" : Boolean(timeout, True),
+			"airWarningCondition_28_descr" : String(timeout, ""),
+			"airWarningCondition_32" : Boolean(timeout, True),
+			"airWarningCondition_32_descr" : String(timeout, ""),
+			"airWarningCondition_39" : Boolean(timeout, True),
+			"airWarningCondition_39_descr" : String(timeout, ""),
+			"airWarningCondition_40" : Boolean(timeout, True),
+			"airWarningCondition_40_descr" : String(timeout, ""),
+			"airWarningCondition_54" : Boolean(timeout, True),
+			"airWarningCondition_54_descr" : String(timeout, ""),
 
-			"airInformationalCondition_3" : Boolean(update_time, True),
-			"airInformationalCondition_3_descr" : String(update_time, ""),
+			"airInformationalCondition_3" : Boolean(timeout, True),
+			"airInformationalCondition_3_descr" : String(timeout, ""),
 		},
 
 		"var" : {

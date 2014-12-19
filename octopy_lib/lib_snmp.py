@@ -1,12 +1,12 @@
 from octopy import *
 
-def SnmpGeneralModule(update_time = UPDATE_TIME_NOT_SPECIFIED):
+def SnmpGeneralModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
 	return {
 		"sensor" : {
-			"configChangeSNMP"       : Boolean(update_time, True),
-			"accessViolationConsole" : Boolean(update_time, True),
-			"accessViolationHTTP"    : Boolean(update_time, True),
-			"passwordChange"         : Boolean(update_time, True),
+			"configChangeSNMP"       : Boolean(timeout, True),
+			"accessViolationConsole" : Boolean(timeout, True),
+			"accessViolationHTTP"    : Boolean(timeout, True),
+			"passwordChange"         : Boolean(timeout, True),
 		},
 
 		"react" : {

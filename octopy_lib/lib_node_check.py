@@ -1,11 +1,11 @@
 from octopy import *
 
-def NodeCheckModule(update_time = Hours(1)):
+def NodeCheckModule(timeout = Hours(1)):
 	return {
 		"sensor" : {
-			"chk_mpi" : Boolean(update_time),
-			"chk_ib" : Boolean(update_time),
-			"ib_visible" : Boolean(update_time),
+			"chk_mpi" : Boolean(timeout),
+			"chk_ib" : Boolean(timeout),
+			"ib_visible" : Boolean(timeout),
 		},
 
 		"react" : {

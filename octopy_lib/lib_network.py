@@ -1,9 +1,9 @@
 from octopy import *
 
-def PingModule(update_time = Minutes(10)):
+def PingModule(timeout = Minutes(10)):
 	return {
-		"const" : {
-			"ping" : Boolean(update_time),
+		"sensor" : {
+			"ping" : Boolean(timeout),
 		},
 
 		"react" : {
@@ -17,10 +17,10 @@ def PingModule(update_time = Minutes(10)):
 		}
 	}
 
-def SshModule(update_time = Minutes(10)):
+def SshModule(timeout = Minutes(10)):
 	return {
-		"const" : {
-			"ssh" : Boolean(update_time),
+		"sensor" : {
+			"ssh" : Boolean(timeout),
 		},
 
 		"react" : {
@@ -34,10 +34,10 @@ def SshModule(update_time = Minutes(10)):
 		}
 	}
 
-def SnmpModule(update_time = Minutes(10)):
+def SnmpModule(timeout = Minutes(10)):
 	return {
-		"const" : {
-			"snmp" : Boolean(update_time),
+		"sensor" : {
+			"snmp" : Boolean(timeout),
 		},
 
 		"react" : {

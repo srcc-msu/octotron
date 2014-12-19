@@ -1,6 +1,6 @@
 from octopy import *
 
-def UpsSnmpModule(update_time = Minutes(1)):
+def UpsSnmpModule(timeout = Minutes(1)):
 	return {
 		"static" :
 		{
@@ -15,23 +15,23 @@ def UpsSnmpModule(update_time = Minutes(1)):
 		},
 
 		"sensor" : {
-			"capacity" : Long(update_time),
+			"capacity" : Long(timeout),
 
-			"remaining_battery_time" : Long(update_time),
+			"remaining_battery_time" : Long(timeout),
 
-			"temp" : Long(update_time),
-			"num_batteries" : Long(update_time),
+			"temp" : Long(timeout),
+			"num_batteries" : Long(timeout),
 
-			"input_voltage" : Long(update_time),
+			"input_voltage" : Long(timeout),
 
-			"output_status" : String(update_time),
-			"battery_status" : String(update_time),
+			"output_status" : String(timeout),
+			"battery_status" : String(timeout),
 
-			"pm_ok"   : Long(update_time),
-			"pm_not"  : Long(update_time),
-			"pm_fail" : Long(update_time),
+			"pm_ok"   : Long(timeout),
+			"pm_not"  : Long(timeout),
+			"pm_fail" : Long(timeout),
 
-			"pm_fail_ref" : Long(update_time),
+			"pm_fail_ref" : Long(timeout),
 		},
 
 		"var" : {
@@ -101,80 +101,80 @@ def UpsSnmpModule(update_time = Minutes(1)):
 		}
 	}
 
-def UpsSnmpTrapModule(update_time = UPDATE_TIME_NOT_SPECIFIED):
+def UpsSnmpTrapModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
 	return {
 		"sensor" : {
-			"communicationLost" : Boolean(update_time, True),
-			"communicationLost_descr" : String(update_time, ""),
+			"communicationLost" : Boolean(timeout, True),
+			"communicationLost_descr" : String(timeout, ""),
 
-			"upsOnBattery" : Boolean(update_time, True),
-			"upsOnBattery_descr" : String(update_time, ""),
+			"upsOnBattery" : Boolean(timeout, True),
+			"upsOnBattery_descr" : String(timeout, ""),
 
-			"lowBattery" : Boolean(update_time, True),
-			"lowBattery_descr" : String(update_time, ""),
+			"lowBattery" : Boolean(timeout, True),
+			"lowBattery_descr" : String(timeout, ""),
 
-			"bypass" : Boolean(update_time, True),
-			"bypass_descr" : String(update_time, ""),
+			"bypass" : Boolean(timeout, True),
+			"bypass_descr" : String(timeout, ""),
 
-			"badVoltage" : Boolean(update_time, True),
-			"badVoltage_descr" : String(update_time, ""),
+			"badVoltage" : Boolean(timeout, True),
+			"badVoltage_descr" : String(timeout, ""),
 
-			"chargerFailure" : Boolean(update_time, True),
-			"chargerFailure_descr" : String(update_time, ""),
+			"chargerFailure" : Boolean(timeout, True),
+			"chargerFailure_descr" : String(timeout, ""),
 
-			"batteryOverTemperature" : Boolean(update_time, True),
-			"batteryOverTemperature_descr" : String(update_time, ""),
+			"batteryOverTemperature" : Boolean(timeout, True),
+			"batteryOverTemperature_descr" : String(timeout, ""),
 
-			"abnormalCondition" : Boolean(update_time, True),
-			"abnormalCondition_descr" : String(update_time, ""),
+			"abnormalCondition" : Boolean(timeout, True),
+			"abnormalCondition_descr" : String(timeout, ""),
 
-			"upsOverload" : Boolean(update_time, True),
-			"upsOverload_descr" : String(update_time, ""),
+			"upsOverload" : Boolean(timeout, True),
+			"upsOverload_descr" : String(timeout, ""),
 
-			"upsDiagnosticsFailed" : Boolean(update_time, True),
-			"upsDiagnosticsFailed_descr" : String(update_time, ""),
+			"upsDiagnosticsFailed" : Boolean(timeout, True),
+			"upsDiagnosticsFailed_descr" : String(timeout, ""),
 
-			"upsDischarged" : Boolean(update_time, True),
-			"upsDischarged_descr" : String(update_time, ""),
+			"upsDischarged" : Boolean(timeout, True),
+			"upsDischarged_descr" : String(timeout, ""),
 
-			"upsTurnedOff" : Boolean(update_time, True),
-			"upsTurnedOff_descr" : String(update_time, ""),
+			"upsTurnedOff" : Boolean(timeout, True),
+			"upsTurnedOff_descr" : String(timeout, ""),
 
-			"upsSleeping" : Boolean(update_time, True),
-			"upsSleeping_descr" : String(update_time, ""),
+			"upsSleeping" : Boolean(timeout, True),
+			"upsSleeping_descr" : String(timeout, ""),
 
-			"upsWokeUp" : Boolean(update_time, True),
-			"upsWokeUp_descr" : String(update_time, ""),
+			"upsWokeUp" : Boolean(timeout, True),
+			"upsWokeUp_descr" : String(timeout, ""),
 
-			"upsRebootStarted" : Boolean(update_time, True),
-			"upsRebootStarted_descr" : String(update_time, ""),
+			"upsRebootStarted" : Boolean(timeout, True),
+			"upsRebootStarted_descr" : String(timeout, ""),
 
-			"upsBatteryNeedsReplacement" : Boolean(update_time, True),
-			"upsBatteryNeedsReplacement_descr" : String(update_time, ""),
+			"upsBatteryNeedsReplacement" : Boolean(timeout, True),
+			"upsBatteryNeedsReplacement_descr" : String(timeout, ""),
 
-			"bypassPowerSupplyFailure" : Boolean(update_time, True),
-			"bypassPowerSupplyFailure_descr" : String(update_time, ""),
+			"bypassPowerSupplyFailure" : Boolean(timeout, True),
+			"bypassPowerSupplyFailure_descr" : String(timeout, ""),
 
-			"baseFanFailure" : Boolean(update_time, True),
-			"baseFanFailure_descr" : String(update_time, ""),
+			"baseFanFailure" : Boolean(timeout, True),
+			"baseFanFailure_descr" : String(timeout, ""),
 
-			"batteryPackCommLost" : Boolean(update_time, True),
-			"batteryPackCommLost_descr" : String(update_time, ""),
+			"batteryPackCommLost" : Boolean(timeout, True),
+			"batteryPackCommLost_descr" : String(timeout, ""),
 
-			"calibrationStart" : Boolean(update_time, True),
-			"calibrationStart_descr" : String(update_time, ""),
+			"calibrationStart" : Boolean(timeout, True),
+			"calibrationStart_descr" : String(timeout, ""),
 
-			"upsTurnedOn" : Boolean(update_time, True),
-			"upsTurnedOn_descr" : String(update_time, ""),
+			"upsTurnedOn" : Boolean(timeout, True),
+			"upsTurnedOn_descr" : String(timeout, ""),
 
-			"upsBatteryReplaced" : Boolean(update_time, True),
-			"upsBatteryReplaced_descr" : String(update_time, ""),
+			"upsBatteryReplaced" : Boolean(timeout, True),
+			"upsBatteryReplaced_descr" : String(timeout, ""),
 
-			"powerModuleIncrease" : Boolean(update_time, True),
-			"powerModuleIncrease_descr" : String(update_time, ""),
+			"powerModuleIncrease" : Boolean(timeout, True),
+			"powerModuleIncrease_descr" : String(timeout, ""),
 
-			"powerModuleDecrease" : Boolean(update_time, True),
-			"powerModuleDecrease_descr" : String(update_time, ""),
+			"powerModuleDecrease" : Boolean(timeout, True),
+			"powerModuleDecrease_descr" : String(timeout, ""),
 		},
 
 

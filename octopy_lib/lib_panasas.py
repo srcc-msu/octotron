@@ -1,17 +1,17 @@
 from octopy import *
 
-def PanasasSystemModule(update_time = Minutes(10)):
+def PanasasSystemModule(timeout = Minutes(10)):
 	return {
 		"const" : {
 			"type" : "panasas_system"
 		},
 
 		"sensor" : {
-			"capacity_total" : Long(update_time),
-			"capacity_used"  : Long(update_time),
-			"capacity_avail" : Long(update_time),
-			"nfs_perf_ops" : Long(update_time),
-			"nfs_perf_mbs" : Long(update_time),
+			"capacity_total" : Long(timeout),
+			"capacity_used"  : Long(timeout),
+			"capacity_avail" : Long(timeout),
+			"nfs_perf_ops" : Long(timeout),
+			"nfs_perf_mbs" : Long(timeout),
 		},
 
 		"var" : {
@@ -24,7 +24,7 @@ def PanasasSystemModule(update_time = Minutes(10)):
 		}
 	}
 
-def PanasasShelfModule(update_time = Minutes(10)):
+def PanasasShelfModule(timeout = Minutes(10)):
 	return {
 		"const" : {
 			"type" : "panasas_shelf"
@@ -40,21 +40,21 @@ def PanasasShelfModule(update_time = Minutes(10)):
 		}
 	}
 
-def PanasasBladeModule(update_time = Minutes(10)):
+def PanasasBladeModule(timeout = Minutes(10)):
 	return {
 		"const" : {
 			"type" : "panasas_blade"
 		},
 
 		"sensor" : {
-			"status"     : String(update_time),
-			"blade_type" : String(update_time),
-			"cpu_util"  : Long(update_time),
-			"disk_util" : Long(update_time),
-			"perf_ops"      : Long(update_time),
-			"perf_response" : Long(update_time),
-			"perf_in_kbs"   : Long(update_time),
-			"perf_out_kbs"  : Long(update_time),
+			"status"     : String(timeout),
+			"blade_type" : String(timeout),
+			"cpu_util"  : Long(timeout),
+			"disk_util" : Long(timeout),
+			"perf_ops"      : Long(timeout),
+			"perf_response" : Long(timeout),
+			"perf_in_kbs"   : Long(timeout),
+			"perf_out_kbs"  : Long(timeout),
 		},
 
 		"react" : {
@@ -76,14 +76,14 @@ def PanasasBladeModule(update_time = Minutes(10)):
 		}
 	}
 
-def PanasasVolumeModule(update_time = Minutes(10)):
+def PanasasVolumeModule(timeout = Minutes(10)):
 	return {
 		"const" : {
 			"type" : "panasas_volume",
 		},
 
 		"sensor" : {
-			"info" : "",
+			"info" : String(timeout),
 		},
 
 		"react" : {

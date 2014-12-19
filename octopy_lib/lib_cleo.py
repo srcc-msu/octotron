@@ -12,27 +12,27 @@ from octopy import *
 # TODO: make more clear
 #
 
-def CleoModule(update_time = Minutes(10)):
+def CleoModule(timeout = Minutes(10)):
 	return {
 		"const" : {
 			"type" : "queue"
 		},
 
 		"sensor" : {
-			"tasks_total"   : Long(update_time),
-			"tasks_running" : Long(update_time),
-			"tasks_blocked" : Long(update_time),
-			"tasks_queued"  : Long(update_time),
-			"tasks_prerun"  : Long(update_time),
+			"tasks_total"   : Long(timeout),
+			"tasks_running" : Long(timeout),
+			"tasks_blocked" : Long(timeout),
+			"tasks_queued"  : Long(timeout),
+			"tasks_prerun"  : Long(timeout),
 
-			"tasks_completition" : Long(update_time),
+			"tasks_completition" : Long(timeout),
 
-			"can_run_tasks"   : Long(update_time),
-			"can_queue_tasks" : Long(update_time),
+			"can_run_tasks"   : Long(timeout),
+			"can_queue_tasks" : Long(timeout),
 
-			"cpus_total_free"    : Long(update_time),
-			"cpus_total_number"  : Long(update_time),
-			"cpus_blocked_count" : Long(update_time),
+			"cpus_total_free"    : Long(timeout),
+			"cpus_total_number"  : Long(timeout),
+			"cpus_blocked_count" : Long(timeout),
 		},
 
 		"var" : {
