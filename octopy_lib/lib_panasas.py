@@ -88,11 +88,11 @@ def PanasasVolumeModule(timeout = Minutes(10)):
 
 		"react" : {
 			NotEquals("info", "Online") :
-				( Danger("tag", "STORAGE").Msg("loc", "{panasas_volume}")
+				( Danger("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "panasas volume info changed")
-					.Msg("msg"  , "panasas volume({panasas_volume}) info changed: {info}")
-				, Recover("tag", "STORAGE").Msg("loc", "{panasas_volume}")
+					.Msg("msg"  , "panasas volume({mount}) info changed: {info}")
+				, Recover("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "panasas volume is ok")
-					.Msg("msg"  , "panasas volume({panasas_volume}) is ok: {info}")),
+					.Msg("msg"  , "panasas volume({mount}) is ok: {info}")),
 		}
 	}
