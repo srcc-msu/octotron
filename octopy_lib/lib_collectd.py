@@ -109,7 +109,7 @@ def NodeModule(timeout = Minutes(10)):
 			"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
 			"temp_state" : Interval("temp", 40, 50),
 
-			"fork_rate" : CalcSpeed("forks"),
+			"fork_rate" : Speed("forks"),
 			"fork_rate_ok" : UpperArgThreshold("fork_rate", "_static_fork_rate_thr"),
 
 			"zombies_ok" : Match("zombies", 0),
@@ -357,11 +357,11 @@ def EthModule(timeout = Minutes(10)):
 			"speed_ok" : ArgMatch("speed", "_static_eth_speed_req"),
 			"duplex_ok" : ArgMatch("duplex", "_static_eth_duplex_req"),
 
-			"rx_errors_speed" : CalcSpeed("rx_errors"),
-			"tx_errors_speed" : CalcSpeed("tx_errors"),
+			"rx_errors_speed" : Speed("rx_errors"),
+			"tx_errors_speed" : Speed("tx_errors"),
 
-			"tx_dropped_speed" : CalcSpeed("tx_dropped"),
-			"collisions_speed" : CalcSpeed("collisions"),
+			"tx_dropped_speed" : Speed("tx_dropped"),
+			"collisions_speed" : Speed("collisions"),
 
 			"check_rx_errors" : UpperArgThreshold("rx_errors_speed", "_static_eth_err_speed_thr"),
 			"check_tx_errors" : UpperArgThreshold("tx_errors_speed", "_static_eth_err_speed_thr"),

@@ -25,11 +25,11 @@ def EthPortSnmpModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
-			"eth_out_frames_speed" : CalcSpeed("out_frames"),
-			"eth_in_frames_speed" : CalcSpeed("in_frames"),
+			"eth_out_frames_speed" : Speed("out_frames"),
+			"eth_in_frames_speed" : Speed("in_frames"),
 
-			"eth_in_errors_speed" : CalcSpeed("in_errors"),
-			"eth_out_errors_speed" : CalcSpeed("out_errors"),
+			"eth_in_errors_speed" : Speed("in_errors"),
+			"eth_out_errors_speed" : Speed("out_errors"),
 
 			"status_match" : ArgMatch("oper_status", "admin_status"),
 			"duplex_match" : ArgMatch("duplex", "_static_duplex_req"),

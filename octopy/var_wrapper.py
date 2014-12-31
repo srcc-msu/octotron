@@ -109,7 +109,7 @@ class ArgMatch(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class CalcSpeed(Rule):
+class Speed(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
