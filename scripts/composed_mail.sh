@@ -9,6 +9,8 @@
 # $3 - msg
 set -u
 
+source ./mail_config.sh
+
 script_loc=$(readlink -f "$0")
 cd "$(dirname "$script_loc")"
 
@@ -75,7 +77,7 @@ then
 		INFO=`cat $OUT_FILE | grep $SUBJ_STR | grep INFO | wc -l`
 		RECOVER=`cat $OUT_FILE | grep $SUBJ_STR | grep RECOVER | wc -l`
 
-		cat $OUT_FILE | sed 's/Subject: //' | bash ./single_mail.sh "$1" "Octotron($COUNT): CRITICAL: $CRITICAL DANGER: $DANGER WARNING: $WARNING INFO: $INFO RECOVER: $RECOVER"
+		cat $OUT_FILE | sed 's/Subject: //' | bash ./single_mail.sh "$1" "$PREFIX Octotron($COUNT): Critical: $CRITICAL Danger: $DANGER Warning: $WARNING Info: $INFO Recover: $RECOVER"
 		rm $OUT_FILE
 	fi
 		rm -rf $SEND_DIR
