@@ -5,7 +5,7 @@ include Makefile.config
 # attribute will take the most space in typical configs
 
 OCTO_LIB=lib/octotron.jar
-JAVA_PARAM=-d64 -Dsun.net.httpserver.nodelay=true -cp $(OCTO_LIB)
+JAVA_PARAM=-d64 -Dsun.net.httpserver.nodelay=true -cp lib/jersey-core-1.18.1.jar:$(OCTO_LIB)
 
 all: run
 
