@@ -62,7 +62,7 @@ if __name__ == "__main__":
 			printed = False
 			for suppressed, status, count, descr in linear:
 				if not suppressed and status == entry:
-					print '{}, {}, "{}"'.format(count, status, descr)
+					print '{0}, {1}, "{2}"'.format(count, status, descr)
 					printed = True
 			if printed:
 				print
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 			printed = False
 			for suppressed, status, count, descr in linear:
 				if suppressed and status == entry:
-					print '{}, {}, "{}"'.format(count, status, descr)
+					print '{0}, {1}, "{2}"'.format(count, status, descr)
 					printed = True
 			if printed:
 				print
