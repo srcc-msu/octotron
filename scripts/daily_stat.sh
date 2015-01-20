@@ -9,7 +9,7 @@ FILE="../log/octotron.events.verbose.log."$DATE
 
 if [ -e $FILE ]
 then
-	python daily_stat.py -f $FILE | bash ./single_mail.sh "$RECIPIENT" "$PREFIX[daily]: all events for $DATE"
+	python daily_stat.py -f $FILE 2> log/daily.errors.`date`.log | bash ./single_mail.sh "$RECIPIENT" "$PREFIX[daily]: all events for $DATE"
 else
 	bash ./single_mail.sh "$RECIPIENT" "$PREFIX [daily]: no events for $DATE" "no events"
 fi

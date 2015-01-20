@@ -24,8 +24,8 @@ def Generate(lines):
 
 			data[(status, descr, suppressed)] += 1
 
-		except Exception, ignore:
-			print >> sys.stderr, "error parsing: ", line
+		except Exception as e:
+			print >> sys.stderr, "error parsing: ", line, " error: ", e
 
 	return data
 
@@ -52,6 +52,7 @@ if __name__ == "__main__":
 			"WARNING",
 			"INFO",
 			"RECOVER",
+			"TIMEOUT",
 		]
 
 		print "*** reported events ***"
