@@ -1,3 +1,10 @@
+/**
+url params:
+a_auth - authentication for control/snapshot in web format 'usr:pass'
+s_auth - authentication for view/suppressed ^
+host = host and port of octotoron, without protocol 'ip:port' or 'hostname:port'
+*/
+
 var urlParams; // http://stackoverflow.com/a/2880929
 var rawParams;
 
@@ -16,39 +23,40 @@ var rawParams;
 })();
 
 $(document).ready(function() {
-	document.getElementById('link_active').href += "?" + rawParams;
-	document.getElementById('link_suppressed').href += "?" + rawParams;
-
 	if(!("host" in urlParams))
 		$("#msg").html("<p>Error: host is not specified</p>");
 
-	Update(urlParams["host"] + "/control/snapshot?format=jsonp&callback=octotron_state&v", "result_active", ProcessSnapshot);
-	Update(urlParams["host"] + "/view/suppressed?callback=octotron_state", "result_suppressed", ProcessSuppressed);
+	document.getElementById('link_active').href += "?" + rawParams;
+	document.getElementById('link_suppressed').href += "?" + rawParams;
+
+	if(document.getElementById('result_active') !== null)
+	{
+		Update(urlParams["host"] + "/control/snapshot?format=jsonp&callback=octotron_state&v"
+			, urlParams["a_auth"], "result_active", ProcessSnapshot);
+	}
+
+	if(document.getElementById('result_suppressed') !== null)
+	{
+		Update(urlParams["host"] + "/view/suppressed?callback=octotron_state"
+			, urlParams["s_auth"], "result_suppressed", ProcessSuppressed);
+	}
 });
 
-function Update(data_url, target, processor)
+
+function Update(data_url, auth, target, processor)
 {
 	if(!("host" in urlParams))
 		return;
 
 	var data = {};
 
-	var usr = "";
-	var pwd = "";
-
-	if("usr" in urlParams)
-		usr = urlParams["usr"];
-	if("pwd" in urlParams)
-		pwd = urlParams["pwd"];
-
 	$.ajax({
-		type: "POST",
-		url: data_url,
+		type: "GET",
+		url: "http://" + auth + "@" + data_url,
 		contentType: "application/json",
 		dataType: "jsonp",
+		crossDomain: true,
 		async: false,
-		username: usr,
-		password: pwd,
 		cache: true,
 		success: function(json) { processor(json, target); },
 		error: function(json) { $("#msg").html("<p>Error: could not get data</p>"); }
