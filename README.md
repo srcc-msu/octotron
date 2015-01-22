@@ -7,7 +7,7 @@ Full project documentation is available in wiki: https://github.com/srcc-msu/oct
 
 If you are interested in full source code - visit http://github.com/srcc-msu/octotron_core
 
-The current versions uses a v3.1.4 release of Octotron(https://github.com/srcc-msu/octotron_core/releases/tag/v3.1.4)
+The current versions uses a v3.4.4 release of Octotron(https://github.com/srcc-msu/octotron_core/releases/tag/v3.4.4)
 
 #### Requirements:
 ###### To run a model:
