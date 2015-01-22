@@ -48,32 +48,32 @@ def CleoModule(timeout = Minutes(10)):
 		"react" : {
 			Equals("tasks_total_ok", False) :
 				Warning("tag", "QUEUE").Msg("loc", "{queue_name}")
-					.Msg("descr", "total tasks count is low")
-					.Msg("msg"  , "total tasks count is low({tasks_total}) in queue {queue_name}"),
+					.Msg("descr", "{type}: total tasks count is low")
+					.Msg("msg"  , "{type}({queue_name}): total tasks count is low({tasks_total})"),
 
 			Equals("tasks_running_ok", False) :
 				Warning("tag", "QUEUE").Msg("loc", "{queue_name}")
-					.Msg("descr", "running tasks count is low")
-					.Msg("msg"  , "running tasks count is low({tasks_running}) in queue {queue_name}"),
+					.Msg("descr", "{type}: running tasks count is low")
+					.Msg("msg"  , "{type}({queue_name}): running tasks count is low({tasks_running})"),
 
 			Equals("tasks_queued_ok", False) :
 				Warning("tag", "QUEUE").Msg("loc", "{queue_name}")
-					.Msg("descr", "queued tasks count is low")
-					.Msg("msg"  , "queued tasks count is low({tasks_queued}) in queue {queue_name}"),
+					.Msg("descr", "{type}: queued tasks count is low")
+					.Msg("msg"  , "{type}({queue_name}): queued tasks count is low({tasks_queued})"),
 
 			Equals("cpus_total_free_ok", False) :
 				Danger("tag", "QUEUE").Msg("loc", "{queue_name}")
-					.Msg("descr", "too many free cpus")
-					.Msg("msg"  , "too many free cpus({cpus_total_free}) in queue {queue_name}"),
+					.Msg("descr", "{type}: too many free cpus")
+					.Msg("msg"  , "{type}({queue_name}): too many free cpus({cpus_total_free})"),
 
 			Equals("cpus_total_number_ok", False) :
 				Danger("tag", "QUEUE").Msg("loc", "{queue_name}")
-					.Msg("descr", "the queue has lost some cpus")
-					.Msg("msg"  , "the queue has lost some cpus({cpus_total_number}) in queue {queue_name}"),
+					.Msg("descr", "{type}: the queue has lost some cpus")
+					.Msg("msg"  , "{type}({queue_name}): the queue has lost some cpus({cpus_total_number})"),
 
 			Equals("cpus_blocked_count_ok", False) :
 				Danger("tag", "QUEUE").Msg("loc", "{queue_name}")
-					.Msg("descr", "too many blocked cpus")
-					.Msg("msg"  , "too many blocked cpus({cpus_blocked_count}) in queue {queue_name}"),
+					.Msg("descr", "{type}: too many blocked cpus")
+					.Msg("msg"  , "{type}({queue_name}): too many blocked cpus({cpus_blocked_count})"),
 		}
 	}

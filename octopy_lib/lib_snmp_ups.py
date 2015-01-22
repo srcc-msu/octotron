@@ -53,51 +53,51 @@ def UpsSnmpModule(timeout = Minutes(1)):
 		"react" : {
 			Equals("ups_capacity_ok", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: capacity is low")
-					.Msg("msg"  , "ups {ip}: capacity({capacity}) is low")
+					.Msg("descr", "{type}: capacity is low")
+					.Msg("msg"  , "{type}({ip}): capacity({capacity}) is low")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: capacity is ok")
-					.Msg("msg"  , "ups {ip}: capacity is ok")),
+					.Msg("descr", "{type}: capacity is ok")
+					.Msg("msg"  , "{type}({ip}): capacity is ok")),
 
 			Equals("input_voltage_ok", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: low input voltage")
-					.Msg("msg"  , "ups {ip}: low input voltage({input_voltage})")
+					.Msg("descr", "{type}: low input voltage")
+					.Msg("msg"  , "{type}({ip}): low input voltage({input_voltage})")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: voltage is ok")
-					.Msg("msg"  , "ups {ip}: voltage is ok")),
+					.Msg("descr", "{type}: voltage is ok")
+					.Msg("msg"  , "{type}({ip}): voltage is ok")),
 
 			Equals("output_status_ok", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: status changed")
-					.Msg("msg"  , "ups {ip}: status changed: {output_status}")
+					.Msg("descr", "{type}: status changed")
+					.Msg("msg"  , "{type}({ip}): status changed: {output_status}")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: status is ok")
-					.Msg("msg"  , "ups {ip}: status is ok")),
+					.Msg("descr", "{type}: status is ok")
+					.Msg("msg"  , "{type}({ip}): status is ok")),
 
 			Equals("ups_temp_ok", False) :
 				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-					.Msg("descr", "ups: temperature is too high")
-					.Msg("msg"  , "ups {ip}: temperature({temp}) is too high")
+					.Msg("descr", "{type}: temperature is too high")
+					.Msg("msg"  , "{type}({ip}): temperature({temp}) is too high")
 				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-					.Msg("descr", "ups: temperature is ok")
-					.Msg("msg"  , "ups {ip}: temperature is ok")),
+					.Msg("descr", "{type}: temperature is ok")
+					.Msg("msg"  , "{type}({ip}): temperature is ok")),
 
 			Equals("ups_num_batteries_ok", False) :
 				( Danger("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: lost some batteries")
-					.Msg("msg"  , "ups {ip}: lost some batteries({num_batteries})")
+					.Msg("descr", "{type}: lost some batteries")
+					.Msg("msg"  , "{type}({ip}): lost some batteries({num_batteries})")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: obtained some batteries")
-					.Msg("msg"  , "ups {ip}: obtained some batteries({num_batteries})")),
+					.Msg("descr", "{type}: obtained some batteries")
+					.Msg("msg"  , "{type}({ip}): obtained some batteries({num_batteries})")),
 
 			Equals("pm_good", False) :
 				( Danger("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: power module failed")
-					.Msg("msg"  , "ups {ip}: power module failed: pm_ok: {pm_ok}/{pm_ok_ref}, pm_not: {pm_not}/{pm_not_ref}, pm_fail: {pm_fail}/{pm_fail_ref}")
+					.Msg("descr", "{type}: power module failed")
+					.Msg("msg"  , "{type}({ip}): power module failed: pm_ok: {pm_ok}/{pm_ok_ref}, pm_not: {pm_not}/{pm_not_ref}, pm_fail: {pm_fail}/{pm_fail_ref}")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: power modules are fine")
-					.Msg("msg"  , "ups {ip}: power modules are fine: pm_ok: {pm_ok}/{pm_ok_ref}, pm_not: {pm_not}/{pm_not_ref}, pm_fail: {pm_fail}/{pm_fail_ref})")),
+					.Msg("descr", "{type}: power modules are fine")
+					.Msg("msg"  , "{type}({ip}): power modules are fine: pm_ok: {pm_ok}/{pm_ok_ref}, pm_not: {pm_not}/{pm_not_ref}, pm_fail: {pm_fail}/{pm_fail_ref})")),
 		}
 	}
 
@@ -181,129 +181,129 @@ def UpsSnmpTrapModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
 		"react" : {
 			Equals("communicationLost", False) :
 				( Danger("tag", "INFRASTRUCUTRE").Msg("loc", "{ip}")
-					.Msg("descr", "ups: communication lost")
-					.Msg("msg"  , "ups {ip}: communication lost")
+					.Msg("descr", "{type}: communication lost")
+					.Msg("msg"  , "{type}({ip}): communication lost")
 				, Recover("tag", "INFRASTRUCUTRE").Msg("loc", "{ip}")
-					.Msg("descr", "ups: communication established")
-					.Msg("msg"  , "ups {ip}: communication established")),
+					.Msg("descr", "{type}: communication established")
+					.Msg("msg"  , "{type}({ip}): communication established")),
 
 			Equals("upsOnBattery", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: power off, ups is on battary")
-					.Msg("msg"  , "ups {ip}: power off, ups is on battary")
+					.Msg("descr", "{type}: power off, ups is on battary")
+					.Msg("msg"  , "{type}({ip}): power off, ups is on battary")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: power on")
-					.Msg("msg"  , "ups {ip}: power on")),
+					.Msg("descr", "{type}: power on")
+					.Msg("msg"  , "{type}({ip}): power on")),
 
 			Equals("lowBattery", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: low battery")
-					.Msg("msg"  , "ups {ip}: low battery")
+					.Msg("descr", "{type}: low battery")
+					.Msg("msg"  , "{type}({ip}): low battery")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: battery is ok")
-					.Msg("msg"  , "ups {ip}: battery is ok")),
+					.Msg("descr", "{type}: battery is ok")
+					.Msg("msg"  , "{type}({ip}): battery is ok")),
 
 			Equals("bypass", False) :
 				( Danger("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: up is on bypass")
-					.Msg("msg"  , "ups {ip}: up is on bypass: {bypass_descr}")
+					.Msg("descr", "{type}: up is on bypass")
+					.Msg("msg"  , "{type}({ip}): up is on bypass: {bypass_descr}")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: returned from bypass")
-					.Msg("msg"  , "ups {ip}: returned from bypass")),
+					.Msg("descr", "{type}: returned from bypass")
+					.Msg("msg"  , "{type}({ip}): returned from bypass")),
 
 			Equals("badVoltage", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: bad voltage")
-					.Msg("msg"  , "ups {ip}: bad voltage")
+					.Msg("descr", "{type}: bad voltage")
+					.Msg("msg"  , "{type}({ip}): bad voltage")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: voltage is ok")
-					.Msg("msg"  , "ups {ip}: voltage is ok")),
+					.Msg("descr", "{type}: voltage is ok")
+					.Msg("msg"  , "{type}({ip}): voltage is ok")),
 			Equals("chargerFailure", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: charger failure")
-					.Msg("msg"  , "ups {ip}: charger failure")
+					.Msg("descr", "{type}: charger failure")
+					.Msg("msg"  , "{type}({ip}): charger failure")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: charger is ok")
-					.Msg("msg"  , "ups {ip}: charger is ok")),
+					.Msg("descr", "{type}: charger is ok")
+					.Msg("msg"  , "{type}({ip}): charger is ok")),
 			Equals("batteryOverTemperature", False) :
 				( Critical("tag", "TEMPERATURE").Msg("loc", "{ip}")
-					.Msg("descr", "ups: battery temperature is too high")
-					.Msg("msg"  , "ups {ip}: battery temperature is too high")
+					.Msg("descr", "{type}: battery temperature is too high")
+					.Msg("msg"  , "{type}({ip}): battery temperature is too high")
 				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
-					.Msg("descr", "ups: battery temperature is ok")
-					.Msg("msg"  , "ups {ip}: battery temperature is ok")),
+					.Msg("descr", "{type}: battery temperature is ok")
+					.Msg("msg"  , "{type}({ip}): battery temperature is ok")),
 
 			Equals("abnormalCondition", False) :
 				( Critical("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: abnormal condition")
-					.Msg("msg"  , "ups {ip}: abnormal condition: {abnormalCondition_descr}")
+					.Msg("descr", "{type}: abnormal condition")
+					.Msg("msg"  , "{type}({ip}): abnormal condition: {abnormalCondition_descr}")
 				, Recover("tag", "POWER").Msg("loc", "{ip}")
-					.Msg("descr", "ups: normal condition")
-					.Msg("msg"  , "ups {ip}: normal condition: {abnormalCondition_descr}")),
+					.Msg("descr", "{type}: normal condition")
+					.Msg("msg"  , "{type}({ip}): normal condition: {abnormalCondition_descr}")),
 
 			Equals("upsOverload", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsOverload")
-					.Msg("msg"  , "ups {ip} trap: upsOverload"),
+					.Msg("msg"  , "{type}({ip}) trap: upsOverload"),
 			Equals("upsDiagnosticsFailed", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsDiagnosticsFailed")
-					.Msg("msg"  , "ups {ip} trap: upsDiagnosticsFailed"),
+					.Msg("msg"  , "{type}({ip}) trap: upsDiagnosticsFailed"),
 			Equals("upsDischarged", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsDischarged")
-					.Msg("msg"  , "ups {ip} trap: upsDischarged"),
+					.Msg("msg"  , "{type}({ip}) trap: upsDischarged"),
 			Equals("upsTurnedOff", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsTurnedOff")
-					.Msg("msg"  , "ups {ip} trap: upsTurnedOff"),
+					.Msg("msg"  , "{type}({ip}) trap: upsTurnedOff"),
 			Equals("upsSleeping", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsSleeping")
-					.Msg("msg"  , "ups {ip} trap: upsSleeping"),
+					.Msg("msg"  , "{type}({ip}) trap: upsSleeping"),
 			Equals("upsWokeUp", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsWokeUp")
-					.Msg("msg"  , "ups {ip} trap: upsWokeUp"),
+					.Msg("msg"  , "{type}({ip}) trap: upsWokeUp"),
 			Equals("upsRebootStarted", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsRebootStarted")
-					.Msg("msg"  , "ups {ip} trap: upsRebootStarted"),
+					.Msg("msg"  , "{type}({ip}) trap: upsRebootStarted"),
 			Equals("upsBatteryNeedsReplacement", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsBatteryNeedsReplacement")
-					.Msg("msg"  , "ups {ip} trap: upsBatteryNeedsReplacement"),
+					.Msg("msg"  , "{type}({ip}) trap: upsBatteryNeedsReplacement"),
 			Equals("bypassPowerSupplyFailure", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: bypassPowerSupplyFailure")
-					.Msg("msg"  , "ups {ip} trap: bypassPowerSupplyFailure"),
+					.Msg("msg"  , "{type}({ip}) trap: bypassPowerSupplyFailure"),
 			Equals("baseFanFailure", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: baseFanFailure")
-					.Msg("msg"  , "ups {ip} trap: baseFanFailure"),
+					.Msg("msg"  , "{type}({ip}) trap: baseFanFailure"),
 			Equals("batteryPackCommLost", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: batteryPackCommLost")
-					.Msg("msg"  , "ups {ip} trap: batteryPackCommLost"),
+					.Msg("msg"  , "{type}({ip}) trap: batteryPackCommLost"),
 			Equals("calibrationStart", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: calibrationStart")
-					.Msg("msg"  , "ups {ip} trap: calibrationStart"),
+					.Msg("msg"  , "{type}({ip}) trap: calibrationStart"),
 			Equals("upsTurnedOn", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsTurnedOn")
-					.Msg("msg"  , "ups {ip} trap: upsTurnedOn"),
+					.Msg("msg"  , "{type}({ip}) trap: upsTurnedOn"),
 			Equals("upsBatteryReplaced", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: upsBatteryReplaced")
-					.Msg("msg"  , "ups {ip} trap: upsBatteryReplaced"),
+					.Msg("msg"  , "{type}({ip}) trap: upsBatteryReplaced"),
 			Equals("powerModuleIncrease", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: powerModuleIncrease")
-					.Msg("msg"  , "ups {ip} trap: powerModuleIncrease"),
+					.Msg("msg"  , "{type}({ip}) trap: powerModuleIncrease"),
 			Equals("powerModuleDecrease", False).Repeatable() :
 				Danger("tag", "POWER").Msg("loc", "{ip}")
 					.Msg("descr", "ups trap: powerModuleDecrease")
-					.Msg("msg"  , "ups {ip} trap: powerModuleDecrease"),
+					.Msg("msg"  , "{type}({ip}) trap: powerModuleDecrease"),
 		}
 	}
