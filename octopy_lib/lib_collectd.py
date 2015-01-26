@@ -263,8 +263,8 @@ def MemoryModule(timeout = Minutes(10)):
 def IBModule(timeout = Minutes(10)):
 	return {
 		"sensor" : {
-			"state" : Long(timeout),
-			"physical_state" : Long(timeout),
+			"state" : String(timeout),
+			"physical_state" : String(timeout),
 
 			"LinkRecovers" : Long(timeout),
 			"LinkDowned" : Long(timeout),
@@ -286,14 +286,14 @@ def IBModule(timeout = Minutes(10)):
 		},
 
 		"react" : {
-			NotEquals("state", 0) :
+			NotEquals("state", "Active") :
 				Danger("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB link problem: state")
-					.Msg("msg"  , "{type}({in_n:node}): IB link problem: state"),
-			NotEquals("physical_state", 0) :
+					.Msg("msg"  , "{type}({in_n:node}): IB link problem: {state}"),
+			NotEquals("physical_state", "LinkUp") :
 				Danger("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB link problem: physical state")
-					.Msg("msg"  , "{type}({in_n:node}): IB link problem: physical state"),
+					.Msg("msg"  , "{type}({in_n:node}): IB link problem: {physical_state}"),
 
 			NotEquals("SymbolErrors", 0).Repeatable() :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
