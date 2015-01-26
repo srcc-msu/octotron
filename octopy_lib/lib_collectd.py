@@ -73,6 +73,33 @@ def DiskModule(timeout = Minutes(10)):
 
 #// ----------------------------------------- NODE --------------------------------------------
 
+def ExperimentalNodeModule(timeout = Minutes(10)):
+	return {
+		"var" : {
+			"task_not_present" : Match("task_id", -1),
+			"task_present" : NotMatch("task_id", -1),
+
+			"la_1_free_state" : Interval("la_1", 3.0), "la_1_free_fail" : Match("la_1_free_state", 1),
+			"la_1_busy_state" : Interval("la_1", 33.0), "la_1_busy_fail" : Match("la_1_busy_state", 1),
+
+			"node_free_fail" : StrictLogicalAnd("task_not_present", "la_1_free_fail"),
+			"node_busy_fail" : StrictLogicalAnd("task_present", "la_1_busy_fail"),
+		},
+
+		"react" : {
+			Equals("node_free_fail", True).Delay(1000) :
+				Warning("tag", "NODE").Msg("loc", "{node}")
+					.Msg("descr", "{type}: LA exceeded 3.0 for last 1000 seconds, no running task")
+					.Msg("msg"  , "{type}({node}): LA({la_1}) exceeded 3.0 for last 1000 seconds, no running task"),
+
+			Equals("node_busy_fail", True).Delay(1000) :
+				Warning("tag", "NODE").Msg("loc", "{node}")
+					.Msg("descr", "{type}: LA exceeded 33.0 for last 1000 seconds, user task presents")
+					.Msg("msg"  , "{type}({node}): LA({la_1}) exceeded 33.0 for last 1000 seconds, user task presents"),
+
+		}
+	}
+
 def NodeModule(timeout = Minutes(10)):
 	return {
 		"static" :
@@ -97,15 +124,6 @@ def NodeModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
-			"task_not_present" : Match("task_id", -1),
-			"task_present" : NotMatch("task_id", -1),
-
-			"la_1_free_state" : Interval("la_1", 3.0), "la_1_free_ok" : Match("la_1_free_state", 0),
-			"la_1_busy_state" : Interval("la_1", 33.0), "la_1_busy_ok" : Match("la_1_busy_state", 0),
-
-			"node_free_ok" : StrictLogicalAnd("task_not_present", "la_1_free_ok"),
-			"node_busy_ok" : StrictLogicalAnd("task_present", "la_1_busy_ok"),
-
 			"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
 			"temp_state" : Interval("temp", 40, 50),
 
@@ -131,16 +149,6 @@ def NodeModule(timeout = Minutes(10)):
 				Warning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: zombies present for last 1000 seconds")
 					.Msg("msg"  , "{type}({node}): ({zombies}) zombies present for last 1000 seconds, run for your life!"),
-
-			Equals("node_free_ok", False).Delay(1000) :
-				Warning("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "{type}: LA exceeded 3.0 for last 1000 seconds, no running task")
-					.Msg("msg"  , "{type}({node}): LA({la_1}) exceeded 3.0 for last 1000 seconds, no running task"),
-
-			Equals("node_busy_ok", False).Delay(1000) :
-				Warning("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "{type}: LA exceeded 33.0 for last 1000 seconds, user task presents")
-					.Msg("msg"  , "{type}({node}): LA({la_1}) exceeded 33.0 for last 1000 seconds, user task presents"),
 
 			Equals("check_tmp_ok", False) :
 				( Danger("tag", "NODE").Msg("loc", "{node}")
@@ -196,8 +204,6 @@ def NodeModule(timeout = Minutes(10)):
 	}
 
 #// ----------------------------------------- CPU --------------------------------------------
-
-
 
 def CpuModule(timeout = Minutes(10)):
 	return {
