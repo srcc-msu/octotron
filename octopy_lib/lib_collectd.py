@@ -262,6 +262,10 @@ def MemoryModule(timeout = Minutes(10)):
 
 def IBModule(timeout = Minutes(10)):
 	return {
+		"const" : {
+			"_static_ib_err_speed_thr" : 10.0,
+		},
+
 		"sensor" : {
 			"state" : String(timeout),
 			"physical_state" : String(timeout),
@@ -285,6 +289,30 @@ def IBModule(timeout = Minutes(10)):
 			"PortRcvPkts" : Long(timeout),
 		},
 
+		"var" : {
+			"SymbolErrors_speed" : Speed("SymbolErrors"),
+			"RcvErrors_speed" : Speed("RcvErrors"),
+			"RcvRemotePhysErrors_speed" : Speed("RcvRemotePhysErrors"),
+			"RcvSwRelayErrors_speed" : Speed("RcvSwRelayErrors"),
+			"XmtDiscards_speed" : Speed("XmtDiscards"),
+			"XmtConstraintErrors_speed" : Speed("XmtConstraintErrors"),
+			"RcvConstraintErrors_speed" : Speed("RcvConstraintErrors"),
+			"LinkIntegrityErrors_speed" : Speed("LinkIntegrityErrors"),
+			"ExcBufOverrunErrors_speed" : Speed("ExcBufOverrunErrors"),
+			"VL15Dropped_speed" : Speed("VL15Dropped"),
+
+			"SymbolErrors_check" : UpperThreshold("SymbolErrors_speed", "_static_ib_err_speed_thr"),
+			"RcvErrors_check" : UpperThreshold("RcvErrors_speed", "_static_ib_err_speed_thr"),
+			"RcvRemotePhysErrors_check" : UpperThreshold("RcvRemotePhysErrors_speed", "_static_ib_err_speed_thr"),
+			"RcvSwRelayErrors_check" : UpperThreshold("RcvSwRelayErrors_speed", "_static_ib_err_speed_thr"),
+			"XmtDiscards_check" : UpperThreshold("XmtDiscards_speed", "_static_ib_err_speed_thr"),
+			"XmtConstraintErrors_check" : UpperThreshold("XmtConstraintErrors_speed", "_static_ib_err_speed_thr"),
+			"RcvConstraintErrors_check" : UpperThreshold("RcvConstraintErrors_speed", "_static_ib_err_speed_thr"),
+			"LinkIntegrityErrors_check" : UpperThreshold("LinkIntegrityErrors_speed", "_static_ib_err_speed_thr"),
+			"ExcBufOverrunErrors_check" : UpperThreshold("ExcBufOverrunErrors_speed", "_static_ib_err_speed_thr"),
+			"VL15Dropped_check" : UpperThreshold("VL15Dropped_speed", "_static_ib_err_speed_thr"),
+		},
+
 		"react" : {
 			NotEquals("state", "Active") :
 				Danger("tag", "IB").Msg("loc", "{in_n:node}")
@@ -295,43 +323,43 @@ def IBModule(timeout = Minutes(10)):
 					.Msg("descr", "{type}: IB link problem: physical state")
 					.Msg("msg"  , "{type}({in_n:node}): IB link problem: {physical_state}"),
 
-			NotEquals("SymbolErrors", 0).Repeatable() :
+			NotEquals("SymbolErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: SymbolErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: SymbolErrors({SymbolErrors})"),
-			NotEquals("RcvErrors", 0).Repeatable() :
+			NotEquals("RcvErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: RcvErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: RcvErrors({RcvErrors})"),
-			NotEquals("RcvRemotePhysErrors", 0).Repeatable() :
+			NotEquals("RcvRemotePhysErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: RcvRemotePhysErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: RcvRemotePhysErrors({RcvRemotePhysErrors})"),
-			NotEquals("RcvSwRelayErrors", 0).Repeatable() :
+			NotEquals("RcvSwRelayErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: RcvSwRelayErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: RcvSwRelayErrors({RcvSwRelayErrors})"),
-			NotEquals("XmtDiscards", 0).Repeatable() :
+			NotEquals("XmtDiscards_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: XmtDiscards")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: XmtDiscards({XmtDiscards})"),
-			NotEquals("XmtConstraintErrors", 0).Repeatable() :
+			NotEquals("XmtConstraintErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: XmtConstraintErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: XmtConstraintErrors({XmtConstraintErrors})"),
-			NotEquals("RcvConstraintErrors", 0).Repeatable() :
+			NotEquals("RcvConstraintErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: RcvConstraintErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: RcvConstraintErrors({RcvConstraintErrors})"),
-			NotEquals("LinkIntegrityErrors", 0).Repeatable() :
+			NotEquals("LinkIntegrityErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: LinkIntegrityErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: LinkIntegrityErrors({LinkIntegrityErrors})"),
-			NotEquals("ExcBufOverrunErrors", 0).Repeatable() :
+			NotEquals("ExcBufOverrunErrors_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: ExcBufOverrunErrors")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: ExcBufOverrunErrors({ExcBufOverrunErrors})"),
-			NotEquals("VL15Dropped", 0).Repeatable() :
+			NotEquals("VL15Dropped_check", False).Delay(1000) :
 				Warning("tag", "IB").Msg("loc", "{in_n:node}")
 					.Msg("descr", "{type}: IB errros growing: VL15Dropped")
 					.Msg("msg"  , "{type}({in_n:node}): IB errros growing: VL15Dropped({VL15Dropped})"),
@@ -379,13 +407,13 @@ def EthModule(timeout = Minutes(10)):
 		"react" : {
 			Equals("speed_ok", False) :
 				Danger("tag", "ETH").Msg("loc", "{in_n:node}")
-					.Msg("descr", "{type}: speed does not match requred speed")
-					.Msg("msg"  , "{type}({in_n:node}): speed({speed}) does not match requred speed({_static_eth_speed_req})"),
+					.Msg("descr", "{type}: wrong speed")
+					.Msg("msg"  , "{type}({in_n:node}): wrong speed({speed}), required: {_static_eth_speed_req}"),
 
 			Equals("duplex_ok", False) :
 				Danger("tag", "ETH").Msg("loc", "{in_n:node}")
-					.Msg("descr", "{type}: duplex mode does not match requred mode")
-					.Msg("msg"  , "{type}({in_n:node}): duplex mode({duplex}) does not match requred mode({_static_eth_duplex_req})"),
+					.Msg("descr", "{type}: wrong duplex mode")
+					.Msg("msg"  , "{type}({in_n:node}): wrong duplex mode({duplex})"),
 
 			Equals("check_rx_errors", False).Delay(1000) :
 				Warning("tag", "ETH").Msg("loc", "{in_n:node}")

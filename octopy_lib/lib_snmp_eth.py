@@ -62,7 +62,7 @@ def EthPortSnmpModule(timeout = Minutes(10)):
 			Equals("speed_match", False) :
 				( Danger("tag", "ETH").Msg("loc", "{in_n:ip}")
 					.Msg("descr", "{type}: wrong speed")
-					.Msg("msg"  , "{type}({in_n:ip})[{if_id}] wrong speed({speed})")
+					.Msg("msg"  , "{type}({in_n:ip})[{if_id}] wrong speed({speed}), required: {speed_req}")
 				, Recover("tag", "ETH").Msg("loc", "{in_n:ip}")
 					.Msg("descr", "{type}: speed is ok")
 					.Msg("msg"  , "{type}({in_n:ip})[{if_id}] speed is ok")),
