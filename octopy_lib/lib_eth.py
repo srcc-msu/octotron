@@ -31,7 +31,7 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
 
 	loc = "{in_n:id}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:type}[{in_n:ip}:{in_n:id}] {type}[{id}]: "
+	loc_l = "{in_n:type}[{in_n:ip},{in_n:descr}] {type}[{id}]: "
 
 	return {
 		"sensor" : {
