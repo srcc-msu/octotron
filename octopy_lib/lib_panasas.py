@@ -61,10 +61,10 @@ def PanasasBladeModule(timeout = Minutes(10)):
 			Equals("status", "warning") :
 				( Danger("tag", "STORAGE").Msg("loc", "{uid}")
 					.Msg("descr", "{type}: warning")
-					.Msg("msg"  , "{type}({uid}): warning")
+					.Msg("msg"  , "{type}[{uid}]: warning")
 				, Recover("tag", "STORAGE").Msg("loc", "{uid}")
 					.Msg("descr", "{type}: is ok")
-					.Msg("msg"  , "{type}({uid}): is ok")),
+					.Msg("msg"  , "{type}[{uid}]: is ok")),
 
 			Equals("status", "offline") :
 				( Danger("tag", "STORAGE").Msg("loc", "{uid}")
@@ -72,7 +72,7 @@ def PanasasBladeModule(timeout = Minutes(10)):
 					.Msg("msg"  , "{type}: went offline {uid}")
 				, Recover("tag", "STORAGE").Msg("loc", "{uid}")
 					.Msg("descr", "{type}: is ok")
-					.Msg("msg"  , "{type}({uid}): is ok")),
+					.Msg("msg"  , "{type}[{uid}]: is ok")),
 		}
 	}
 
@@ -90,9 +90,9 @@ def PanasasVolumeModule(timeout = Minutes(10)):
 			NotEquals("info", "Online") :
 				( Danger("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "{type}: info changed")
-					.Msg("msg"  , "{type}({mount}): info changed: {info}")
+					.Msg("msg"  , "{type}[{mount}]: info changed: {info}")
 				, Recover("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "{type}: is ok")
-					.Msg("msg"  , "{type}({mount}): is ok: {info}")),
+					.Msg("msg"  , "{type}[{mount}]: is ok: {info}")),
 		}
 	}
