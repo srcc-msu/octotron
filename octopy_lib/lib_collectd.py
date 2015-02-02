@@ -76,8 +76,7 @@ def DiskModule(timeout = Minutes(10)):
 def ExperimentalNodeModule(timeout = Minutes(10)):
 	return {
 		"var" : {
-			"task_not_present" : Match("task_id", -1),
-			"task_present" : NotMatch("task_id", -1),
+			"task_not_present" : Match("task_present", False),
 
 			"la_1_free_state" : Interval("la_1", 3.0), "la_1_free_fail" : Match("la_1_free_state", 1),
 			"la_1_busy_state" : Interval("la_1", 33.0), "la_1_busy_fail" : Match("la_1_busy_state", 1),
@@ -120,7 +119,7 @@ def NodeModule(timeout = Minutes(10)):
 			"ntpd_drift" : Double(timeout),
 			"la_1" : Double(timeout),
 
-			"task_id" : Long(UPDATE_TIME_NOT_SPECIFIED, -1),
+			"task_present" : Long(UPDATE_TIME_NOT_SPECIFIED, False),
 		},
 
 		"var" : {
