@@ -73,7 +73,7 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 			Equals("speed_match", False) :
 				( Danger("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "wrong speed")
-					.Msg("msg"  , loc_l + "wrong speed({speed}), required: {duplex_req}")
+					.Msg("msg"  , loc_l + "wrong speed({speed}), required: {speed_req}")
 				, Recover("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "speed is ok")
 					.Msg("msg"  , loc_l + "speed is ok")),
