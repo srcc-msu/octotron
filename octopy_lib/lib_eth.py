@@ -26,12 +26,17 @@ def LinkModule():
 	}
 }
 
-def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
-	"""requires user to define and 'speed_req'"""
+def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
+	"""requires user to define 'speed_req'"""
 
-	loc = "{in_n:id}"
-	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:type}[{in_n:ip},{in_n:descr}] {type}[{id}]: "
+	if loc is None:
+		loc = "{in_n:ip}"
+
+	if loc_s is None:
+		loc_s = "{in_n:type} {type}: "
+
+	if loc_l is None:
+		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}]: "
 
 	return {
 		"sensor" : {
