@@ -36,10 +36,13 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 		loc_s = "{in_n:type} {type}: "
 
 	if loc_l is None:
-		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}]: "
+		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}][{name}][{descr}]: "
 
 	return {
 		"sensor" : {
+			"name" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
+			"descr" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
+
 			"admin_status" : String(UPDATE_TIME_NOT_SPECIFIED, "up"),
 			"duplex_req" : String(UPDATE_TIME_NOT_SPECIFIED, "full"),
 			"oper_status" : String(timeout),
