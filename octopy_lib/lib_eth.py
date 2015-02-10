@@ -44,15 +44,12 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 			"descr" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
 
 			"admin_status" : String(UPDATE_TIME_NOT_SPECIFIED, "up"),
-			"duplex_req" : String(UPDATE_TIME_NOT_SPECIFIED, "full"),
 			"oper_status" : String(timeout),
-			"duplex" : String(timeout),
 			"speed" : Long(timeout),
 		},
 
 		"var" : {
 			"status_match" : ArgMatch("oper_status", "admin_status"),
-			"duplex_match" : ArgMatch("duplex", "duplex_req"),
 			"speed_match" : ArgMatch("speed", "speed_req"),
 		},
 
@@ -65,14 +62,6 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 					.Msg("descr", loc_s + "is up")
 					.Msg("msg"  , loc_l + "is up")),
 
-			Equals("duplex_match", False) :
-				( Danger("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "wrong duplex mode")
-					.Msg("msg"  , loc_l + "wrong duplex mode({duplex})")
-				, Recover("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "duplex is ok")
-					.Msg("msg"  , loc_l + "duplex is ok")),
-
 			Equals("speed_match", False) :
 				( Danger("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "wrong speed")
@@ -80,5 +69,71 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 				, Recover("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "speed is ok")
 					.Msg("msg"  , loc_l + "speed is ok")),
+		}
+	}
+
+def PortDuplexModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
+	if loc is None:
+		loc = "{in_n:ip}"
+
+	if loc_s is None:
+		loc_s = "{in_n:type} {type}: "
+
+	if loc_l is None:
+		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}][{name}][{descr}]: "
+
+	return {
+		"sensor" : {
+			"duplex_req" : String(UPDATE_TIME_NOT_SPECIFIED, "full"),
+			"duplex" : String(timeout),
+		},
+
+		"var" : {
+			"duplex_match" : ArgMatch("duplex", "duplex_req"),
+		},
+
+		"react" : {
+			Equals("duplex_match", False) :
+				( Danger("tag", "ETH").Msg("loc", loc)
+					.Msg("descr", loc_s + "wrong duplex mode")
+					.Msg("msg"  , loc_l + "wrong duplex mode({duplex})")
+				, Recover("tag", "ETH").Msg("loc", loc)
+					.Msg("descr", loc_s + "duplex is ok")
+					.Msg("msg"  , loc_l + "duplex is ok")),
+		}
+	}
+
+
+def VlanModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
+	if loc is None:
+		loc = "{in_n:ip}"
+
+	if loc_s is None:
+		loc_s = "{in_n:type} {type}: "
+
+	if loc_l is None:
+		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}][{name}][{descr}]: "
+
+	return {
+		"sensor" : {
+			"name" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
+			"descr" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
+
+			"admin_status" : String(UPDATE_TIME_NOT_SPECIFIED, "up"),
+			"oper_status" : String(timeout),
+		},
+
+		"var" : {
+			"status_match" : ArgMatch("oper_status", "admin_status"),
+		},
+
+		"react" : {
+			Equals("status_match", False) :
+				( Danger("tag", "ETH").Msg("loc", loc)
+					.Msg("descr", loc_s + "is down")
+					.Msg("msg"  , loc_l + "is down")
+				, Recover("tag", "ETH").Msg("loc", loc)
+					.Msg("descr", loc_s + "is up")
+					.Msg("msg"  , loc_l + "is up")),
 		}
 	}
