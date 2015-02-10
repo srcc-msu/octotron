@@ -26,9 +26,7 @@ def LinkModule():
 	}
 }
 
-def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
-	"""requires user to define 'speed_req'"""
-
+def __PortsDefaultMessages(loc, loc_s, loc_l):
 	if loc is None:
 		loc = "{in_n:ip}"
 
@@ -38,6 +36,13 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 	if loc_l is None:
 		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}][{name}][{descr}]: "
 
+	return (loc, loc_s, loc_l)
+
+def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
+	"""requires user to define 'speed_req'"""
+
+	loc, loc_s, loc_l = __PortsDefaultMessages(loc, loc_s, loc_l)
+
 	return {
 		"sensor" : {
 			"name" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
@@ -45,12 +50,13 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 
 			"admin_status" : String(UPDATE_TIME_NOT_SPECIFIED, "up"),
 			"oper_status" : String(timeout),
+
 			"speed" : Long(timeout),
+			"duplex" : String(timeout),
 		},
 
 		"var" : {
 			"status_match" : ArgMatch("oper_status", "admin_status"),
-			"speed_match" : ArgMatch("speed", "speed_req"),
 		},
 
 		"react" : {
@@ -61,31 +67,17 @@ def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, lo
 				, Recover("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "is up")
 					.Msg("msg"  , loc_l + "is up")),
-
-			Equals("speed_match", False) :
-				( Danger("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "wrong speed")
-					.Msg("msg"  , loc_l + "wrong speed({speed}), required: {speed_req}")
-				, Recover("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "speed is ok")
-					.Msg("msg"  , loc_l + "speed is ok")),
 		}
 	}
 
-def PortDuplexModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
-	if loc is None:
-		loc = "{in_n:ip}"
+def PortDuplexModule(loc = None, loc_s = None, loc_l = None):
+	"""depends on PortModule"""
 
-	if loc_s is None:
-		loc_s = "{in_n:type} {type}: "
-
-	if loc_l is None:
-		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}][{name}][{descr}]: "
+	loc, loc_s, loc_l = __PortsDefaultMessages(loc, loc_s, loc_l)
 
 	return {
 		"sensor" : {
 			"duplex_req" : String(UPDATE_TIME_NOT_SPECIFIED, "full"),
-			"duplex" : String(timeout),
 		},
 
 		"var" : {
@@ -103,37 +95,23 @@ def PortDuplexModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = No
 		}
 	}
 
+def PortSpeedModule(loc = None, loc_s = None, loc_l = None):
+	"""depends on PortModule, requires user to define 'speed_req'"""
 
-def VlanModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
-	if loc is None:
-		loc = "{in_n:ip}"
-
-	if loc_s is None:
-		loc_s = "{in_n:type} {type}: "
-
-	if loc_l is None:
-		loc_l = "{in_n:type}[{in_n:ip}] {type}[{id}][{name}][{descr}]: "
+	loc, loc_s, loc_l = __PortsDefaultMessages(loc, loc_s, loc_l)
 
 	return {
-		"sensor" : {
-			"name" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
-			"descr" : String(UPDATE_TIME_NOT_SPECIFIED, ""),
-
-			"admin_status" : String(UPDATE_TIME_NOT_SPECIFIED, "up"),
-			"oper_status" : String(timeout),
-		},
-
 		"var" : {
-			"status_match" : ArgMatch("oper_status", "admin_status"),
+			"speed_match" : ArgMatch("speed", "speed_req"),
 		},
 
 		"react" : {
-			Equals("status_match", False) :
+			Equals("speed_match", False) :
 				( Danger("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "is down")
-					.Msg("msg"  , loc_l + "is down")
+					.Msg("descr", loc_s + "wrong speed")
+					.Msg("msg"  , loc_l + "wrong speed({speed}), required: {speed_req}")
 				, Recover("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "is up")
-					.Msg("msg"  , loc_l + "is up")),
+					.Msg("descr", loc_s + "speed is ok")
+					.Msg("msg"  , loc_l + "speed is ok")),
 		}
 	}
