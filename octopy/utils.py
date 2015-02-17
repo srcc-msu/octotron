@@ -53,6 +53,10 @@ class CSVReader:
 	def Declare(*params):
 		CSVReader_java.Declare(model_service, *params)
 
+	@staticmethod
+	def OrderByColumn(*params):
+		return CSVReader_java.OrderByColumn(model_service, *params)
+
 class Enumerator:
 	@staticmethod
 	def Sequence(*params):
