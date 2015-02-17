@@ -4,8 +4,8 @@ from octopy import *
 # include all standard library files
 from octopy_lib import *
 
-# include our sample library
-from sample_lib import *
+# include our example library
+from example_lib import *
 
 NODES = 4
 CPU_PER_NODE = 2
@@ -16,15 +16,15 @@ nodes = CreateObjects(NODES, lib_collectd.NodeModule()
 	, { "const" : {"type" : "node"}})
 
 # assign to every object ip from the file
-CSVReader.Declare(nodes, "sample_model/ip.csv")
+CSVReader.Declare(nodes, "example_model/ip.csv")
 
 # declare a ring connection using data in csv file
-EveryToEvery(CSVReader.OrderByColumn(nodes, "sample_model/ip_ring.csv", 0)
-	, CSVReader.OrderByColumn(nodes, "sample_model/ip_ring.csv", 1)
+EveryToEvery(CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 0)
+	, CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 1)
 	, "ethernet")
 
 # create 8 nodes and assign to them properties
-# declared in sample_lib.py
+# declared in example_lib.py
 cpus = CreateObjects(NODES * CPU_PER_NODE, my_module
 	, {
 		"const" : (my_const, {"type" : "cpu"}),

@@ -1,9 +1,9 @@
 {
 	"model" :
 	{
-		"name" : "sample",
-		"path" : "sample_model",
-		"main" : "sample.py"
+		"name" : "example",
+		"path" : "example_model",
+		"main" : "example.py"
 	},
 
 	"system" :

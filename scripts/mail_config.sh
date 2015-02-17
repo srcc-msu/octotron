@@ -2,7 +2,7 @@
 # change this for your needs
 
 # prefix for mail subjects
-PREFIX="[sample]: "
+PREFIX="[example]: "
 
 # mail recipient
 RECIPIENT="notify@localhost"
