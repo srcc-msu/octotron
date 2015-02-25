@@ -1,5 +1,6 @@
 import lib_cleo
 import lib_collectd
+import lib_drms
 import lib_eth
 import lib_links
 import lib_network
