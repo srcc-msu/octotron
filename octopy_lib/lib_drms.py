@@ -3,7 +3,6 @@ from octopy import *
 def DrmsModule(timeout = Minutes(10)):
 	return {
 		"const" : {
-			"type" : "queue",
 #			"tasks_running_min" # user provided
 #			"tasks_queued_min" # user provided
 #			"cpus_total" # user provided
