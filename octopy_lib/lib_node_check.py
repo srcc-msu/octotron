@@ -8,25 +8,23 @@ def NodeCheckModule(timeout = Hours(1)):
 			"ib_visible" : Boolean(timeout),
 		},
 
+		"var" : {
+			"node_check_total_errors" : AStrictNotMatchCount(true, EDependencyType.SELF
+				, "chk_mpi"
+				, "ib_visible")
+		},
+
 		"react" : {
 			Equals("chk_mpi", False) :
-				( Critical("tag", "NODE").Msg("loc", "{node}")
+				( Danger("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: failure: mpi")
 					.Msg("msg"  , "{node}: failure: mpi")
 				, Recover("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: is good: mpi")
 					.Msg("msg"  , "{node}: is good: mpi")),
 
-			Equals("chk_ib", False) :
-				( Critical("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "{type}: failure: ib")
-					.Msg("msg"  , "{node}: failure: ib")
-				, Recover("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "{type}: is good: ib")
-					.Msg("msg"  , "{node}: is good: ib")),
-
 			Equals("ib_visible", False) :
-				( Critical("tag", "NODE").Msg("loc", "{node}")
+				( Danger("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: is not visible in SubNet manager")
 					.Msg("msg"  , "{node}: is not visible in SubNet manager")
 				, Recover("tag", "NODE").Msg("loc", "{node}")

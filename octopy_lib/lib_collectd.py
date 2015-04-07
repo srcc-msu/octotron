@@ -6,74 +6,82 @@ def DiskModule(timeout = Minutes(10)):
 	loc_l = "{in_n:node} {type}: "
 
 	return {
-	"static" : {
-		"_static_disk_temp_max" :  40,
-	},
+		"static" : {
+			"_static_disk_temp_max" :  40,
+		},
 
-	"sensor" : {
-		"current_pending_sector" : Long(timeout),
-		"hardware_ecc_recovered" : Long(timeout),
-		"offline_uncorrectable"  : Long(timeout),
-		"reallocated_sector_ct"  : Long(timeout),
-		"reported_uncorrect"     : Long(timeout),
-		"seek_error_rate"        : Long(timeout),
-		"spin_retry_count"       : Long(timeout),
-		"udma_crc_error_count"   : Long(timeout),
+		"sensor" : {
+			"current_pending_sector" : Long(timeout),
+			"hardware_ecc_recovered" : Long(timeout),
+			"offline_uncorrectable"  : Long(timeout),
+			"reallocated_sector_ct"  : Long(timeout),
+			"reported_uncorrect"     : Long(timeout),
+			"seek_error_rate"        : Long(timeout),
+			"spin_retry_count"       : Long(timeout),
+			"udma_crc_error_count"   : Long(timeout),
 
-		"temperature_celsius"    : Long(timeout),
-	},
+			"temperature_celsius"    : Long(timeout),
+		},
 
-	"var" : {
-		"current_pending_sector_ok" : Match("current_pending_sector", 0),
-		"offline_uncorrectable_ok"  : Match("offline_uncorrectable", 0),
-		"reallocated_sector_ct_ok"  : Match("reallocated_sector_ct", 0),
-		"reported_uncorrect_ok"     : Match("reported_uncorrect", 0),
-		"spin_retry_count_ok"       : Match("spin_retry_count", 0),
-		"udma_crc_error_count_ok"   : Match("udma_crc_error_count", 0),
+		"var" : {
+			"current_pending_sector_ok" : Match("current_pending_sector", 0),
+			"offline_uncorrectable_ok"  : Match("offline_uncorrectable", 0),
+			"reallocated_sector_ct_ok"  : Match("reallocated_sector_ct", 0),
+			"reported_uncorrect_ok"     : Match("reported_uncorrect", 0),
+			"spin_retry_count_ok"       : Match("spin_retry_count", 0),
+			"udma_crc_error_count_ok"   : Match("udma_crc_error_count", 0),
 
-		"temp_ok" : UpperArgThreshold("temperature_celsius", "_static_disk_temp_max"),
-	},
+			"temp_ok" : UpperArgThreshold("temperature_celsius", "_static_disk_temp_max"),
 
-	"react" : {
-		Equals("current_pending_sector_ok", False) :
-			Warning("tag", "DISK").Msg("loc", loc)
-				.Msg("descr", loc_s + "current_pending_sector growing")
-				.Msg("msg"  , loc_l + "current_pending_sector growing : {current_pending_sector}"),
+			"cd_disk_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
+				, "current_pending_sector_ok"
+				, "offline_uncorrectable_ok"
+				, "reallocated_sector_ct_ok"
+				, "reported_uncorrect_ok"
+				, "spin_retry_count_ok"
+				, "udma_crc_error_count_ok"),
+		},
 
-		Equals("offline_uncorrectable_ok", False) :
-			Warning("tag", "DISK").Msg("loc", loc)
-				.Msg("descr", loc_s + "offline_uncorrectable growing")
-				.Msg("msg"  , loc_l + "offline_uncorrectable growing : {offline_uncorrectable}"),
+		"react" : {
+			Equals("current_pending_sector_ok", False) :
+				Warning("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "current_pending_sector growing")
+					.Msg("msg"  , loc_l + "current_pending_sector growing : {current_pending_sector}"),
 
-		Equals("reallocated_sector_ct_ok", False) :
-			Warning("tag", "DISK").Msg("loc", loc)
-				.Msg("descr", loc_s + "reallocated_sector_ct growing")
-				.Msg("msg"  , loc_l + "reallocated_sector_ct growing : {reallocated_sector_ct}"),
+			Equals("offline_uncorrectable_ok", False) :
+				Warning("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "offline_uncorrectable growing")
+					.Msg("msg"  , loc_l + "offline_uncorrectable growing : {offline_uncorrectable}"),
 
-		Equals("reported_uncorrect_ok", False) :
-			Warning("tag", "DISK").Msg("loc", loc)
-				.Msg("descr", loc_s + "reported_uncorrect growing")
-				.Msg("msg"  , loc_l + "reported_uncorrect growing : {reported_uncorrect}"),
+			Equals("reallocated_sector_ct_ok", False) :
+				Warning("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "reallocated_sector_ct growing")
+					.Msg("msg"  , loc_l + "reallocated_sector_ct growing : {reallocated_sector_ct}"),
 
-		Equals("spin_retry_count_ok", False) :
-			Warning("tag", "DISK").Msg("loc", loc)
-				.Msg("descr", loc_s + "spin_retry_count growing")
-				.Msg("msg"  , loc_l + "spin_retry_count growing : {spin_retry_count}"),
+			Equals("reported_uncorrect_ok", False) :
+				Warning("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "reported_uncorrect growing")
+					.Msg("msg"  , loc_l + "reported_uncorrect growing : {reported_uncorrect}"),
 
-		Equals("udma_crc_error_count_ok", False) :
-			Warning("tag", "DISK").Msg("loc", loc)
-				.Msg("descr", loc_s + "udma_crc_error_count growing")
-				.Msg("msg"  , loc_l + "udma_crc_error_count growing : {spin_retry_count}"),
+			Equals("spin_retry_count_ok", False) :
+				Warning("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "spin_retry_count growing")
+					.Msg("msg"  , loc_l + "spin_retry_count growing : {spin_retry_count}"),
 
-		Equals("temp_ok", False) :
-			( Danger("tag", "TEMPERATURE").Msg("loc", loc)
-				.Msg("descr", loc_s + "disk temperature is above threshol")
-				.Msg("msg"  , loc_l + "disk temperature is above threshol({temperature_celsius}")
-			, Recover("tag", "TEMPERATURE").Msg("loc", loc)
-				.Msg("descr", loc_s + "disk temperature is back to normal")
-				.Msg("msg"  , loc_l + "disk temperature is back to normal({temperature_celsius})")),
+			Equals("udma_crc_error_count_ok", False) :
+				Warning("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "udma_crc_error_count growing")
+					.Msg("msg"  , loc_l + "udma_crc_error_count growing : {spin_retry_count}"),
+
+			Equals("temp_ok", False) :
+				( Danger("tag", "TEMPERATURE").Msg("loc", loc)
+					.Msg("descr", loc_s + "disk temperature is above threshol")
+					.Msg("msg"  , loc_l + "disk temperature is above threshol({temperature_celsius}")
+				, Recover("tag", "TEMPERATURE").Msg("loc", loc)
+					.Msg("descr", loc_s + "disk temperature is back to normal")
+					.Msg("msg"  , loc_l + "disk temperature is back to normal({temperature_celsius})")),
+		}
 	}
-}
 
 #// ----------------------------------------- NODE --------------------------------------------
 
@@ -137,6 +145,7 @@ def NodeModule(timeout = Minutes(10)):
 		"var" : {
 			"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
 			"temp_state" : Interval("temp", 40, 50),
+			"temp_ok" : NotMatch("temp_state", 2),
 
 			"fork_rate" : Speed("forks"),
 			"fork_rate_ok" : UpperArgThreshold("fork_rate", "_static_fork_rate_thr"),
@@ -148,6 +157,16 @@ def NodeModule(timeout = Minutes(10)):
 			"check_clean_ok" : Match("check_clean", 0),
 
 			"check_nmond_ok" : Match("check_nmond", 0),
+
+			"cd_node_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
+				, "temp_ok"
+				, "fork_rate_ok"
+				, "zombies_ok"
+				, "check_tmp_ok"
+				, "check_home_ok"
+				, "check_clean_ok"
+				, "check_nmond_ok")
+
 		},
 
 		"react" : {
@@ -264,6 +283,9 @@ def MemoryModule(timeout = Minutes(10)):
 
 	"var" : {
 		"total_memory_ok" : LowerArgThreshold("total", "req_mem"),
+
+		"cd_mem_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
+			, "total_memory_ok")
 	},
 
 	"react" : {
@@ -324,6 +346,9 @@ def IBModule(timeout = Minutes(10)):
 			"ExcBufOverrunErrors_speed" : Speed("ExcBufOverrunErrors"),
 			"VL15Dropped_speed" : Speed("VL15Dropped"),
 
+			"state_ok" : Match("state", "Active"),
+			"physical_state_ok" : Match("physical_state", "LinkUp"),
+
 			"SymbolErrors_check" : UpperArgThreshold("SymbolErrors_speed", "_static_ib_err_speed_thr"),
 			"RcvErrors_check" : UpperArgThreshold("RcvErrors_speed", "_static_ib_err_speed_thr"),
 			"RcvRemotePhysErrors_check" : UpperArgThreshold("RcvRemotePhysErrors_speed", "_static_ib_err_speed_thr"),
@@ -334,14 +359,28 @@ def IBModule(timeout = Minutes(10)):
 			"LinkIntegrityErrors_check" : UpperArgThreshold("LinkIntegrityErrors_speed", "_static_ib_err_speed_thr"),
 			"ExcBufOverrunErrors_check" : UpperArgThreshold("ExcBufOverrunErrors_speed", "_static_ib_err_speed_thr"),
 			"VL15Dropped_check" : UpperArgThreshold("VL15Dropped_speed", "_static_ib_err_speed_thr"),
+
+			"cd_ib_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
+				, "state_ok"
+				, "physical_state_ok"
+				, "SymbolErrors_check"
+				, "RcvErrors_check"
+				, "RcvRemotePhysErrors_check"
+				, "RcvSwRelayErrors_check"
+				, "XmtDiscards_check"
+				, "XmtConstraintErrors_check"
+				, "RcvConstraintErrors_check"
+				, "LinkIntegrityErrors_check"
+				, "ExcBufOverrunErrors_check"
+				, "VL15Dropped_check"),
 		},
 
 		"react" : {
-			NotEquals("state", "Active") :
+			Equals("state_ok", False) :
 				Danger("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: state")
 					.Msg("msg"  , loc_l + "IB link problem: {state}"),
-			NotEquals("physical_state", "LinkUp") :
+			Equals("physical_state", False) :
 				Danger("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: physical state")
 					.Msg("msg"  , loc_l + "IB link problem: {physical_state}"),
@@ -419,6 +458,12 @@ def EthModule(timeout = Minutes(10)):
 
 			"check_tx_dropped" : UpperArgThreshold("tx_dropped_speed", "_static_eth_err_speed_thr"),
 			"check_collisions" : UpperArgThreshold("collisions_speed", "_static_eth_err_speed_thr"),
+
+			"cd_eth_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
+				, "check_rx_errors"
+				, "check_tx_errors"
+				, "check_tx_dropped"
+				, "check_collisions")
 		},
 
 		"react" : {
