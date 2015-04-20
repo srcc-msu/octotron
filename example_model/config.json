@@ -14,21 +14,22 @@
 
 	"db" :
 	{
-		"path" : "dbs/"
+		"path" : "dbs/",
+		"port" : 7475
 	},
 
-    "scripts" :
-    {
-        "on_start" : "scripts/octotron_start.sh",
-        "on_finish" : "scripts/octotron_finish.sh",
-        "on_crash" : "scripts/octotron_crash.sh",
+	"scripts" :
+	{
+		"on_start" : "scripts/octotron_start.sh",
+		"on_finish" : "scripts/octotron_finish.sh",
+		"on_crash" : "scripts/octotron_crash.sh",
 
-        "on_critical" : "scripts/react_mail.sh",
-        "on_danger" : "scripts/react_mail.sh",
-        "on_warning" : "scripts/react_mail.sh",
-        "on_info" : "scripts/react_mail.sh",
-        "on_recover" : "scripts/react_mail.sh"
-    },
+		"on_critical" : "scripts/react_mail.sh",
+		"on_danger" : "scripts/react_mail.sh",
+		"on_warning" : "scripts/react_mail.sh",
+		"on_info" : "scripts/react_mail.sh",
+		"on_recover" : "scripts/react_mail.sh"
+	},
 
 	"graph" :
 	{

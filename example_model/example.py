@@ -19,7 +19,7 @@ nodes = CreateObjects(NODES, lib_collectd.NodeModule()
 CSVReader.Declare(nodes, "example_model/ip.csv")
 
 # declare a ring connection using data in csv file
-EveryToEvery(CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 0)
+EveryWithEvery(CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 0)
 	, CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 1)
 	, "ethernet")
 
