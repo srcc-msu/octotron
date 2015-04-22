@@ -145,3 +145,115 @@ def ChunksWithEvery_Guided(obj1, obj2, guide, types, *modules):
 
 def EveryWithChunks_Guided(obj1, obj2, guide, types, *modules):
 	return Call(EveryToChunks_Guided.__name__, types, modules, obj1, obj2, False, guide)
+
+def DiscoverConnect(sources, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, debug = None):
+	"""
+	sources - ModelList of elements to start from
+	target_attributes - list of attributes (pairs) to detect target attributes
+	allowed_links - list of attributes (pairs) to filter allowed links during traversing
+
+	chain_attribute - attribute that will be used to generate path string for chain_filters
+		the path string will be generated using values of the required attributes, separated by '-'
+		e.g. "ib_node-ib_port-ib_port-ib_switch_element-ib_switch"
+
+	chain_filters - list of regular expressions, all of them must succeed on target path string
+		, or it will be discarded
+
+	link_type - type for a new link
+
+	example: DiscoverConnect(list_of_switches, [("type", "ib_switch"), ("type", "node")], [("type", "ib")], "type", ["^.*-ib_port-ib_port-[^p]*$"], "logical_ib")
+	"""
+
+	for source in sources:
+		DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, debug)
+
+import re
+from ru.parallel.octotron.core.collections import ModelLinkList
+
+def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, debug = None):
+	debug = debug is not None
+
+	compiled_chain_filters = []
+
+	for chain_filter in chain_filters:
+		compiled_chain_filters.append(re.compile(chain_filter))
+
+#---------------
+
+	def Step(paths):
+		if debug:
+			print "old paths:", map(lambda x: x.GetID(), paths)
+
+		new_paths = []
+
+		for path in paths:
+			for allowed_link in allowed_links:
+				for neighbor in path[-1].GetAllNeighbors(allowed_link[0], allowed_link[1]):
+
+					if neighbor in path:
+						continue
+
+					ext_path = path[:]
+					ext_path.append(neighbor)
+					new_paths.append(ext_path)
+
+		if debug:
+			print "new paths: ", map(lambda x: x.GetID(), new_paths)
+
+		return new_paths
+
+	def CheckPath(path):
+		chain = ""
+		prefix = ""
+
+		for object in path:
+			if not object.TestAttribute(chain_attribute):
+				return False
+
+			chain += prefix + object.GetAttribute(chain_attribute).GetValue().GetRaw()
+			prefix = "-"
+
+		for chain_filter in compiled_chain_filters:
+			if not chain_filter.match(chain):
+				if debug:
+					print "chain %s failed" % chain
+				return False
+
+		if debug:
+			print "chain %s passed" % chain
+
+		return True
+
+#---------------
+
+	result = ModelLinkList()
+
+	new_paths = Step([[source]])
+
+	while len(new_paths) > 0:
+		unfinished_paths = []
+		finished_paths = []
+
+		for path in new_paths:
+			added = False
+			for target_attribute in target_attributes:
+				name = target_attribute[0]
+				value = target_attribute[1]
+
+				if path[-1].TestAttribute(name) and path[-1].GetAttribute(name).eq(value):
+					finished_paths.append(path)
+					added = True
+
+			if not added:
+				unfinished_paths.append(path)
+
+		for path in finished_paths:
+			if CheckPath(path):
+				result.add(OneWithOne(path[0], path[-1], link_type))
+
+				if debug:
+					print "added for: ", map(lambda x: x.GetID(), path)
+
+		new_paths = Step(unfinished_paths)
+
+	return result

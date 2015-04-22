@@ -41,3 +41,5 @@ Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 # connect every node with 2 cpus using
 # two links for connection with specified types
 EveryToChunks(nodes, cpus, ["contain", "chill"])
+
+#DiscoverConnectOne(cpus, [("type", "cpu")], [("type", "contain"), ("type", "chill"), ("type", "ethernet")], "type", ["^.*cpu-node-node-cpu.*$"], "mega", True)
