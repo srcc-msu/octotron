@@ -1,6 +1,7 @@
 from octopy.utils import *
 
 from ru.parallel.octotron.core.collections import ModelLinkList
+from ru.parallel.octotron.core.collections import ModelObjectList
 from ru.parallel.octotron.generators import LinkFactory
 
 import java.lang
@@ -146,7 +147,7 @@ def ChunksWithEvery_Guided(obj1, obj2, guide, types, *modules):
 def EveryWithChunks_Guided(obj1, obj2, guide, types, *modules):
 	return Call(EveryToChunks_Guided.__name__, types, modules, obj1, obj2, False, guide)
 
-def DiscoverConnect(sources, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, debug = None):
+def DiscoverConnect(sources, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, max_length, connect_function = None, debug = None):
 	"""
 	sources - ModelList of elements to start from
 	target_attributes - list of attributes (pairs) to detect target attributes
@@ -165,13 +166,16 @@ def DiscoverConnect(sources, target_attributes, allowed_links, chain_attribute, 
 	"""
 
 	for source in sources:
-		DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, debug)
+		DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, max_length, connect_function, debug)
 
 import re
 from ru.parallel.octotron.core.collections import ModelLinkList
 
-def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, debug = None):
+def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, max_length, connect_function = None, debug = None):
 	debug = debug is not None
+
+	if connect_function is None:
+		connect_function = OneWithOne
 
 	compiled_chain_filters = []
 
@@ -181,24 +185,33 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 #---------------
 
 	def Step(paths):
-		if debug:
-			print "old paths:", map(lambda x: x.GetID(), paths)
-
 		new_paths = []
 
+		if debug:
+			print "paths: ", map(lambda y: map(lambda x: x.GetID(), y), paths)
+
 		for path in paths:
+			neighbor_list = ModelObjectList()
+
 			for allowed_link in allowed_links:
-				for neighbor in path[-1].GetAllNeighbors(allowed_link[0], allowed_link[1]):
+				for neighbor in path[-1].GetAllNeighbors(allowed_link[0], allowed_link[1]).Uniq():
+					neighbor_list.add(neighbor)
 
-					if neighbor in path:
-						continue
+			neighbor_list = neighbor_list.Uniq()
 
-					ext_path = path[:]
-					ext_path.append(neighbor)
-					new_paths.append(ext_path)
+
+			for neighbor in neighbor_list:
+				if neighbor in path:
+					continue
+
+				ext_path = path[:]
+				ext_path.append(neighbor)
+
+				new_paths.append(ext_path)
+				print "added neighbor: ", neighbor.GetID()
 
 		if debug:
-			print "new paths: ", map(lambda x: x.GetID(), new_paths)
+			print "new paths: ", map(lambda y: map(lambda x: x.GetID(), y), new_paths)
 
 		return new_paths
 
@@ -216,11 +229,11 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 		for chain_filter in compiled_chain_filters:
 			if not chain_filter.match(chain):
 				if debug:
-					print "chain %s failed" % chain
+					print "chain %s failed regexp" % chain
 				return False
 
 		if debug:
-			print "chain %s passed" % chain
+			print "chain %s passed regexp" % chain
 
 		return True
 
@@ -228,14 +241,20 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 
 	result = ModelLinkList()
 
-	new_paths = Step([[source]])
+	paths = [[source]]
 
-	while len(new_paths) > 0:
+	for i in xrange(1, max_length): # 1 elememnt already presents
+		if debug:
+			print "step ", i
+
+		new_paths = Step(paths)
+
 		unfinished_paths = []
 		finished_paths = []
 
 		for path in new_paths:
 			added = False
+
 			for target_attribute in target_attributes:
 				name = target_attribute[0]
 				value = target_attribute[1]
@@ -249,11 +268,14 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 
 		for path in finished_paths:
 			if CheckPath(path):
-				result.add(OneWithOne(path[0], path[-1], link_type))
+				result.add(connect_function(path[0], path[-1], link_type))
 
 				if debug:
 					print "added for: ", map(lambda x: x.GetID(), path)
 
-		new_paths = Step(unfinished_paths)
+		paths = unfinished_paths
+
+	if debug:
+		print "finished"
 
 	return result
