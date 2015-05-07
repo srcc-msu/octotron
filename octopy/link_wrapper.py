@@ -17,11 +17,12 @@ def GetLinkFactory(params, type):
 
 	CheckAllowed(params)
 
-	factory = factory.Constants(ConvertConsts(params["const"]))
-	factory = factory.Constants(ConvertConsts(params["static"]))
-	factory = factory.Sensors  (ConvertSensors(params["sensor"]))
-	factory = factory.Vars     (ConvertVars(params["var"]))
-	factory = factory.Reactions(ConvertReacts(params["react"]))
+	factory = factory.Constants(ConvertConsts  (params["const"]))
+	factory = factory.Statics  (ConvertConsts  (params["static"]))
+	factory = factory.Sensors  (ConvertSensors (params["sensor"]))
+	factory = factory.Vars     (ConvertVars    (params["var"]))
+	factory = factory.Triggers (ConvertTriggers(params["trigger"]))
+	factory = factory.Reactions(ConvertReacts  (params["react"]))
 
 	return factory.Constants(ConvertConsts([{ "type" : type }]))
 

@@ -31,7 +31,7 @@ def DiskModule(timeout = Minutes(10)):
 			"spin_retry_count_ok"       : Match("spin_retry_count", 0),
 			"udma_crc_error_count_ok"   : Match("udma_crc_error_count", 0),
 
-			"temp_ok" : UpperArgThreshold("temperature_celsius", "_static_disk_temp_max"),
+			"temperature_ok" : UpperArgThreshold("temperature_celsius", "_static_disk_temp_max"),
 
 			"cd_disk_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
 				, "current_pending_sector_ok"
@@ -42,45 +42,27 @@ def DiskModule(timeout = Minutes(10)):
 				, "udma_crc_error_count_ok"),
 		},
 
-		"react" : {
-			Equals("current_pending_sector_ok", False) :
-				Warning("tag", "DISK").Msg("loc", loc)
-					.Msg("descr", loc_s + "current_pending_sector growing")
-					.Msg("msg"  , loc_l + "current_pending_sector growing : {current_pending_sector}"),
+		"trigger" : {
+			"disk_error" : NotEquals("cd_disk_total_errors", 0)
+			"bad_temperature" : Equals("temperature_ok", false)
+		}
 
-			Equals("offline_uncorrectable_ok", False) :
-				Warning("tag", "DISK").Msg("loc", loc)
-					.Msg("descr", loc_s + "offline_uncorrectable growing")
-					.Msg("msg"  , loc_l + "offline_uncorrectable growing : {offline_uncorrectable}"),
-
-			Equals("reallocated_sector_ct_ok", False) :
-				Warning("tag", "DISK").Msg("loc", loc)
-					.Msg("descr", loc_s + "reallocated_sector_ct growing")
-					.Msg("msg"  , loc_l + "reallocated_sector_ct growing : {reallocated_sector_ct}"),
-
-			Equals("reported_uncorrect_ok", False) :
-				Warning("tag", "DISK").Msg("loc", loc)
-					.Msg("descr", loc_s + "reported_uncorrect growing")
-					.Msg("msg"  , loc_l + "reported_uncorrect growing : {reported_uncorrect}"),
-
-			Equals("spin_retry_count_ok", False) :
-				Warning("tag", "DISK").Msg("loc", loc)
-					.Msg("descr", loc_s + "spin_retry_count growing")
-					.Msg("msg"  , loc_l + "spin_retry_count growing : {spin_retry_count}"),
-
-			Equals("udma_crc_error_count_ok", False) :
-				Warning("tag", "DISK").Msg("loc", loc)
+		"react" : [
+			Reaction("notify_disk_error")
+				.On("disk_error")
+				.Begin(Warning("tag", "DISK").Msg("loc", loc)
 					.Msg("descr", loc_s + "udma_crc_error_count growing")
-					.Msg("msg"  , loc_l + "udma_crc_error_count growing : {spin_retry_count}"),
+					.Msg("msg"  , loc_l + "udma_crc_error_count growing : {spin_retry_count}")),
 
-			Equals("temp_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", loc)
+			Reaction("notify_bad_temperature")
+				.On("bad_temperature")
+				.Begin(Danger("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is above threshol")
-					.Msg("msg"  , loc_l + "disk temperature is above threshol({temperature_celsius}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "disk temperature is above threshol({temperature_celsius}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is back to normal")
 					.Msg("msg"  , loc_l + "disk temperature is back to normal({temperature_celsius})")),
-		}
+		]
 	}
 
 #// ----------------------------------------- NODE --------------------------------------------
@@ -92,27 +74,35 @@ def ExperimentalNodeModule(timeout = Minutes(10)):
 
 	return {
 		"var" : {
-			"task_not_present" : Match("task_present", False),
+			"la_state" : Interval("la_1", 3.0, 33.0),
 
-			"la_1_free_state" : Interval("la_1", 3.0), "la_1_free_fail" : Match("la_1_free_state", 1),
-			"la_1_busy_state" : Interval("la_1", 33.0), "la_1_busy_fail" : Match("la_1_busy_state", 1),
-
-			"node_free_fail" : StrictLogicalAnd("task_not_present", "la_1_free_fail"),
-			"node_busy_fail" : StrictLogicalAnd("task_present", "la_1_busy_fail"),
+			"node_free_fail" : StrictLogicalAnd("task_not_present", "la_free_fail"),
+			"node_busy_fail" : StrictLogicalAnd("task_present", "la_busy_fail"),
 		},
 
-		"react" : {
-			Equals("node_free_fail", True).Delay(1000) :
-				Warning("tag", "NODE").Msg("loc", loc)
+		"trigger" : {
+			"task_present" : Manual()
+
+			"high_la_free" : Equals("la_free_state", 1),
+			"high_la_busy" : Equals("la_busy_state", 2),
+		},
+
+		"react" : [
+			Reaction("notify_high_la_free")
+				.Off("task_present")
+				.On("high_la_free", 0, 1000)
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "LA exceeded 3.0 for last 1000 seconds, no running task")
-					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 3.0 for last 1000 seconds, no running task"),
+					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 3.0 for last 1000 seconds, no running task")),
 
-			Equals("node_busy_fail", True).Delay(1000) :
-				Warning("tag", "NODE").Msg("loc", loc)
+			Reaction("notify_high_la_busy")
+				.On(task_present)
+				.On("high_la_busy", 0, 1000)
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "LA exceeded 33.0 for last 1000 seconds, user task presents")
-					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 33.0 for last 1000 seconds, user task presents"),
+					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 33.0 for last 1000 seconds, user task presents")),
 
-		}
+		]
 	}
 
 def NodeModule(timeout = Minutes(10)):
@@ -138,8 +128,6 @@ def NodeModule(timeout = Minutes(10)):
 
 			"ntpd_drift" : Double(timeout),
 			"la_1" : Double(timeout),
-
-			"task_present" : Long(UPDATE_TIME_NOT_SPECIFIED, False),
 		},
 
 		"var" : {

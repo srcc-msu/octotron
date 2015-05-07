@@ -17,10 +17,11 @@ def CreateObjects(count, *modules):
 
 	factory = ObjectFactory(model_service)
 
-	factory = factory.Constants(ConvertConsts(params["const"]))
-	factory = factory.Constants(ConvertConsts(params["static"]))
-	factory = factory.Sensors  (ConvertSensors(params["sensor"]))
-	factory = factory.Vars     (ConvertVars(params["var"]))
+	factory = factory.Constants(ConvertConsts  (params["const"]))
+	factory = factory.Statics  (ConvertConsts  (params["static"]))
+	factory = factory.Sensors  (ConvertSensors (params["sensor"]))
+	factory = factory.Triggers (ConvertTriggers(params["trigger"]))
+	factory = factory.Vars     (ConvertVars    (params["var"]))
 
 	factory = factory.Reactions(ConvertReacts(params["react"]))
 
@@ -32,8 +33,9 @@ def UpdateObject(object, *modules):
 	CheckAllowed(params)
 
 	object.GetBuilder(model_service).DeclareConst(ConvertConsts(params["const"]))
-	object.GetBuilder(model_service).DeclareConst(ConvertConsts(params["static"]))
+	object.GetBuilder(model_service).DeclareStatic(ConvertConsts(params["static"]))
 	object.GetBuilder(model_service).DeclareSensor(ConvertSensors(params["sensor"]))
 	object.GetBuilder(model_service).DeclareVar(ConvertVars(params["var"]))
+	object.GetBuilder(model_service).DeclareTrigger(ConvertTriggers(params["trigger"]))
 
 	object.GetBuilder(model_service).AddReaction(ConvertReacts(params["react"]))

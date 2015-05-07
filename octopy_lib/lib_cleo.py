@@ -22,13 +22,19 @@ def CleoModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
-			"tasks_total_ok"   : LowerArgThreshold("tasks_total", "tasks_total_req"),
+			"tasks_total_threshold"   : LowerArgThreshold("tasks_total", "tasks_total_req"),
 		},
 
-		"react" : {
-			Equals("tasks_total_ok", False) :
-				Warning("tag", "QUEUE").Msg("loc", "{queue_name}")
+		"trigger" : {
+			"not_enough_tasks" : Equals("tasks_total_threshold", False)
+		},
+
+		"react" : [
+			Reaction("notify_tasks_count")
+				.On("not_enough_tasks")
+				.Begin(Warning("tag", "QUEUE")
+					.Msg("loc", "{queue_name}")
 					.Msg("descr", "{type}: total tasks count is low")
-					.Msg("msg"  , "{type}({queue_name}): total tasks count is low({tasks_total})"),
-		}
+					.Msg("msg"  , "{type}({queue_name}): total tasks count is low({tasks_total})"))
+		]
 	}

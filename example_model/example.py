@@ -30,6 +30,7 @@ cpus = CreateObjects(NODES * CPU_PER_NODE, my_module
 		"const" : (my_const, {"type" : "cpu"}),
 		"sensor" : my_sensor,
 		"var" : my_var,
+		"trigger" : my_trigger,
 		"react" : my_react
 	})
 

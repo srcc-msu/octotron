@@ -7,30 +7,43 @@ from octopy import *
 my_module = {
 # declare constants
 	"const" : {
-		"temp_max" : 70,
+		"temperature_max" : 70,
 	},
 
 # declare sensors
+# the sensor must be updated every minute or timeout notification will be triggered
 	"sensor" : {
 		"temperature" : Long(Minutes(1))
 	},
 
-# declare varying attrbiutes
+# declare varying attribute
+# temp_threshold is a boolean attribute,
+# which shows is temperature below threshold or not
 	"var" : {
-		"temp_ok" : UpperArgThreshold("temperature", "temp_max"),
+		"temp_threshold" : UpperArgThreshold("temperature", "temperature_max"),
+	},
+
+# declare triggers
+# bad_temperature will be triggered, when temperature check attribute becomes false
+	"trigger" :
+	{
+		"bad_temperature" : Equals("temp_threshold", False),
+		"disable_all" : Manual()
 	},
 
 # declare reactions
-	"react" : {
-	# invoke the Danger() reaction if "temperature" becomes greater
-	# than "temp_max"
-	# invoke the Recover() reaction when "temperature" lowers
-		Equals("temp_ok", False).Repeatable() :
-			( Danger("tag", "TEMPERATURE")
-				.Msg("msg", "very high cpu temperature: {temperature}")
-			, Recover("tag", "TEMPERATURE")
+# it will be execute when required trigger is turned on (by user or by condition)
+# in thi case - when temperature is above threshold
+	"react" : [
+		ReactionTemplate("notify_temperature")
+			.On("bad_temperature")
+			.Off("disable_all")
+			.Begin(Danger("tag", "TEMPERATURE")
+				.Msg("msg", "very high cpu temperature: {temperature}"))
+			.Repeatable()
+			.End(Recover("tag", "TEMPERATURE")
 				.Msg("msg", "temperature is back to normal: {temperature}"))
-	}
+	]
 }
 
 #
@@ -47,12 +60,17 @@ my_sensor = {
 
 # declare varying attrbiutes
 my_var = {
-	"load_ok" : UpperArgThreshold("avg_load", "load_max")
+	"load_threshold" : UpperArgThreshold("avg_load", "load_max")
 }
 
-my_react = {
+my_trigger = {
+	"bad_load" :  Equals("load_ok", False)
+}
+
+my_react = [
 	# invoke the Warning() reaction when "avg_load" becomes greater
 	# than "load_max" and stays so for 60 or more seconds
-		Equals("load_ok", False).Delay(60) :
-			Warning("msg", "high cpu load for last minute: {avg_load}")
-}
+		ReactionTemplate("notify_load")
+		.Require("bad_load", 0, 60)
+		.Response(Warning("msg", "high cpu load for last minute: {avg_load}"))
+]

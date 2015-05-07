@@ -18,7 +18,6 @@ class Rule(object):
 
 		return cons.newInstance(*self.args)
 
-
 # ASoft
 
 class ASoftDoubleSum(Rule):
