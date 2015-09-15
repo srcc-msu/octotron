@@ -1,9 +1,5 @@
 include Makefile.config
 
-# assuming 8GB RAM total
-# 4GB - for Octotron: 2GB - for heap, 2GB - for neo4j mapping
-# attribute will take the most space in typical configs
-
 OCTO_LIB=lib/octotron.jar
 JAVA_PARAM=-d64 -Dsun.net.httpserver.nodelay=true -cp lib/jersey-core-1.18.1.jar:$(OCTO_LIB)
 
