@@ -17,25 +17,24 @@ my_module = {
 	},
 
 # declare varying attribute
-# temp_threshold is a boolean attribute,
-# which shows is temperature below threshold or not
+# temperatrue_speed store a speed of the temperature changes
 	"var" : {
-		"temp_threshold" : UpperArgThreshold("temperature", "temperature_max"),
+		"temperatrue_speed" : Speed("temperature"),
 	},
 
 # declare triggers
-# bad_temperature will be triggered, when temperature check attribute becomes false
+# bad_temperature will be triggered, when temperature sensor is above threshold
 	"trigger" :
 	{
-		"bad_temperature" : Equals("temp_threshold", False),
+		"bad_temperature" : GT("temperature", "temperature_max"),
 		"disable_all" : Manual()
 	},
 
 # declare reactions
 # it will be execute when required trigger is turned on (by user or by condition)
-# in thi case - when temperature is above threshold
-	"react" : [
-		ReactionTemplate("notify_temperature")
+# in this case - when temperature is above threshold
+	"react" : {
+		"notify_temperature" : Reaction()
 			.On("bad_temperature")
 			.Off("disable_all")
 			.Begin(Danger("tag", "TEMPERATURE")
@@ -43,7 +42,7 @@ my_module = {
 			.Repeatable()
 			.End(Recover("tag", "TEMPERATURE")
 				.Msg("msg", "temperature is back to normal: {temperature}"))
-	]
+	}
 }
 
 #
@@ -58,19 +57,15 @@ my_sensor = {
 	"avg_load" : Long(Minutes(1)),
 }
 
-# declare varying attrbiutes
-my_var = {
-	"load_threshold" : UpperArgThreshold("avg_load", "load_max")
-}
-
 my_trigger = {
-	"bad_load" :  Equals("load_ok", False)
+	"bad_load" :  GT("avg_load", "load_max")
 }
 
-my_react = [
-	# invoke the Warning() reaction when "avg_load" becomes greater
-	# than "load_max" and stays so for 60 or more seconds
-		ReactionTemplate("notify_load")
-		.Require("bad_load", 0, 60)
-		.Response(Warning("msg", "high cpu load for last minute: {avg_load}"))
-]
+# invoke the Warning() reaction when "avg_load" becomes greater
+# than "load_max" and stays so for 60 or more seconds
+
+my_react = {
+	"notify_load" : Reaction()
+		.On("bad_load", 0, 60)
+		.Begin(Warning("msg", "high cpu load for last minute: {avg_load}"))
+}

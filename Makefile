@@ -13,7 +13,7 @@ run: $(OCTO_LIB) $(MODEL_CFG)
 	java $(JAVA_PARAM) $(USR_JAVA_PARAM) ru.parallel.octotron.exec.Start $(MODEL_CFG)
 
 $(OCTO_LIB):
-	wget -O $(OCTO_LIB) 'https://github.com/srcc-msu/octotron_core/releases/download/v3.4.5/octotron.jar'
+	wget -O $(OCTO_LIB) 'https://github.com/srcc-msu/octotron_core/releases/download/v4.1.0/octotron.jar'
 
 clean:
 	rm -f octopy/*.class

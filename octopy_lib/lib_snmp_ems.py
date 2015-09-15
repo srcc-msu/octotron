@@ -3,11 +3,11 @@ from octopy import *
 def EmsSensorModule(timeout = Minutes(1)):
 	return {
 		"static" : {
-			"_static_ems_sensor_front_temp_max" : 30,
-			"_static_ems_sensor_back_temp_max" : 50,
+			"static_ems_sensor_front_temp_max" : 30,
+			"static_ems_sensor_back_temp_max" : 50,
 
-			"_static_ems_sensor_humidity_min" : 10,
-			"_static_ems_sensor_humidity_max" : 70,
+			"static_ems_sensor_humidity_min" : 10,
+			"static_ems_sensor_humidity_max" : 70,
 		},
 
 		"sensor" : {
@@ -20,63 +20,69 @@ def EmsSensorModule(timeout = Minutes(1)):
 			"back_temp" : Long(timeout),
 		},
 
-		"var" : {
-			"front_temp_ok" : UpperArgThreshold("front_temp", "_static_ems_sensor_front_temp_max"),
-			"back_temp_ok" : UpperArgThreshold("back_temp", "_static_ems_sensor_back_temp_max"),
+		"trigger" : {
+			"front_temp_error" : GTArg("front_temp", "static_ems_sensor_front_temp_max"),
+			"back_temp_error" : GTArg("back_temp", "static_ems_sensor_back_temp_max"),
 
-			"front_humidity_max_ok" : UpperArgThreshold("front_humidity", "_static_ems_sensor_humidity_max"),
-			"back_humidity_max_ok"  : UpperArgThreshold("back_humidity", "_static_ems_sensor_humidity_max"),
+			"front_humidity_max_error" : GTArg("front_humidity", "static_ems_sensor_humidity_max"),
+			"back_humidity_max_error"  : GTArg("back_humidity", "static_ems_sensor_humidity_max"),
 
-			"front_humidity_min_ok" : LowerArgThreshold("front_humidity", "_static_ems_sensor_humidity_min"),
-			"back_humidity_min_ok"  : LowerArgThreshold("back_humidity", "_static_ems_sensor_humidity_min"),
+			"front_humidity_min_error" : LTArg("front_humidity", "static_ems_sensor_humidity_min"),
+			"back_humidity_min_error"  : LTArg("back_humidity", "static_ems_sensor_humidity_min"),
 		},
 
 		"react" : {
-			Equals("front_temp_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{descr}")
+			"notify_front_temp_error" : Reactino()
+				.On("front_temp_error")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: front temp is very high")
-					.Msg("msg"  , "ems sensor: front temp in {descr} is very high: {front_temp}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems sensor: front temp in {descr} is very high: {front_temp}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: front temp is back to normal")
 					.Msg("msg"  , "ems sensor: front temp in {descr} is back to normal: {front_temp}")),
 
-			Equals("back_temp_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{descr}")
+			"notify_back_temp_error" : Reactino()
+				.On("back_temp_error")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: back temp is very high")
-					.Msg("msg"  , "ems sensor: back temp in {descr} is very high: {back_temp}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems sensor: back temp in {descr} is very high: {back_temp}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: back temp is back to normal")
 					.Msg("msg"  , "ems sensor: back temp in {descr} is back to normal: {back_temp}")),
 
-			Equals("front_humidity_max_ok", False) :
-				( Danger("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+			"notify_front_humidity_max_error" : Reactino()
+				.On("front_humidity_max_error")
+				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: front humidity is very high")
-					.Msg("msg"  , "ems sensor: front humidity in {descr} is very high: {front_humidity}")
-				, Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems sensor: front humidity in {descr} is very high: {front_humidity}"))
+				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: front humidity is back to normal")
 					.Msg("msg"  , "ems sensor: front humidity in {descr} is back to normal: {front_humidity}")),
 
-			Equals("back_humidity_max_ok", False) :
-				( Danger("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+			"notify_back_humidity_max_error" : Reactino()
+				.On("back_humidity_max_error")
+				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: back humidity is very high")
-					.Msg("msg"  , "ems sensor: back humidity in {descr} is very high: {back_humidity}")
-				, Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems sensor: back humidity in {descr} is very high: {back_humidity}"))
+				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: back humidity is back to normal")
 					.Msg("msg"  , "ems sensor: back humidity in {descr} is back to normal: {back_humidity}")),
 
-			Equals("front_humidity_min_ok", False) :
-				( Danger("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+			"notify_front_humidity_min_error" : Reactino()
+				.On("front_humidity_min_error")
+				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: front humidity is low")
-					.Msg("msg"  , "ems sensor: front humidity in {descr} is low: {front_humidity}")
-				, Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems sensor: front humidity in {descr} is low: {front_humidity}"))
+				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: front humidity is back to normal")
 					.Msg("msg"  , "ems sensor: front humidity in {descr} is back to normal: {front_humidity}")),
 
-			Equals("back_humidity_min_ok", False) :
-				( Danger("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+			"notify_back_humidity_min_error" : Reactino()
+				.On("back_humidity_min_error")
+				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: back humidity is low")
-					.Msg("msg"  , "ems sensor: back humidity in {descr} is low: {back_humidity}")
-				, Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems sensor: back humidity in {descr} is low: {back_humidity}"))
+				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{descr}")
 					.Msg("descr", "ems sensor: back humidity is back to normal")
 					.Msg("msg"  , "ems sensor: back humidity in {descr} is back to normal: {back_humidity}")),
 		}
@@ -89,22 +95,24 @@ def EmsContactModule(timeout = Minutes(1)):
 			"normal_state" : String(timeout),
 		},
 
-		"var" : {
-			"state_ok" : VarArgMatch("state", "normal_state")
+		"trigger" : {
+			"state_error" : NotMatchArg("state", "normal_state")
 		},
 
 		"react" : {
-			Equals("state_ok", False) :
-				( Info("tag", "INFRASTRUCTURE").Msg("loc", "{descr}")
+			"notify_state_error" : Reaction()
+				.On("state_error")
+				.Begin(Info("tag", "INFRASTRUCTURE").Msg("loc", "{descr}")
 					.Msg("descr", "ems contact failed")
-					.Msg("msg"  , "ems contact {descr} failed: state: {state} normal_state : {normal_state}")
-				, Recover("tag", "INFRASTRUCTURE").Msg("loc", "{descr}")
+					.Msg("msg"  , "ems contact {descr} failed: state: {state} normal_state : {normal_state}"))
+				.End(Recover("tag", "INFRASTRUCTURE").Msg("loc", "{descr}")
 					.Msg("descr", "ems contact is ok")
 					.Msg("msg"  , "ems contact {descr} is ok")),
 		}
 	}
 
 def EmsSnmpTrapModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
+	return None # TODO
 	return {
 		"sensor" : {
 			"iemHighTempThresholdViolation" : Boolean(timeout, True),

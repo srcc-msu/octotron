@@ -6,6 +6,7 @@ from octopy.const_wrapper import *
 from octopy.sensor_wrapper import *
 from octopy.var_wrapper import *
 from octopy.react_wrapper import *
+from octopy.trigger_wrapper import *
 
 def CreateObject(*modules):
 	return CreateObjects(1, *modules).Only()
@@ -15,7 +16,7 @@ def CreateObjects(count, *modules):
 
 	CheckAllowed(params)
 
-	factory = ObjectFactory(model_service)
+	factory = ObjectFactory()
 
 	factory = factory.Constants(ConvertConsts  (params["const"]))
 	factory = factory.Statics  (ConvertConsts  (params["static"]))
@@ -32,10 +33,10 @@ def UpdateObject(object, *modules):
 
 	CheckAllowed(params)
 
-	object.GetBuilder(model_service).DeclareConst(ConvertConsts(params["const"]))
-	object.GetBuilder(model_service).DeclareStatic(ConvertConsts(params["static"]))
-	object.GetBuilder(model_service).DeclareSensor(ConvertSensors(params["sensor"]))
-	object.GetBuilder(model_service).DeclareVar(ConvertVars(params["var"]))
-	object.GetBuilder(model_service).DeclareTrigger(ConvertTriggers(params["trigger"]))
+	object.GetBuilder().DeclareConst(ConvertConsts(params["const"]))
+	object.GetBuilder().DeclareStatic(ConvertConsts(params["static"]))
+	object.GetBuilder().DeclareSensor(ConvertSensors(params["sensor"]))
+	object.GetBuilder().DeclareVar(ConvertVars(params["var"]))
+	object.GetBuilder().DeclareTrigger(ConvertTriggers(params["trigger"]))
 
-	object.GetBuilder(model_service).AddReaction(ConvertReacts(params["react"]))
+	object.GetBuilder().AddReaction(ConvertReacts(params["react"]))

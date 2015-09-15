@@ -1,18 +1,15 @@
+from octopy.utils import *
+
 from ru.parallel.octotron.generators.tmpl import TriggerTemplate
-
-from ru.parallel.octotron.triggers import Equals
-from ru.parallel.octotron.triggers import NotEquals
-
-# utils
 
 def TriggersFromDict(triggers_dict):
 	res = []
 
-	for name, rule in varyings_dict.items():
-		if len(rule) > 1:
-			raise RuntimeError("duplicated trigger: " + name + " : " + str(rule))
+	for name, trigger in triggers_dict.items():
+		if len(trigger) > 1:
+			raise RuntimeError("duplicated trigger: " + name + " : " + str(trigger))
 
-		res.append(TriggerTemplate(name, trigger))
+		res.append(TriggerTemplate(name, trigger[0].GetPlainOcto()))
 
 	return res
 
