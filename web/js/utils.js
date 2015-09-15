@@ -37,7 +37,7 @@ $(document).ready(function() {
 
 	if(document.getElementById('result_suppressed') !== null)
 	{
-		Update(urlParams["host"] + "/view/suppressed?callback=octotron_state"
+		Update(urlParams["host"] + "/view/suppressed?callback=octotron_state&v"
 			, urlParams["s_auth"], "result_suppressed", ProcessSuppressed);
 	}
 });
@@ -76,9 +76,9 @@ function ProcessSnapshot(json, target)
 	fields.append($('<th></th>').text("loc"))
 	fields.append($('<th></th>').text("msg"))
 
-	fields.append($('<th></th>').text("attr.name"))
-	fields.append($('<th></th>').text("attr.value"))
-	fields.append($('<th></th>').text("suppressed"))
+	fields.append($('<th></th>').text("name"))
+	fields.append($('<th></th>').text("repeated"))
+	fields.append($('<th></th>').text("is_suppressed"))
 
 	head.append(fields)
 
@@ -98,7 +98,7 @@ function ProcessSnapshot(json, target)
 		column.append($('<td></td>').text(json.data[i].usr.loc))
 		column.append($('<td></td>').text(json.data[i].usr.msg))
 
-		var attribute_aid = json.data[i].reaction.attribute;
+		/*var attribute_aid = json.data[i].reaction.attribute;
 		var name = null;
 		var value = null;
 
@@ -113,12 +113,11 @@ function ProcessSnapshot(json, target)
 				name = item["name"]
 				value = item["value"]
 			}
+		}*/
 
-		}
-
-		column.append($('<td></td>').text(name))
-		column.append($('<td></td>').text(value))
-		column.append($('<td></td>').text(json.data[i].reaction.suppressed))
+		column.append($('<td></td>').text(json.data[i].reaction.name))
+		column.append($('<td></td>').text(json.data[i].reaction.counter))
+		column.append($('<td></td>').text(json.data[i].reaction.is_suppressed))
 
 		body.append(column);
 	}
@@ -136,11 +135,9 @@ function ProcessSuppressed(json, target, host)
 	var head = $('<thead></thead>');
 	var fields = $('<tr></tr>');
 
-	fields.append($('<th></th>').text("reason"))
-	fields.append($('<th></th>').text("attr.name"))
-	fields.append($('<th></th>').text("tag"))
-	fields.append($('<th></th>').text("descr"))
-	fields.append($('<th></th>').text("entity AID"))
+	fields.append($('<th></th>').text("AID"))
+	fields.append($('<th></th>').text("description"))
+	fields.append($('<th></th>').text("name"))
 	fields.append($('<th></th>').text("unsuppress"))
 
 	head.append(fields)
@@ -151,16 +148,13 @@ function ProcessSuppressed(json, target, host)
 	{
 		var column = $('<tr></tr>');
 
-		column.append($('<td></td>').text(json.data[i].info.descr))
-		column.append($('<td></td>').text(json.data[i].model.attribute.name))
-		column.append($('<td></td>').text(json.data[i].usr.tag))
-		column.append($('<td></td>').text(json.data[i].usr.descr))
+		column.append($('<td></td>').text(json.data[i]["attribute AID"]))
+		column.append($('<td></td>').text(json.data[i].description))
+		column.append($('<td></td>').text(json.data[i].name))
 
-		column.append($('<td></td>').text(json.data[i].model.entity.AID))
-		var url = host + "/modify/unsuppress?path=obj(AID=="+json.data[i].model.entity.AID+")&template_id="+json.data[i].template.AID;
-
-		var link = $("<a></a>").attr("href", url).text("unsuppress");
-		column.append($('<td></td>').html(link));
+//		var url = host + "/modify/unsuppress?path=obj(AID=="+json.data[i].model.entity.AID+")&template_id="+json.data[i].template.AID;
+//		var link = $("<a></a>").attr("href", url).text("unsuppress");
+//		column.append($('<td></td>').html(link));
 
 		body.append(column);
 	}
