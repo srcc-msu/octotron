@@ -3,32 +3,90 @@ from octopy import *
 def NodeCheckModule(timeout = Hours(1)):
 	return {
 		"sensor" : {
-			"chk_mpi" : Boolean(timeout),
-			"chk_ib" : Boolean(timeout),
-			"ib_visible" : Boolean(timeout),
+			"mpi_check" : Boolean(timeout),
+			"ib_check" : Boolean(timeout),
+			"ib_visibility_check" : Boolean(timeout),
 		},
 
-		"var" : {
-			"node_check_total_errors" : AStrictNotMatchCount(true, EDependencyType.SELF
-				, "chk_mpi"
-				, "ib_visible")
+		"trigger" : {
+			"mpi_check_failed" : Match("mpi_check", False),
+			"ib_check_failed" : Match("ib_check", False),
+			"ib_visibility_check_failed" : Match("ib_visibility_check", False),
 		},
 
 		"react" : {
-			Equals("chk_mpi", False) :
-				( Danger("tag", "NODE").Msg("loc", "{node}")
+			"notify_mpi_check_failed" : Reaction()
+				.On("mpi_check_failed")
+				.Begin(Warning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: failure: mpi")
-					.Msg("msg"  , "{node}: failure: mpi")
-				, Recover("tag", "NODE").Msg("loc", "{node}")
+					.Msg("msg"  , "{node}: failure: mpi"))
+				.End(Recover("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: is good: mpi")
 					.Msg("msg"  , "{node}: is good: mpi")),
 
-			Equals("ib_visible", False) :
-				( Danger("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "{type}: is not visible in SubNet manager")
-					.Msg("msg"  , "{node}: is not visible in SubNet manager")
-				, Recover("tag", "NODE").Msg("loc", "{node}")
-					.Msg("descr", "{type}: is visible in SubNet manager again")
-					.Msg("msg"  , "{node}: is visible in SubNet manager again")),
+			"notify_ib_check_failed" : Reaction()
+				.On("ib_check_failed")
+				.Begin(Warning("tag", "NODE").Msg("loc", "{node}")
+					.Msg("descr", "{type}: failure: ib check")
+					.Msg("msg"  , "{node}: failure: ib check"))
+				.End(Recover("tag", "NODE").Msg("loc", "{node}")
+					.Msg("descr", "{type}: is good: ib check")
+					.Msg("msg"  , "{node}: is good: ib check")),
+
+			"notify_ib_visibility_check_failed" : Reaction()
+				.On("ib_visibility_check_failed")
+				.Begin(Warning("tag", "NODE").Msg("loc", "{node}")
+					.Msg("descr", "{type}: failure: node is not visible in subnet manager")
+					.Msg("msg"  , "{node}: failure: node is not visible in subnet manager"))
+				.End(Recover("tag", "NODE").Msg("loc", "{node}")
+					.Msg("descr", "{type}: is good: node is visible in subnet manager")
+					.Msg("msg"  , "{node}: is good: node is visible in subnet manager")),
+		}
+	}
+
+
+def ChassisNodeCheck(failed_nodes = 8, loc = "{id}"):
+	return {
+		"var" : {
+			"mpi_check_failed_count" : ASoftMatchCount(EDependecyType.OUT, "mpi_check_failed"),
+			"ib_check_failed_count" : ASoftMatchCount(EDependecyType.OUT, "ib_check_failed"),
+			"ib_visibility_check_failed_count" : ASoftMatchCount(EDependecyType.OUT, "ib_visibility_check_failed"),
+
+			"ping_failed_count" : ASoftMatchCount(EDependecyType.OUT, "ping_failed"),
+		},
+
+		"trigger" : {
+			"many_mpi_check_failed" : GT("mpi_check_failed_count", failed_nodes),
+			"many_ib_check_failed" : GT("ib_check_failed_count", failed_nodes),
+			"many_ib_visibility_check_failed" : GT("ib_visibility_check_failed_count", failed_nodes),
+
+			"many_ping_failed" : GT("ping_failed_count", failed_nodes),
+		},
+
+		"react" : {
+
+			"notify_many_mpi_check_failed" : Reaction()
+				.On("many_mpi_check_failed")
+				.Begin(Danger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: many nodes failed mpi check")
+					.Msg("msg", loc + ": many nodes failed mpi check")),
+
+			"notify_many_ib_check_failed" : Reaction()
+				.On("many_ib_check_failed")
+				.Begin(Danger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: many nodes failed ib check")
+					.Msg("msg", loc + ": many nodes failed ib check")),
+
+			"notify_many_ib_visibility_check_failed" : Reaction()
+				.On("many_ib_visibility_check_failed")
+				.Begin(Danger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: many nodes failed ib visibility check")
+					.Msg("msg", loc + ": many nodes failed ib visibility check")),
+
+			"notify_many_ping_failed" : Reaction()
+				.On("many_ping_failed")
+				.Begin(Danger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: many nodes failed ping check")
+					.Msg("msg", loc + ": many nodes failed ping check")),
 		}
 	}

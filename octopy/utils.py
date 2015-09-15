@@ -3,6 +3,8 @@ import collections
 import ru.parallel.octotron.generators.CSVReader as CSVReader_java
 import ru.parallel.octotron.generators.Enumerator as Enumerator_java
 
+import ru.parallel.octotron.core.collections.ModelList.EQueryType as EQueryType;
+
 def GetCollection(thing):
 	if isinstance(thing, (list, tuple)):
 		return thing
@@ -27,7 +29,7 @@ def MergeDicts(dicts):
 
 	return result
 
-__allowed = ["const", "static", "sensor", "var", "react"]
+__allowed = ["const", "static", "sensor", "var", "react", "trigger"]
 
 def CheckAllowed(params):
 	for param in params.keys():
@@ -51,13 +53,13 @@ def MergeUniqueDicts(dicts):
 class CSVReader:
 	@staticmethod
 	def Declare(*params):
-		CSVReader_java.Declare(model_service, *params)
+		CSVReader_java.Declare(*params)
 
 	@staticmethod
 	def OrderByColumn(*params):
-		return CSVReader_java.OrderByColumn(model_service, *params)
+		return CSVReader_java.OrderByColumn(*params)
 
 class Enumerator:
 	@staticmethod
 	def Sequence(*params):
-		Enumerator_java.Sequence(model_service, *params)
+		Enumerator_java.Sequence(*params)

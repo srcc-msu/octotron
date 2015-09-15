@@ -15,12 +15,12 @@ def PanasasSystemModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
-			"sum_cpu_util"  : ASoftLongSum(EDependencyType.OUT, "sum_cpu_util"),
-			"sum_disk_util" : ASoftLongSum(EDependencyType.OUT, "sum_disk_util"),
-			"sum_perf_ops"      : ASoftLongSum(EDependencyType.OUT, "sum_perf_ops"),
-			"sum_perf_response" : ASoftLongSum(EDependencyType.OUT, "sum_perf_response"),
-			"sum_perf_in_kbs"   : ASoftLongSum(EDependencyType.OUT, "sum_perf_in_kbs"),
-			"sum_perf_out_kbs"  : ASoftLongSum(EDependencyType.OUT, "sum_perf_out_kbs")
+			"sum_cpu_util"  : ASoftLongSum("out_n", "sum_cpu_util"),
+			"sum_disk_util" : ASoftLongSum("out_n", "sum_disk_util"),
+			"sum_perf_ops"      : ASoftLongSum("out_n", "sum_perf_ops"),
+			"sum_perf_response" : ASoftLongSum("out_n", "sum_perf_response"),
+			"sum_perf_in_kbs"   : ASoftLongSum("out_n", "sum_perf_in_kbs"),
+			"sum_perf_out_kbs"  : ASoftLongSum("out_n", "sum_perf_out_kbs")
 		}
 	}
 
@@ -31,12 +31,12 @@ def PanasasShelfModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
-			"sum_cpu_util"  : ASoftLongSum(EDependencyType.OUT, "cpu_util"),
-			"sum_disk_util" : ASoftLongSum(EDependencyType.OUT, "disk_util"),
-			"sum_perf_ops"      : ASoftLongSum(EDependencyType.OUT, "perf_ops"),
-			"sum_perf_response" : ASoftLongSum(EDependencyType.OUT, "perf_response"),
-			"sum_perf_in_kbs"   : ASoftLongSum(EDependencyType.OUT, "perf_in_kbs"),
-			"sum_perf_out_kbs"  : ASoftLongSum(EDependencyType.OUT, "perf_out_kbs")
+			"sum_cpu_util"  : ASoftLongSum("out_n", "cpu_util"),
+			"sum_disk_util" : ASoftLongSum("out_n", "disk_util"),
+			"sum_perf_ops"      : ASoftLongSum("out_n", "perf_ops"),
+			"sum_perf_response" : ASoftLongSum("out_n", "perf_response"),
+			"sum_perf_in_kbs"   : ASoftLongSum("out_n", "perf_in_kbs"),
+			"sum_perf_out_kbs"  : ASoftLongSum("out_n", "perf_out_kbs")
 		}
 	}
 
@@ -57,22 +57,26 @@ def PanasasBladeModule(timeout = Minutes(10)):
 			"perf_out_kbs"  : Long(timeout),
 		},
 
-		"react" : {
-			Equals("status", "warning") :
-				( Danger("tag", "STORAGE").Msg("loc", "{uid}")
-					.Msg("descr", "{type}: warning")
-					.Msg("msg"  , "{type}[{uid}]: warning")
-				, Recover("tag", "STORAGE").Msg("loc", "{uid}")
-					.Msg("descr", "{type}: is ok")
-					.Msg("msg"  , "{type}[{uid}]: is ok")),
+		"trigger" : {
+			"blade_warning" : Match("status", "warning"),
+			"blade_offline" : Match("status", "offline"),
+		},
 
-			Equals("status", "offline") :
-				( Danger("tag", "STORAGE").Msg("loc", "{uid}")
-					.Msg("descr", "{type}: went offline")
-					.Msg("msg"  , "{type}: went offline {uid}")
-				, Recover("tag", "STORAGE").Msg("loc", "{uid}")
-					.Msg("descr", "{type}: is ok")
-					.Msg("msg"  , "{type}[{uid}]: is ok")),
+		"react" : {
+			"blade_warning" : Reaction()
+				.On("blade_warning")
+				.Begin(Warning("tag", "STORAGE").Msg("loc", "{uid}")
+					.Msg("descr", "{type}: {status}")
+					.Msg("msg"  , "{type}[{uid}]: {status}")),
+
+			"blade_offline" : Reaction()
+				.On("blade_offline")
+				.Begin(Danger("tag", "STORAGE").Msg("loc", "{uid}")
+					.Msg("descr", "{type}: {status}")
+					.Msg("msg"  , "{type}[{uid}]: {status}"))
+				.End(Recover("tag", "STORAGE").Msg("loc", "{uid}")
+					.Msg("descr", "{type}: {status}")
+					.Msg("msg"  , "{type}[{uid}]: {status}")),
 		}
 	}
 
@@ -86,12 +90,17 @@ def PanasasVolumeModule(timeout = Minutes(10)):
 			"info" : String(timeout),
 		},
 
+		"trigger" : {
+			"not_online" : NotMatch("info", "Online")
+		},
+		
 		"react" : {
-			NotEquals("info", "Online") :
-				( Danger("tag", "STORAGE").Msg("loc", "{mount}")
+			"notify_not_online" : Reaction()
+				.On("not_online")
+				.Begin(Danger("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "{type}: info changed")
-					.Msg("msg"  , "{type}[{mount}]: info changed: {info}")
-				, Recover("tag", "STORAGE").Msg("loc", "{mount}")
+					.Msg("msg"  , "{type}[{mount}]: info changed: {info}"))
+				.End(Recover("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "{type}: is ok")
 					.Msg("msg"  , "{type}[{mount}]: is ok: {info}")),
 		}

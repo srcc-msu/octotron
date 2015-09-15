@@ -29,7 +29,6 @@ cpus = CreateObjects(NODES * CPU_PER_NODE, my_module
 	, {
 		"const" : (my_const, {"type" : "cpu"}),
 		"sensor" : my_sensor,
-		"var" : my_var,
 		"trigger" : my_trigger,
 		"react" : my_react
 	})
@@ -43,4 +42,4 @@ Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 # two links for connection with specified types
 EveryToChunks(nodes, cpus, ["contain", "chill"])
 
-DiscoverConnect(cpus, [("type", "cpu")], [("type", "contain"), ("type", "chill"), ("type", "ethernet")], "type", ["^.*cpu-node-node-cpu.*$"], "mega", 4, debug = True)
+DiscoverConnect(cpus, [("type", "cpu")], [("type", "contain"), ("type", "chill"), ("type", "ethernet")], "type", ["^.*cpu-node-node-cpu.*$"], "mega", 4)

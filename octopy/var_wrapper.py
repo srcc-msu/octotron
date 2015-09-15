@@ -3,7 +3,6 @@ from octopy.utils import *
 import java.lang
 import jarray
 
-from ru.parallel.octotron.core.primitive import EDependencyType
 from ru.parallel.octotron.generators.tmpl import VarTemplate
 
 OCTO_PACKAGE = "ru.parallel.octotron"
@@ -14,6 +13,12 @@ class Rule(object):
 
 	def GetOcto(self):
 		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules." + type(self).__name__)
+		cons = c.getConstructors()[0]
+
+		return cons.newInstance(*self.args)
+
+	def GetPlainOcto(self):
+		c = java.lang.Class.forName(OCTO_PACKAGE + ".rules.plain." + type(self).__name__)
 		cons = c.getConstructors()[0]
 
 		return cons.newInstance(*self.args)
@@ -98,15 +103,61 @@ class SoftLogicalOr(Rule):
 	def __init__(self, *arg1):
 		Rule.__init__(self, (jarray.array(arg1, java.lang.String),))
 
+# plain
+
+class Manual(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class GTArg(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class GT(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LinkedMatch(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LinkedNotMatch(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LT(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LTArg(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class Match(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MatchAprx(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MatchArg(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class MatchArgAprx(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class NotMatch(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class NotMatchArg(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 # single
-
-class ArgMatchAprx(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class ArgMatch(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
 
 class Speed(Rule):
 	def __init__(self, *args):
@@ -136,22 +187,6 @@ class CheckedInterval(Rule):
 	def __init__(self, arg1, *arg2):
 		Rule.__init__(self, (arg1, jarray.array(arg2, java.lang.Object),))
 
-class LowerArgThreshold(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class LowerThreshold(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class MatchAprx(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class Match(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
 class MirrorBoolean(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
@@ -168,30 +203,6 @@ class MirrorString(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class NotMatch(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class UpperArgThreshold(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class UpperThreshold(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class VarArgMatchAprx(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class VarArgMatch(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
-class LinkedVarArgMatch(Rule):
-	def __init__(self, *args):
-		Rule.__init__(self, args)
-
 # utils
 
 def VarsFromDict(varyings_dict):
@@ -201,7 +212,10 @@ def VarsFromDict(varyings_dict):
 		if len(rule) > 1:
 			raise RuntimeError("duplicated var: " + name + " : " + str(rule))
 
-		res.append(VarTemplate(name, rule[0].GetOcto()))
+		try:
+			res.append(VarTemplate(name, rule[0].GetOcto()))
+		except java.lang.ClassNotFoundException:
+			res.append(VarTemplate(name, rule[0].GetPlainOcto()))
 
 	return res
 

@@ -11,9 +11,10 @@ from octopy.const_wrapper import *
 from octopy.sensor_wrapper import *
 from octopy.var_wrapper import *
 from octopy.react_wrapper import *
+from octopy.trigger_wrapper import *
 
 def GetLinkFactory(params, type):
-	factory = LinkFactory(model_service)
+	factory = LinkFactory()
 
 	CheckAllowed(params)
 
@@ -209,7 +210,9 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 				ext_path.append(neighbor)
 
 				new_paths.append(ext_path)
-				print "added neighbor: ", neighbor.GetID()
+
+				if debug:
+					print "added neighbor: ", neighbor.GetID()
 
 		if debug:
 			print "new paths: ", map(lambda y: map(lambda x: x.GetID(), y), new_paths)

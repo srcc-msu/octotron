@@ -4,111 +4,121 @@ def FanSnmpModule(timeout = Minutes(1)):
 	return {
 		"static" :
 		{
-			"_static_infra_air_in_temp"  : 35,
-			"_static_infra_air_out_temp" : 25,
+			"static_infra_air_in_temp"  : 35,
+			"static_infra_air_out_temp" : 25,
 
-			"_static_infra_humidity" : 70,
+			"static_infra_humidity" : 70,
 		},
 
 		"sensor" : {
 			"inlet_1" : Long(timeout),
 			"inlet_2" : Long(timeout),
 			"inlet_3" : Long(timeout),
-			"humidity_in"  : Long(timeout),
-			"humidity_out" : Long(timeout),
+
 			"air_in"  : Long(timeout),
 			"air_out" : Long(timeout),
+			"humidity_in"  : Long(timeout),
+			"humidity_out" : Long(timeout),
+
 			"fluid_in"  : Long(timeout),
 			"fluid_out" : Long(timeout),
 		},
 
 		"var" : {
-			"inlet_1_ok" : UpperArgThreshold("inlet_1", "_static_infra_air_in_temp"),
-			"inlet_2_ok" : UpperArgThreshold("inlet_2", "_static_infra_air_in_temp"),
-			"inlet_3_ok" : UpperArgThreshold("inlet_3", "_static_infra_air_in_temp"),
-
-			"humidity_in_ok"  : UpperArgThreshold("humidity_in", "_static_infra_humidity"),
-			"humidity_out_ok" : UpperArgThreshold("humidity_out", "_static_infra_humidity"),
-			"air_in_ok"  : UpperArgThreshold("air_in", "_static_infra_air_in_temp"),
-			"air_out_ok" : UpperArgThreshold("air_out", "_static_infra_air_out_temp"),
-
 			"fluid_in_state"  : CheckedInterval("fluid_in", 1, 20, 40),
 		},
 
+		"trigger" : {
+			"high_inlet_1" : GTArg("inlet_1", "static_infra_air_in_temp"),
+			"high_inlet_2" : GTArg("inlet_2", "static_infra_air_in_temp"),
+			"high_inlet_3" : GTArg("inlet_3", "static_infra_air_in_temp"),
+
+			"high_air_in"  : GTArg("air_in", "static_infra_air_in_temp"),
+			"high_air_out" : GTArg("air_out", "static_infra_air_out_temp"),
+			"high_humidity_in"  : GTArg("humidity_in", "static_infra_humidity"),
+			"high_humidity_out" : GTArg("humidity_out", "static_infra_humidity"),
+
+			"high_fluid_in" : Match("fluid_in", 2),
+		},
+
 		"react" : {
-			Equals("inlet_1_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+			"notify_high_inlet_1" : Reaction()
+				.On("high_inlet_1")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 1 is too high")
-					.Msg("msg"  , "{type}[{ip}]: air temperature 1 is too high: {inlet_1}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air temperature 1 is too high: {inlet_1}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 1 is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 1 is back to normal")),
 
-			Equals("inlet_2_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+			"notify_high_inlet_2" : Reaction()
+				.On("high_inlet_2")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 2 is too high")
-					.Msg("msg"  , "{type}[{ip}]: air temperature 2 is too high: {inlet_2}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air temperature 2 is too high: {inlet_2}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 2 is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 2 is back to normal")),
 
-			Equals("inlet_3_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+			"notify_high_inlet_3" : Reaction()
+				.On("high_inlet_3")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 3 is too high")
-					.Msg("msg"  , "{type}[{ip}]: air temperature 3 is too high: {inlet_3}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air temperature 3 is too high: {inlet_3}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 3 is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 3 is back to normal")),
 
-			Equals("humidity_in_ok", False) :
-				( Danger("tag", "ENVIRONMENT").Msg("loc", "{ip}")
+			"notify_high_humidity_in" : Reaction()
+				.On("high_humidity_in")
+				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_in is too high")
-					.Msg("msg"  , "{type}[{ip}]: air humidity_in is too high: {humidity_in}")
-				, Recover("tag", "ENVIRONMENT").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air humidity_in is too high: {humidity_in}"))
+				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_in is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air humidity_in is back to normal")),
 
-			Equals("humidity_out_ok", False) :
-				( Danger("tag", "ENVIRONMENT").Msg("loc", "{ip}")
+			"notify_high_humidity_out" : Reaction()
+				.On("high_humidity_out")
+				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_out is too high")
-					.Msg("msg"  , "{type}[{ip}]: air humidity_out is too high: {humidity_out}")
-				, Recover("tag", "ENVIRONMENT").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air humidity_out is too high: {humidity_out}"))
+				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_out is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air humidity_out is back to normal")),
 
-			Equals("air_in_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+			"notify_high_air_in" : Reaction()
+				.On("high_air_in")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_in temperature is too high")
-					.Msg("msg"  , "{type}[{ip}]: air_in temperature is too high: {air_in}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air_in temperature is too high: {air_in}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_in temperature is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air_in temperature is back to normal")),
 
-			Equals("air_out_ok", False) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+			"notify_high_air_out" : Reaction()
+				.On("high_air_out")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_out temperature is too high")
-					.Msg("msg"  , "{type}[{ip}]: air_out temperature is too high: {air_out}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: air_out temperature is too high: {air_out}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_out temperature is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air_out temperature is back to normal")),
 
-			Equals("fluid_in_state", 2) :
-				( Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
+			"notify_high_fluid_in" : Reaction()
+				.On("high_fluid_in")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: fluid_in temperature is too high")
-					.Msg("msg"  , "{type}[{ip}]: fluid_in temperature is too high: {fluid_in}")
-				, Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+					.Msg("msg"  , "{type}[{ip}]: fluid_in temperature is too high: {fluid_in}"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: fluid_in temperature is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: fluid_in temperature is back to normal")),
-
-			Invalid("fluid_in_state") :
-				Danger("tag", "TEMPERATURE").Msg("loc", "{ip}")
-					.Msg("descr", "{type}: invalid fluid_in temperature")
-					.Msg("msg"  , "{type}[{ip}]: invalid fluid_in temperature: {fluid_in}"),
 		}
 	}
 
 
 def FanSnmpTrapModule(timeout = UPDATE_TIME_NOT_SPECIFIED):
+	return None # TODO
 	return {
 		# True = no trap
 		"sensor" : {

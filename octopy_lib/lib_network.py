@@ -1,52 +1,67 @@
 from octopy import *
 
-def PingModule(timeout = Minutes(10), key = "ip"):
+def PingModule(timeout = Minutes(10), key = "ip", status = Warning):
 	return {
 		"sensor" : {
 			"ping" : Boolean(timeout),
 		},
 
+		"trigger" : {
+			"ping_failed" : Match("ping", False)
+		},
+
 		"react" : {
-			Equals("ping", False).Repeat(2) :
-				( Danger("tag", "NETWORK").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: ping failed twice")
-					.Msg("msg"  , "{type}[{" + key + "}]: ping failed twice")
-				, Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
+			"notify_ping_failed" : Reaction()
+				.On("ping_failed", 3, 0)
+				.Begin(status("tag", "NETWORK").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: ping failed three times")
+					.Msg("msg"  , "{type}[{" + key + "}]: ping failed three times"))
+				.End(Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: ping ok")
 					.Msg("msg"  , "{type}[{" + key + "}]: ping ok")),
 		}
 	}
 
-def SshModule(timeout = Minutes(10), key = "ip"):
+def SshModule(timeout = Minutes(10), key = "ip", status = Warning):
 	return {
 		"sensor" : {
 			"ssh" : Boolean(timeout),
 		},
 
+		"trigger" : {
+			"ssh_failed" : Match("ssh", False)
+		},
+
 		"react" : {
-			Equals("ssh", False).Repeat(2) :
-				( Danger("tag", "NETWORK").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: ssh failed twice")
-					.Msg("msg"  , "{type}[{" + key + "}]: ssh failed twice")
-				, Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
+			"notify_ssh_failed" : Reaction()
+				.On("ssh_failed", 3, 0)
+				.Begin(status("tag", "NETWORK").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: ssh failed three times")
+					.Msg("msg"  , "{type}[{" + key + "}]: ssh failed three times"))
+				.End(Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: ssh ok")
 					.Msg("msg"  , "{type}[{" + key + "}]: ssh ok")),
 		}
 	}
 
-def SnmpModule(timeout = Minutes(10), key = "ip"):
+def SnmpModule(timeout = Minutes(10), key = "ip", status = Warning):
 	return {
 		"sensor" : {
 			"snmp" : Boolean(timeout),
 		},
 
+		"trigger" : {
+			"snmp_failed" : Match("snmp", False)
+		},
+
 		"react" : {
-			Equals("snmp", False).Repeat(2) :
-				( Danger("tag", "INFRASTRUCTURE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: snmp check failed twice")
-					.Msg("msg"  , "{type}[{" + key + "}]: snmp check failed twice")
-				, Recover("tag", "INFRASTRUCTURE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: snmp check ok")
-					.Msg("msg"  , "{type}[{" + key + "}]: snmp check ok")),
+			"notify_snmp_failed" : Reaction()
+				.On("snmp_failed", 3, 0)
+				.Begin(status("tag", "NETWORK").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: snmp failed three times")
+					.Msg("msg"  , "{type}[{" + key + "}]: snmp failed three times"))
+				.End(Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: snmp ok")
+					.Msg("msg"  , "{type}[{" + key + "}]: snmp ok")),
 		}
 	}

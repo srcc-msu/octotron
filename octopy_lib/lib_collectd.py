@@ -5,9 +5,16 @@ def DiskModule(timeout = Minutes(10)):
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
+	def ErrorResponse(name):
+		return (Reaction()
+			.On(name + "_error")
+			.Begin(Info("tag", "DISK").Msg("loc", loc)
+				.Msg("descr", loc_s + "disk error: %s" % (name))
+				.Msg("msg"  , loc_l + "disk_error: %s = {%s}" % (name, name))))
+
 	return {
 		"static" : {
-			"_static_disk_temp_max" :  40,
+			"static_disk_temp_max" :  40,
 		},
 
 		"sensor" : {
@@ -24,45 +31,46 @@ def DiskModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
-			"current_pending_sector_ok" : Match("current_pending_sector", 0),
-			"offline_uncorrectable_ok"  : Match("offline_uncorrectable", 0),
-			"reallocated_sector_ct_ok"  : Match("reallocated_sector_ct", 0),
-			"reported_uncorrect_ok"     : Match("reported_uncorrect", 0),
-			"spin_retry_count_ok"       : Match("spin_retry_count", 0),
-			"udma_crc_error_count_ok"   : Match("udma_crc_error_count", 0),
+			"cd_disk_total_warnings" : AStrictMatchCount(True, "self"
+				, "current_pending_sector_error"
+				, "offline_uncorrectable_error"
+				, "reallocated_sector_ct_error"
+				, "reported_uncorrect_error"
+				, "spin_retry_count_error"
+				, "udma_crc_error_count_error"),
 
-			"temperature_ok" : UpperArgThreshold("temperature_celsius", "_static_disk_temp_max"),
-
-			"cd_disk_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
-				, "current_pending_sector_ok"
-				, "offline_uncorrectable_ok"
-				, "reallocated_sector_ct_ok"
-				, "reported_uncorrect_ok"
-				, "spin_retry_count_ok"
-				, "udma_crc_error_count_ok"),
+			"cd_disk_total_errors" : AStrictMatchCount(True, "self"
+				, "bad_temperature"),
 		},
 
 		"trigger" : {
-			"disk_error" : NotEquals("cd_disk_total_errors", 0)
-			"bad_temperature" : Equals("temperature_ok", false)
-		}
+			"current_pending_sector_error" : NotMatch("current_pending_sector", 0),
+			"offline_uncorrectable_error"  : NotMatch("offline_uncorrectable", 0),
+			"reallocated_sector_ct_error"  : NotMatch("reallocated_sector_ct", 0),
+			"reported_uncorrect_error"     : NotMatch("reported_uncorrect", 0),
+			"spin_retry_count_error"       : NotMatch("spin_retry_count", 0),
+			"udma_crc_error_count_error"   : NotMatch("udma_crc_error_count", 0),
 
-		"react" : [
-			Reaction("notify_disk_error")
-				.On("disk_error")
-				.Begin(Warning("tag", "DISK").Msg("loc", loc)
-					.Msg("descr", loc_s + "udma_crc_error_count growing")
-					.Msg("msg"  , loc_l + "udma_crc_error_count growing : {spin_retry_count}")),
+			"bad_temperature" : GTArg("temperature_celsius", "static_disk_temp_max")
+		},
 
-			Reaction("notify_bad_temperature")
+		"react" : {
+			"notify_current_pending_sector_error" : ErrorResponse("current_pending_sector"),
+			"notify_offline_uncorrectable_error" : ErrorResponse("offline_uncorrectable"),
+			"notify_reallocated_sector_ct_error" : ErrorResponse("reallocated_sector_ct"),
+			"notify_reported_uncorrect_error" : ErrorResponse("reported_uncorrect"),
+			"notify_spin_retry_count_error" : ErrorResponse("spin_retry_count"),
+			"notify_udma_crc_error_count_error" : ErrorResponse("udma_crc_error_count"),
+
+			"notify_bad_temperature" : Reaction()
 				.On("bad_temperature")
-				.Begin(Danger("tag", "TEMPERATURE").Msg("loc", loc)
-					.Msg("descr", loc_s + "disk temperature is above threshol")
-					.Msg("msg"  , loc_l + "disk temperature is above threshol({temperature_celsius}"))
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
+					.Msg("descr", loc_s + "disk temperature is above threshold")
+					.Msg("msg"  , loc_l + "disk temperature is above threshold: {temperature_celsius}"))
 				.End(Recover("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is back to normal")
-					.Msg("msg"  , loc_l + "disk temperature is back to normal({temperature_celsius})")),
-		]
+					.Msg("msg"  , loc_l + "disk temperature is back to normal: {temperature_celsius}")),
+		}
 	}
 
 #// ----------------------------------------- NODE --------------------------------------------
@@ -75,35 +83,32 @@ def ExperimentalNodeModule(timeout = Minutes(10)):
 	return {
 		"var" : {
 			"la_state" : Interval("la_1", 3.0, 33.0),
-
-			"node_free_fail" : StrictLogicalAnd("task_not_present", "la_free_fail"),
-			"node_busy_fail" : StrictLogicalAnd("task_present", "la_busy_fail"),
 		},
 
 		"trigger" : {
-			"task_present" : Manual()
+			"task_present" : Manual(),
 
-			"high_la_free" : Equals("la_free_state", 1),
-			"high_la_busy" : Equals("la_busy_state", 2),
+			"high_la_free" : Match("la_state", 1),
+			"high_la_busy" : Match("la_state", 2),
 		},
-
-		"react" : [
-			Reaction("notify_high_la_free")
+	}
+"""
+		"react" : {
+			"notify_high_la_free" : Reaction()
 				.Off("task_present")
 				.On("high_la_free", 0, 1000)
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(Info("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "LA exceeded 3.0 for last 1000 seconds, no running task")
 					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 3.0 for last 1000 seconds, no running task")),
 
-			Reaction("notify_high_la_busy")
-				.On(task_present)
+			"notify_high_la_busy" : Reaction()
+				.On("task_present")
 				.On("high_la_busy", 0, 1000)
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(Info("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "LA exceeded 33.0 for last 1000 seconds, user task presents")
 					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 33.0 for last 1000 seconds, user task presents")),
-
-		]
-	}
+		}
+"""
 
 def NodeModule(timeout = Minutes(10)):
 	loc = "{node}"
@@ -111,9 +116,8 @@ def NodeModule(timeout = Minutes(10)):
 	loc_l = "{node}: "
 
 	return {
-		"static" :
-		{
-			"_static_fork_rate_thr" : 50.0,
+		"static" : {
+			"static_fork_rate_thr" : 50.0,
 		},
 
 		"sensor" : {
@@ -131,93 +135,111 @@ def NodeModule(timeout = Minutes(10)):
 		},
 
 		"var" : {
+			"fork_rate" : Speed("forks"),
 			"ntpd_drift_state" : Interval("ntpd_drift", -2.0, 2.0),
 			"temp_state" : Interval("temp", 40, 50),
-			"temp_ok" : NotMatch("temp_state", 2),
 
-			"fork_rate" : Speed("forks"),
-			"fork_rate_ok" : UpperArgThreshold("fork_rate", "_static_fork_rate_thr"),
+			"cd_node_total_warnings" : AStrictMatchCount(True, "self"
+				, "high_fork_rate"
+				, "zombies_present"
+				, "high_temp"),
 
-			"zombies_ok" : Match("zombies", 0),
+			"cd_node_total_errors" : AStrictMatchCount(True, "self"
+				, "tmp_test_error"
+				, "home_test_error"
+				, "clean_test_error"
+				, "nmond_missing"
 
-			"check_tmp_ok"   : Match("check_tmp", 0),
-			"check_home_ok"  : Match("check_home", 0),
-			"check_clean_ok" : Match("check_clean", 0),
+				, "high_nptd_drift"
+				, "very_high_temp"),
+		},
 
-			"check_nmond_ok" : Match("check_nmond", 0),
+		"trigger" : {
+			"high_fork_rate" : GTArg("fork_rate", "static_fork_rate_thr"),
+			"zombies_present" : NotMatch("zombies", 0),
 
-			"cd_node_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
-				, "temp_ok"
-				, "fork_rate_ok"
-				, "zombies_ok"
-				, "check_tmp_ok"
-				, "check_home_ok"
-				, "check_clean_ok"
-				, "check_nmond_ok")
+			"tmp_test_error" : NotMatch("check_tmp", 0),
+			"home_test_error" : NotMatch("check_home", 0),
+			"clean_test_error" : NotMatch("check_clean", 0),
+			"nmond_missing" : NotMatch("check_nmond", 0),
 
+			"high_nptd_drift" : NotMatch("ntpd_drift_state", 1),
+			"high_temp" : NotMatch("temp_state", 0),
+			"very_high_temp" : Match("temp_state", 2),
 		},
 
 		"react" : {
-			Equals("fork_rate_ok", False).Delay(1000) :
-				Warning("tag", "NODE").Msg("loc", loc)
+			"notify_fork_rate" : Reaction()
+				.On("high_fork_rate", 0, 1000)
+				.Begin(Info("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "high fork rate on for last 1000 seconds")
-					.Msg("msg"  , loc_l + "high fork rate on for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"),
+					.Msg("msg"  , loc_l + "high fork rate on for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}")),
 
-			Equals("zombies_ok", False).Delay(1000) :
-				Warning("tag", "NODE").Msg("loc", loc)
+			"notify_zombies_present" : Reaction()
+				.On("zombies_present", 0, 1000)
+				.Begin(Info("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "zombies present for last 1000 seconds")
-					.Msg("msg"  , loc_l + "({zombies}) zombies present for last 1000 seconds, run for your life!"),
+					.Msg("msg"  , loc_l + "({zombies}) zombies present for last 1000 seconds, run for your life!")),
 
-			Equals("check_tmp_ok", False) :
-				( Danger("tag", "NODE").Msg("loc", loc)
+			"notify_tmp_test_error" : Reaction()
+				.On("tmp_test_error")
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not access tmp")
-					.Msg("msg"  , loc_l + "could not access tmp")
-				, Recover("tag", "NODE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "could not access tmp"))
+				.End(Recover("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "tmp is accessible again")
 					.Msg("msg"  , loc_l + "tmp is accessible again")),
-			Equals("check_home_ok", False) :
-				( Danger("tag", "NODE").Msg("loc", loc)
+
+			"notify_home_test_error" : Reaction()
+				.On("home_test_error")
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not access home")
-					.Msg("msg"  , loc_l + "could not access home")
-				, Recover("tag", "NODE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "could not access home"))
+				.End(Recover("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "home is accessible again")
 					.Msg("msg"  , loc_l + "home is accessible again")),
-			Equals("check_clean_ok", False) :
-				( Danger("tag", "NODE").Msg("loc", loc)
+
+			"notify_clean_test_error" : Reaction()
+				.On("clean_test_error")
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not remove file")
-					.Msg("msg"  , loc_l + "could not remove file")
-				, Recover("tag", "NODE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "could not remove file"))
+				.End(Recover("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "remove file worked")
 					.Msg("msg"  , loc_l + "remove file worked")),
 
-			Equals("check_nmond_ok", False) :
-				( Danger("tag", "NODE").Msg("loc", loc)
+			"notify_nmond_missing" : Reaction()
+				.On("nmond_missing")
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "hopsa agent(nmond) not found")
-					.Msg("msg"  , loc_l + "hopsa agent(nmond) not found")
-				, Recover("tag", "NODE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "hopsa agent(nmond) not found"))
+				.End(Recover("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "hopsa agent(nmond) found")
 					.Msg("msg"  , loc_l + "hopsa agent(nmond) found")),
 
-			NotEquals("ntpd_drift_state", 1) :
-				( Danger("tag", "NODE").Msg("loc", loc)
+			"notify_high_nptd_drift" : Reaction()
+				.On("high_nptd_drift")
+				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "ntpd drift is too big")
-					.Msg("msg"  , loc_l + "ntpd drift({ntpd_drift}) is too big")
-				, Recover("tag", "NODE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "ntpd drift is too big: {ntpd_drift}"))
+				.End(Recover("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "ntpd drift is ok")
-					.Msg("msg"  , loc_l + "ntpd drift({ntpd_drift}) is ok")),
+					.Msg("msg"  , loc_l + "ntpd drift is ok: {ntpd_drift}")),
 
-			NotEquals("temp_state", 0) :
-				( Warning("tag", "TEMPERATURE").Msg("loc", loc)
+			"notify_high_temp" : Reaction()
+				.On("high_temp")
+				.Begin(Info("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "bad system temp")
-					.Msg("msg"  , loc_l + "bad system temp")
-				, Recover("tag", "NODE").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "bad system temp"))
+				.End(Recover("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "system temp is ok")
-					.Msg("msg"  , loc_l + "system temp is ok")),
+					.Msg("msg"  , loc_l + "system temp is ok: {temp}")),
 
-			Equals("temp_state", 2) :
-				Critical("tag", "TEMPERATURE").Msg("loc", loc)
+			"notify_very_high_temp" : Reaction()
+				.On("very_high_temp")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "critical system temp")
-					.Msg("msg"  , loc_l + "critical system temp"),
+					.Msg("msg"  , loc_l + "critical system temp: {temp}")),
 		}
 	}
 
@@ -237,19 +259,26 @@ def CpuModule(timeout = Minutes(10)):
 			"temp_state" : Interval("temp", 75, 80),
 		},
 
-		"react" : {
-			NotEquals("temp_state", 0) :
-				( Warning("tag", "TEMPERATURE").Msg("loc", loc)
-					.Msg("descr", loc_s + "bad temp")
-					.Msg("msg"  , loc_l + "bad temp({temp})")
-				, Recover("tag", "TEMPERATURE").Msg("loc", loc)
-					.Msg("descr", loc_s + "temp is ok now ")
-					.Msg("msg"  , loc_l + "temp({temp}) is ok now ")),
+		"trigger" : {
+			"high_temp" : NotMatch("temp_state", 0),
+			"very_high_temp" : Match("temp_state", 2),
+		},
 
-			Equals("temp_state", 2) :
-				Critical("tag", "TEMPERATURE").Msg("loc", loc)
+		"react" : {
+			"notify_high_temp" : Reaction()
+				.On("high_temp")
+				.Begin(Info("tag", "TEMPERATURE").Msg("loc", loc)
+					.Msg("descr", loc_s + "bad temp")
+					.Msg("msg"  , loc_l + "bad temp({temp})"))
+				.End(Recover("tag", "TEMPERATURE").Msg("loc", loc)
+					.Msg("descr", loc_s + "temp is ok now ")
+					.Msg("msg"  , loc_l + "temp is ok: {temp}")),
+
+			"notify_very_high_temp" : Reaction()
+				.On("very_high_temp")
+				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "critical temp")
-					.Msg("msg"  , loc_l + "critical temp({temp})"),
+					.Msg("msg"  , loc_l + "critical temp: {temp}")),
 		}
 	}
 
@@ -270,18 +299,21 @@ def MemoryModule(timeout = Minutes(10)):
 	},
 
 	"var" : {
-		"total_memory_ok" : LowerArgThreshold("total", "req_mem"),
-
-		"cd_mem_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
-			, "total_memory_ok")
+		"cd_memory_total_errors" : AStrictMatchCount(True, "self", "memory_reduced")
 	},
 
+	"trigger" : {
+		"memory_reduced" : LTArg("total", "req_mem"),
+	},
+
+
 	"react" : {
-		Equals("total_memory_ok", False) :
-			( Danger("tag", "MEM").Msg("loc", loc)
+		"notify_memory_reduced" : Reaction()
+			.On("memory_reduced")
+			.Begin(Warning("tag", "MEM").Msg("loc", loc)
 				.Msg("descr", loc_s + "total mem reduced below check value")
-				.Msg("msg"  , loc_l + "total mem({total}) reduced below check value({req_mem})")
-			, Recover("tag", "MEM").Msg("loc", loc)
+				.Msg("msg"  , loc_l + "total mem({total}) reduced below check value({req_mem})"))
+			.End(Recover("tag", "MEM").Msg("loc", loc)
 				.Msg("descr", loc_s + "total mem is ok")
 				.Msg("msg"  , loc_l + "total mem({total}) is ok")),
 	}
@@ -294,9 +326,16 @@ def IBModule(timeout = Minutes(10)):
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
+	def ErrorResponse(name):
+		return (Reaction()
+			.On(name + "_error", 0, 1000)
+			.Begin(Info("tag", "IB").Msg("loc", loc)
+				.Msg("descr", loc_s + "IB errros growing: %s" % (name))
+				.Msg("msg"  , loc_l + "IB errros growing: %s = {%s}"% (name, name))))
+
 	return {
-		"const" : {
-			"_static_ib_err_speed_thr" : 10.0,
+		"static" : {
+			"static_ib_err_speed_thr" : 10.0,
 		},
 
 		"sensor" : {
@@ -334,85 +373,63 @@ def IBModule(timeout = Minutes(10)):
 			"ExcBufOverrunErrors_speed" : Speed("ExcBufOverrunErrors"),
 			"VL15Dropped_speed" : Speed("VL15Dropped"),
 
-			"state_ok" : Match("state", "Active"),
-			"physical_state_ok" : Match("physical_state", "LinkUp"),
+			"cd_ib_total_warnings" : AStrictMatchCount(True, "self"
+				, "SymbolErrors_error"
+				, "RcvErrors_error"
+				, "RcvRemotePhysErrors_error"
+				, "RcvSwRelayErrors_error"
+				, "XmtDiscards_error"
+				, "XmtConstraintErrors_error"
+				, "RcvConstraintErrors_error"
+				, "LinkIntegrityErrors_error"
+				, "ExcBufOverrunErrors_error"
+				, "VL15Dropped_error"),
 
-			"SymbolErrors_check" : UpperArgThreshold("SymbolErrors_speed", "_static_ib_err_speed_thr"),
-			"RcvErrors_check" : UpperArgThreshold("RcvErrors_speed", "_static_ib_err_speed_thr"),
-			"RcvRemotePhysErrors_check" : UpperArgThreshold("RcvRemotePhysErrors_speed", "_static_ib_err_speed_thr"),
-			"RcvSwRelayErrors_check" : UpperArgThreshold("RcvSwRelayErrors_speed", "_static_ib_err_speed_thr"),
-			"XmtDiscards_check" : UpperArgThreshold("XmtDiscards_speed", "_static_ib_err_speed_thr"),
-			"XmtConstraintErrors_check" : UpperArgThreshold("XmtConstraintErrors_speed", "_static_ib_err_speed_thr"),
-			"RcvConstraintErrors_check" : UpperArgThreshold("RcvConstraintErrors_speed", "_static_ib_err_speed_thr"),
-			"LinkIntegrityErrors_check" : UpperArgThreshold("LinkIntegrityErrors_speed", "_static_ib_err_speed_thr"),
-			"ExcBufOverrunErrors_check" : UpperArgThreshold("ExcBufOverrunErrors_speed", "_static_ib_err_speed_thr"),
-			"VL15Dropped_check" : UpperArgThreshold("VL15Dropped_speed", "_static_ib_err_speed_thr"),
+			"cd_ib_total_errors" : AStrictMatchCount(True, "self"
+				, "state_error"
+				, "physical_state_error"),
+		},
 
-			"cd_ib_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
-				, "state_ok"
-				, "physical_state_ok"
-				, "SymbolErrors_check"
-				, "RcvErrors_check"
-				, "RcvRemotePhysErrors_check"
-				, "RcvSwRelayErrors_check"
-				, "XmtDiscards_check"
-				, "XmtConstraintErrors_check"
-				, "RcvConstraintErrors_check"
-				, "LinkIntegrityErrors_check"
-				, "ExcBufOverrunErrors_check"
-				, "VL15Dropped_check"),
+		"trigger" : {
+			"state_error" : NotMatch("state", "Active"),
+			"physical_state_error" : NotMatch("physical_state", "LinkUp"),
+			"ib_errors" : NotMatch("cd_ib_total_warnings", 0),
+
+			"SymbolErrors_error" : GTArg("SymbolErrors_speed", "static_ib_err_speed_thr"),
+			"RcvErrors_error" : GTArg("RcvErrors_speed", "static_ib_err_speed_thr"),
+			"RcvRemotePhysErrors_error" : GTArg("RcvRemotePhysErrors_speed", "static_ib_err_speed_thr"),
+			"RcvSwRelayErrors_error" : GTArg("RcvSwRelayErrors_speed", "static_ib_err_speed_thr"),
+			"XmtDiscards_error" : GTArg("XmtDiscards_speed", "static_ib_err_speed_thr"),
+			"XmtConstraintErrors_error" : GTArg("XmtConstraintErrors_speed", "static_ib_err_speed_thr"),
+			"RcvConstraintErrors_error" : GTArg("RcvConstraintErrors_speed", "static_ib_err_speed_thr"),
+			"LinkIntegrityErrors_error" : GTArg("LinkIntegrityErrors_speed", "static_ib_err_speed_thr"),
+			"ExcBufOverrunErrors_error" : GTArg("ExcBufOverrunErrors_speed", "static_ib_err_speed_thr"),
+			"VL15Dropped_error" : GTArg("VL15Dropped_speed", "static_ib_err_speed_thr"),
 		},
 
 		"react" : {
-			Equals("state_ok", False) :
-				Danger("tag", "IB").Msg("loc", loc)
+			"notify_state_error" : Reaction()
+				.On("state_error")
+				.Begin(Warning("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: state")
-					.Msg("msg"  , loc_l + "IB link problem: {state}"),
-			Equals("physical_state", False) :
-				Danger("tag", "IB").Msg("loc", loc)
+					.Msg("msg"  , loc_l + "IB link problem: {state}")),
+			
+			"notify_physical_state_error" : Reaction()
+				.On("physical_state_error")
+				.Begin(Warning("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: physical state")
-					.Msg("msg"  , loc_l + "IB link problem: {physical_state}"),
+					.Msg("msg"  , loc_l + "IB link problem: {physical_state}")),
 
-			NotEquals("SymbolErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: SymbolErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: SymbolErrors({SymbolErrors})"),
-			NotEquals("RcvErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: RcvErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: RcvErrors({RcvErrors})"),
-			NotEquals("RcvRemotePhysErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: RcvRemotePhysErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: RcvRemotePhysErrors({RcvRemotePhysErrors})"),
-			NotEquals("RcvSwRelayErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: RcvSwRelayErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: RcvSwRelayErrors({RcvSwRelayErrors})"),
-			NotEquals("XmtDiscards_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: XmtDiscards")
-					.Msg("msg"  , loc_l + "IB errros growing: XmtDiscards({XmtDiscards})"),
-			NotEquals("XmtConstraintErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: XmtConstraintErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: XmtConstraintErrors({XmtConstraintErrors})"),
-			NotEquals("RcvConstraintErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: RcvConstraintErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: RcvConstraintErrors({RcvConstraintErrors})"),
-			NotEquals("LinkIntegrityErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: LinkIntegrityErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: LinkIntegrityErrors({LinkIntegrityErrors})"),
-			NotEquals("ExcBufOverrunErrors_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: ExcBufOverrunErrors")
-					.Msg("msg"  , loc_l + "IB errros growing: ExcBufOverrunErrors({ExcBufOverrunErrors})"),
-			NotEquals("VL15Dropped_check", False).Delay(1000) :
-				Warning("tag", "IB").Msg("loc", loc)
-					.Msg("descr", loc_s + "IB errros growing: VL15Dropped")
-					.Msg("msg"  , loc_l + "IB errros growing: VL15Dropped({VL15Dropped})"),
+			"notify_SymbolErrors_error" : ErrorResponse("SymbolErrors"),
+			"notify_RcvErrors_error" : ErrorResponse("RcvErrors"),
+			"notify_RcvRemotePhysErrors_error" : ErrorResponse("RcvRemotePhysErrors"),
+			"notify_RcvSwRelayErrors_error" : ErrorResponse("RcvSwRelayErrors"),
+			"notify_XmtDiscards_error" : ErrorResponse("XmtDiscards"),
+			"notify_XmtConstraintErrors_error" : ErrorResponse("XmtConstraintErrors"),
+			"notify_RcvConstraintErrors_error" : ErrorResponse("RcvConstraintErrors"),
+			"notify_LinkIntegrityErrors_error" : ErrorResponse("LinkIntegrityErrors"),
+			"notify_ExcBufOverrunErrors_error" : ErrorResponse("ExcBufOverrunErrors"),
+			"notify_VL15Dropped_error" : ErrorResponse("VL15Dropped"),
 		}
 	}
 
@@ -421,9 +438,16 @@ def EthModule(timeout = Minutes(10)):
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
+	def ErrorResponse(name):
+		return (Reaction()
+			.On(name + "_growing", 0, 1000)
+			.Begin(Info("tag", "ETH").Msg("loc", loc)
+				.Msg("descr", loc_s + "eth errors growing: %s" % (name))
+				.Msg("msg"  , loc_l + "eth errors growing: %s = {%s}"% (name, name))))
+
 	return {
 		"static" : {
-			"_static_eth_err_speed_thr" : 10.0
+			"static_eth_err_speed_thr" : 10.0
 		},
 
 		"sensor" : {
@@ -441,38 +465,25 @@ def EthModule(timeout = Minutes(10)):
 			"tx_dropped_speed" : Speed("tx_dropped"),
 			"collisions_speed" : Speed("collisions"),
 
-			"check_rx_errors" : UpperArgThreshold("rx_errors_speed", "_static_eth_err_speed_thr"),
-			"check_tx_errors" : UpperArgThreshold("tx_errors_speed", "_static_eth_err_speed_thr"),
+			"cd_eth_total_warnings" : AStrictMatchCount(True, "self"
+				, "rx_errors_growing"
+				, "tx_errors_growing"
+				, "tx_dropped_growing"
+				, "collisions_growing")
+		},
 
-			"check_tx_dropped" : UpperArgThreshold("tx_dropped_speed", "_static_eth_err_speed_thr"),
-			"check_collisions" : UpperArgThreshold("collisions_speed", "_static_eth_err_speed_thr"),
+		"trigger" : {
+			"rx_errors_growing" : GTArg("rx_errors_speed", "static_eth_err_speed_thr"),
+			"tx_errors_growing" : GTArg("tx_errors_speed", "static_eth_err_speed_thr"),
 
-			"cd_eth_total_errors" : AStrictNotMatchCount(True, EDependencyType.SELF
-				, "check_rx_errors"
-				, "check_tx_errors"
-				, "check_tx_dropped"
-				, "check_collisions")
+			"tx_dropped_growing" : GTArg("tx_dropped_speed", "static_eth_err_speed_thr"),
+			"collisions_growing" : GTArg("collisions_speed", "static_eth_err_speed_thr"),
 		},
 
 		"react" : {
-			Equals("check_rx_errors", False).Delay(1000) :
-				Warning("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "recieve errors growing fast for last 1000 seconds")
-					.Msg("msg"  , loc_l + "recieve errors({rx_errors}) growing fast for last 1000 seconds"),
-
-			Equals("check_tx_errors", False).Delay(1000) :
-				Warning("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "transm errors growing fast for last 1000 seconds")
-					.Msg("msg"  , loc_l + "transm errors({tx_errors}) growing fast for last 1000 seconds"),
-
-			Equals("check_tx_dropped", False).Delay(1000) :
-				Warning("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "tranms dropped growing fast for last 1000 seconds")
-					.Msg("msg"  , loc_l + "tranms dropped({tx_dropped}) growing fast for last 1000 seconds"),
-
-			Equals("check_collisions", False).Delay(1000) :
-				Warning("tag", "ETH").Msg("loc", loc)
-					.Msg("descr", loc_s + "collisions growing fast for last 1000 seconds")
-					.Msg("msg"  , loc_l + "collisions({collisions}) growing fast for last 1000 seconds"),
+			"notify_rx_errors_growing" : ErrorResponse("rx_errors"),
+			"notify_tx_errors_growing" : ErrorResponse("tx_errors"),
+			"notify_tx_dropped_growing" : ErrorResponse("tx_dropped"),
+			"notify_collisions_growing" : ErrorResponse("collisions"),
 		}
 	}
