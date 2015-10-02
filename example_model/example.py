@@ -14,14 +14,16 @@ CPU_PER_NODE = 2
 # to them attributes from the collectd library module
 nodes = CreateObjects(NODES, lib_collectd.NodeModule()
 	, { "const" : {"type" : "node"}})
+GenID(nodes)
 
 # assign to every object ip from the file
 CSVReader.Declare(nodes, "example_model/ip.csv")
 
 # declare a ring connection using data in csv file
-EveryWithEvery(CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 0)
+node_node_links = EveryWithEvery(CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 0)
 	, CSVReader.OrderByColumn(nodes, "example_model/ip_ring.csv", 1)
 	, "ethernet")
+GenID(node_node_links, "n-n")
 
 # create 8 nodes and assign to them properties
 # declared in example_lib.py
@@ -32,6 +34,7 @@ cpus = CreateObjects(NODES * CPU_PER_NODE, my_module
 		"trigger" : my_trigger,
 		"react" : my_react
 	})
+GenID(cpus)
 
 # add attribute "lid" to each cpu, that equals
 # its position in the list by modulo CPU_PER_NODE
@@ -40,6 +43,7 @@ Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 
 # connect every node with 2 cpus using
 # two links for connection with specified types
-EveryToChunks(nodes, cpus, ["contain", "chill"])
+node_cpu_links = EveryToChunks(nodes, cpus, ["contain", "chill"])
+GenID(node_cpu_links, "n-c")
 
 DiscoverConnect(cpus, [("type", "cpu")], [("type", "contain"), ("type", "chill"), ("type", "ethernet")], "type", ["^.*cpu-node-node-cpu.*$"], "mega", 4)

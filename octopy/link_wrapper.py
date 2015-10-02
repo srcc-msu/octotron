@@ -57,7 +57,7 @@ def Call(name, types, modules, *args):
 
 		links = CallFactoryMethod(factory, name, args)
 
-		result.append(links)
+		result = result.append(links)
 
 	return result
 
