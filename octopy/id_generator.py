@@ -13,7 +13,7 @@ def GenID(target, format = "{type}"):
 	else:
 		to_process = target
 
-	for i, entity in enumerate(target):
+	for i, entity in enumerate(to_process):
 		user_str = format
 
 		while prog.search(user_str):

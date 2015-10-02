@@ -23,7 +23,6 @@ def CreateObjects(count, *modules):
 	factory = factory.Sensors  (ConvertSensors (params["sensor"]))
 	factory = factory.Triggers (ConvertTriggers(params["trigger"]))
 	factory = factory.Vars     (ConvertVars    (params["var"]))
-
 	factory = factory.Reactions(ConvertReacts(params["react"]))
 
 	return factory.Create(count)
@@ -38,5 +37,4 @@ def UpdateObject(object, *modules):
 	object.GetBuilder().DeclareSensor(ConvertSensors(params["sensor"]))
 	object.GetBuilder().DeclareVar(ConvertVars(params["var"]))
 	object.GetBuilder().DeclareTrigger(ConvertTriggers(params["trigger"]))
-
-	object.GetBuilder().AddReaction(ConvertReacts(params["react"]))
+	object.GetBuilder().DeclareReaction(ConvertReacts(params["react"]))
