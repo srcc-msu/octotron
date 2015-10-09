@@ -34,7 +34,6 @@ cpus = CreateObjects(NODES * CPU_PER_NODE, my_module
 		"trigger" : my_trigger,
 		"react" : my_react
 	})
-GenID(cpus)
 
 # add attribute "lid" to each cpu, that equals
 # its position in the list by modulo CPU_PER_NODE
@@ -44,6 +43,7 @@ Enumerator.Sequence(cpus, "lid", CPU_PER_NODE)
 # connect every node with 2 cpus using
 # two links for connection with specified types
 node_cpu_links = EveryToChunks(nodes, cpus, ["contain", "chill"])
+GenNestedID(cpus, nodes)
 GenID(node_cpu_links, "n-c")
 
 DiscoverConnect(cpus, [("type", "cpu")], [("type", "contain"), ("type", "chill"), ("type", "ethernet")], "type", ["^.*cpu-node-node-cpu.*$"], "mega", 4)
