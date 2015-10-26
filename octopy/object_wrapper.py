@@ -1,6 +1,7 @@
 from octopy.utils import *
 
 from ru.parallel.octotron.generators import ObjectFactory
+from ru.parallel.octotron.core.collections import ModelObjectList as ModelObjectList
 
 from octopy.const_wrapper import *
 from octopy.sensor_wrapper import *
@@ -25,7 +26,13 @@ def CreateObjects(count, *modules):
 	factory = factory.Vars     (ConvertVars    (params["var"]))
 	factory = factory.Reactions(ConvertReacts(params["react"]))
 
-	return factory.Create(count)
+	objects = factory.Create(count)
+
+	CreateObjects.all_objects = CreateObjects.all_objects.append(objects)
+
+	return objects
+
+CreateObjects.all_objects = ModelObjectList()
 
 def UpdateObject(object, *modules):
 	params = MergeDicts(modules)

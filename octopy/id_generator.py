@@ -2,6 +2,8 @@ import re
 
 from ru.parallel.octotron.core.collections import ModelList as ModelList
 
+from octopy.object_wrapper import *
+
 ID_NAME = "_id"
 
 prog = re.compile("{[^}]+}")
@@ -51,3 +53,24 @@ def GenNestedID(targets, parents, format = "{type}"):
 			if target_parent in parents:
 				target_parent_id = target_parent.GetAttribute(ID_NAME).GetString()
 				GenID(entity, target_parent_id + "_" + format, n = i)
+import atexit
+
+def __id_checker():
+	error = False
+
+	for object in CreateObjects.all_objects:
+		if not object.TestAttribute(ID_NAME):
+			error = True
+			msg = "uid missing: "
+
+			for attribute in object.GetAttributes():
+				msg += "{0} = {1}, ".format(attribute.GetName(), attribute.GetStringValue())
+
+			print >> sys.stderr, msg
+
+	if error:
+		raise RuntimeException("some uids are missing")
+	else:
+		print "all uids present, checked: ", CreateObjects.all_objects.size()
+
+atexit.register(__id_checker)
