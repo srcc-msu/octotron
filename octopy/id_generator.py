@@ -1,3 +1,4 @@
+import sys
 import re
 
 from ru.parallel.octotron.core.collections import ModelList as ModelList
@@ -63,13 +64,13 @@ def __id_checker():
 			error = True
 			msg = "uid missing: "
 
-			for attribute in object.GetAttributes():
-				msg += "{0} = {1}, ".format(attribute.GetName(), attribute.GetStringValue())
+			for attribute in object.GetConst():
+				msg += attribute.GetName() + " : " + attribute.ValueToString() + "\n"
 
 			print >> sys.stderr, msg
 
 	if error:
-		raise RuntimeException("some uids are missing")
+		raise RuntimeError("some uids are missing")
 	else:
 		print "all uids present, checked: ", CreateObjects.all_objects.size()
 
