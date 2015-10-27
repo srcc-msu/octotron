@@ -1,0 +1,11 @@
++ set -u
++ :
++ date
+Пн. окт. 26 20:12:15 MSK 2015
+++ mktemp
++ file=/tmp/tmp.JRmGqax51n
++ bash ./stream.sh
++ python ./convert.py
++ python utils/import_url_file.py -i127.0.0.1 -p4448 -f/tmp/tmp.JRmGqax51n --usr admin --pwd admin
++ rm /tmp/tmp.JRmGqax51n
++ sleep 180
