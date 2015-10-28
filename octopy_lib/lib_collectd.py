@@ -10,7 +10,7 @@ def DiskModule(timeout = Minutes(10)):
 			.On(name + "_error")
 			.Begin(Info("tag", "DISK").Msg("loc", loc)
 				.Msg("descr", loc_s + "disk error: %s" % (name))
-				.Msg("msg"  , loc_l + "disk_error: %s = {%s}" % (name, name))))
+				.Msg("msg"  , loc_l + "disk error: %s = {%s}" % (name, name))))
 
 	return {
 		"static" : {
@@ -70,6 +70,27 @@ def DiskModule(timeout = Minutes(10)):
 				.End(RWarning("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is back to normal")
 					.Msg("msg"  , loc_l + "disk temperature is back to normal: {temperature_celsius}")),
+		}
+	}
+
+def DiskProphecy():
+	loc = "{in_n:node}"
+	loc_s = "{in_n:type} {type}: "
+	loc_l = "{in_n:node} {type}: "
+
+	def Prophecy(name, repeat = 0, dealy = 0):
+		return (Reaction()
+			.On(name, repeat, delay)
+			.Begin(Info("tag", "DISK").Msg("loc", loc)
+				.Msg("descr", loc_s + "disk is doomed!")
+				.Msg("msg"  , loc_l + "disk is doomed!")))
+
+	return {
+		"react" : {
+			"forecast_1" : Prophecy("offline_uncorrectable_error"),
+			"forecast_2" : Prophecy("reallocated_sector_ct"),
+			"forecast_3" : Prophecy("spin_retry_count", 3),
+			"forecast_4" : Prophecy("bad_temperature", 0, Minutes(30)),
 		}
 	}
 
@@ -445,6 +466,35 @@ def IBModule(timeout = Minutes(10)):
 		}
 	}
 
+
+def IBProphecy():
+	loc = "{in_n:node}"
+	loc_s = "{in_n:type} {type}: "
+	loc_l = "{in_n:node} {type}: "
+
+	def Prophecy(name, repeat = 0, dealy = 0):
+		return (Reaction()
+			.On(name, repeat, delay)
+			.Begin(Info("tag", "NODE").Msg("loc", loc)
+				.Msg("descr", loc_s + "ethernet is doomed!")
+				.Msg("msg"  , loc_l + "ethernet is doomed!")))
+
+	return {
+		"react" : {
+			"forecast_ib1" : Prophecy("SymbolErrors_error", 0, Minutes(30)),
+			"forecast_ib2" : Prophecy("RcvErrors_error", 0, Minutes(30)),
+			"forecast_ib3" : Prophecy("RcvRemotePhysErrors_error", 0, Minutes(30)),
+			"forecast_ib4" : Prophecy("RcvSwRelayErrors_error", 0, Minutes(30)),
+			"forecast_ib5" : Prophecy("XmtDiscards_error", 0, Minutes(30)),
+			"forecast_ib6" : Prophecy("XmtConstraintErrors_error", 0, Minutes(30)),
+			"forecast_ib7" : Prophecy("RcvConstraintErrors_error", 0, Minutes(30)),
+			"forecast_ib8" : Prophecy("LinkIntegrityErrors_error", 0, Minutes(30)),
+			"forecast_ib9" : Prophecy("ExcBufOverrunErrors_error", 0, Minutes(30)),
+			"forecast_ib10" : Prophecy("VL15Dropped_error", 0, Minutes(30)),
+		}
+	}
+
+
 def EthModule(timeout = Minutes(10)):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
@@ -497,5 +547,26 @@ def EthModule(timeout = Minutes(10)):
 			"notify_tx_errors_growing" : ErrorResponse("tx_errors"),
 			"notify_tx_dropped_growing" : ErrorResponse("tx_dropped"),
 			"notify_collisions_growing" : ErrorResponse("collisions"),
+		}
+	}
+
+def EthProphecy():
+	loc = "{in_n:node}"
+	loc_s = "{in_n:type} {type}: "
+	loc_l = "{in_n:node} {type}: "
+
+	def Prophecy(name, repeat = 0, dealy = 0):
+		return (Reaction()
+			.On(name, repeat, delay)
+			.Begin(Info("tag", "NODE").Msg("loc", loc)
+				.Msg("descr", loc_s + "ethernet is doomed!")
+				.Msg("msg"  , loc_l + "ethernet is doomed!")))
+
+	return {
+		"react" : {
+			"forecast_eth1" : Prophecy("rx_errors_growing", 0, Minutes(30)),
+			"forecast_eth2" : Prophecy("tx_errors_growing", 0, Minutes(30)),
+			"forecast_eth3" : Prophecy("tx_dropped_growing", 0, Minutes(30)),
+			"forecast_eth4" : Prophecy("collisions_growing", 0, Minutes(30)),
 		}
 	}
