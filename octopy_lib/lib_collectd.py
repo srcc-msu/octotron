@@ -78,7 +78,7 @@ def DiskProphecy():
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
-	def Prophecy(name, repeat = 0, dealy = 0):
+	def Prophecy(name, repeat = 0, delay = 0):
 		return (Reaction()
 			.On(name, repeat, delay)
 			.Begin(Info("tag", "DISK").Msg("loc", loc)
@@ -88,8 +88,8 @@ def DiskProphecy():
 	return {
 		"react" : {
 			"forecast_1" : Prophecy("offline_uncorrectable_error"),
-			"forecast_2" : Prophecy("reallocated_sector_ct"),
-			"forecast_3" : Prophecy("spin_retry_count", 3),
+			"forecast_2" : Prophecy("reallocated_sector_ct_error"),
+			"forecast_3" : Prophecy("spin_retry_count_error", 3),
 			"forecast_4" : Prophecy("bad_temperature", 0, Minutes(30)),
 		}
 	}
@@ -472,7 +472,7 @@ def IBProphecy():
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
-	def Prophecy(name, repeat = 0, dealy = 0):
+	def Prophecy(name, repeat = 0, delay = 0):
 		return (Reaction()
 			.On(name, repeat, delay)
 			.Begin(Info("tag", "NODE").Msg("loc", loc)
@@ -555,7 +555,7 @@ def EthProphecy():
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
-	def Prophecy(name, repeat = 0, dealy = 0):
+	def Prophecy(name, repeat = 0, delay = 0):
 		return (Reaction()
 			.On(name, repeat, delay)
 			.Begin(Info("tag", "NODE").Msg("loc", loc)
