@@ -24,7 +24,7 @@ def InitDuplication(host1, host2, timeout = Minutes(10)):
 						.Msg("loc", "{host}")
 						.Msg("descr", "octotron on {host} failed one check")
 						.Msg("msg", "don't panic - might be just a false alarm"))
-					.End(Recover("tag", "OCTOTRON")
+					.End(RDanger("tag", "OCTOTRON")
 						.Msg("loc", "{host}")
 						.Msg("descr", "octotron on {host} is ok")
 						.Msg("msg", "that was close..")),

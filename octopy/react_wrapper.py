@@ -19,7 +19,7 @@ def ConvertReacts(var):
 	return ReactsFromDict(MergeDicts(var))
 
 def Info(tag, message):
-	return Response("INFO", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_warning")
+	return Response("INFO", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_info")
 
 def Warning(tag, message):
 	return Response("WARNING", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_warning")
@@ -30,8 +30,19 @@ def Danger(tag, message):
 def Critical(tag, message):
 	return Response("CRITICAL", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_critical")
 
-def Recover(tag, message):
-	return Response("RECOVER", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_recover")
+
+def RInfo(tag, message):
+	return Response("RECOVER_INFO", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_info")
+
+def RWarning(tag, message):
+	return Response("RECOVER_WARNING", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_warning")
+
+def RDanger(tag, message):
+	return Response("RECOVER_DANGER", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_danger")
+
+def RCritical(tag, message):
+	return Response("RECOVER_CRITICAL", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_critical")
+
 
 def Prophecy(tag, message):
 	return Response("PROPHECY", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_prophecy")

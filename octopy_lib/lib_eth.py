@@ -12,13 +12,19 @@ def LinkModule():
 				.On("duplex_mismatch")
 				.Begin(Warning("tag", "ETH").Msg("loc", "{left.in_n:ip} {right.in_n:ip}")
 					.Msg("descr", "mismatch duplex mode on two sides of the link")
-					.Msg("msg"  , "mismatch duplex mode on two sides of the link from {left:ip} to {right:ip}")),
+					.Msg("msg"  , "mismatch duplex mode on two sides of the link: from {left:ip} to {right:ip}"))
+				.End(RWarning("tag", "ETH").Msg("loc", "{left.in_n:ip} {right.in_n:ip}")
+					.Msg("descr", "duplex mode on two sides of the link is ok")
+					.Msg("msg"  , "duplex mode on two sides of the link is ok: from {left:ip} to {right:ip}")),
 
 			"notify_speed_mismatch" : Reaction()
 				.On("speed_mismatch")
 				.Begin(Warning("tag", "ETH").Msg("loc", "{left.in_n:ip} {right.in_n:ip}")
 					.Msg("descr", "mismatch speed on two sides of the link")
-					.Msg("msg"  , "mismatch speed on two sides of the link  from {left:ip} to {right:ip}"))
+					.Msg("msg"  , "mismatch speed on two sides of the link: from {left:ip} to {right:ip}"))
+				.End(RWarning("tag", "ETH").Msg("loc", "{left.in_n:ip} {right.in_n:ip}")
+					.Msg("descr", "speed on two sides of the link is ok")
+					.Msg("msg"  , "speed on two sides of the link is ok: from {left:ip} to {right:ip}"))
 		}
 	}
 
@@ -83,7 +89,10 @@ def PortDuplexModule(loc = None, loc_s = None, loc_l = None):
 				.On("duplex_mismatch")
 				.Begin(Warning("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "wrong duplex mode")
-					.Msg("msg"  , loc_l + "wrong duplex mode: {duplex}")),
+					.Msg("msg"  , loc_l + "wrong duplex mode: {duplex}"))
+				.End(RWarning("tag", "ETH").Msg("loc", loc)
+					.Msg("descr", loc_s + "duplex mode is ok")
+					.Msg("msg"  , loc_l + "duplex mode is ok: {duplex}")),
 		}
 	}
 
@@ -102,6 +111,9 @@ def PortSpeedModule(loc = None, loc_s = None, loc_l = None):
 				.On("speed_mismatch")
 				.Begin(Warning("tag", "ETH").Msg("loc", loc)
 					.Msg("descr", loc_s + "wrong speed")
-					.Msg("msg"  , loc_l + "wrong speed: {speed} != {speed_req}")),
+					.Msg("msg"  , loc_l + "wrong speed: {speed} != {speed_req}"))
+				.End(RWarning("tag", "ETH").Msg("loc", loc)
+					.Msg("descr", loc_s + "speed is ok")
+					.Msg("msg"  , loc_l + "speed is ok: {speed} != {speed_req}")),
 		}
 	}

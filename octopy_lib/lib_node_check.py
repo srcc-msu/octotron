@@ -20,7 +20,7 @@ def NodeCheckModule(timeout = Hours(1)):
 				.Begin(Warning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: failure: mpi")
 					.Msg("msg"  , "{node}: failure: mpi"))
-				.End(Recover("tag", "NODE").Msg("loc", "{node}")
+				.End(RWarning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: is good: mpi")
 					.Msg("msg"  , "{node}: is good: mpi")),
 
@@ -29,7 +29,7 @@ def NodeCheckModule(timeout = Hours(1)):
 				.Begin(Warning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: failure: ib check")
 					.Msg("msg"  , "{node}: failure: ib check"))
-				.End(Recover("tag", "NODE").Msg("loc", "{node}")
+				.End(RWarning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: is good: ib check")
 					.Msg("msg"  , "{node}: is good: ib check")),
 
@@ -38,7 +38,7 @@ def NodeCheckModule(timeout = Hours(1)):
 				.Begin(Warning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: failure: node is not visible in subnet manager")
 					.Msg("msg"  , "{node}: failure: node is not visible in subnet manager"))
-				.End(Recover("tag", "NODE").Msg("loc", "{node}")
+				.End(RWarning("tag", "NODE").Msg("loc", "{node}")
 					.Msg("descr", "{type}: is good: node is visible in subnet manager")
 					.Msg("msg"  , "{node}: is good: node is visible in subnet manager")),
 		}
@@ -69,24 +69,36 @@ def ChassisNodeCheck(failed_nodes = 8, loc = "{id}"):
 				.On("many_mpi_check_failed")
 				.Begin(Danger("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", "{type}: many nodes failed mpi check")
-					.Msg("msg", loc + ": many nodes failed mpi check")),
+					.Msg("msg", loc + ": many nodes failed mpi check"))
+				.End(RDanger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: nodes mpi check is mostly ok")
+					.Msg("msg", loc + ": nodes mpi check is mostly ok")),
 
 			"notify_many_ib_check_failed" : Reaction()
 				.On("many_ib_check_failed")
 				.Begin(Danger("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", "{type}: many nodes failed ib check")
-					.Msg("msg", loc + ": many nodes failed ib check")),
+					.Msg("msg", loc + ": many nodes failed ib check"))
+				.End(RDanger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: nodes ib check is mostly ok")
+					.Msg("msg", loc + ": nodes ib check is mostly ok")),
 
 			"notify_many_ib_visibility_check_failed" : Reaction()
 				.On("many_ib_visibility_check_failed")
 				.Begin(Danger("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", "{type}: many nodes failed ib visibility check")
-					.Msg("msg", loc + ": many nodes failed ib visibility check")),
+					.Msg("msg", loc + ": many nodes failed ib visibility check"))
+				.End(RDanger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: nodes ib visibility check is mostly ok")
+					.Msg("msg", loc + ": nodes ib visibility check is mostly ok")),
 
 			"notify_many_ping_failed" : Reaction()
 				.On("many_ping_failed")
 				.Begin(Danger("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", "{type}: many nodes failed ping check")
-					.Msg("msg", loc + ": many nodes failed ping check")),
+					.Msg("msg", loc + ": many nodes failed ping check"))
+				.End(RDanger("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", "{type}: nodes ping check is mostly ok")
+					.Msg("msg", loc + ": nodes ping check is mostly ok")),
 		}
 	}

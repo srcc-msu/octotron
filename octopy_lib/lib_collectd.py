@@ -67,7 +67,7 @@ def DiskModule(timeout = Minutes(10)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is above threshold")
 					.Msg("msg"  , loc_l + "disk temperature is above threshold: {temperature_celsius}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", loc)
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is back to normal")
 					.Msg("msg"  , loc_l + "disk temperature is back to normal: {temperature_celsius}")),
 		}
@@ -173,20 +173,26 @@ def NodeModule(timeout = Minutes(10)):
 				.On("high_fork_rate", 0, 1000)
 				.Begin(Info("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "high fork rate on for last 1000 seconds")
-					.Msg("msg"  , loc_l + "high fork rate on for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}")),
+					.Msg("msg"  , loc_l + "high fork rate on for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"))
+				.End(RInfo("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", loc_s + "fork rate is ok")
+					.Msg("msg"  , loc_l + "fork rate is ok, forks: {forks}, fork_rate: {fork_rate}")),
 
 			"notify_zombies_present" : Reaction()
 				.On("zombies_present", 0, 1000)
 				.Begin(Info("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "zombies present for last 1000 seconds")
-					.Msg("msg"  , loc_l + "({zombies}) zombies present for last 1000 seconds, run for your life!")),
+					.Msg("msg"  , loc_l + "({zombies}) zombies present for last 1000 seconds, run for your life!"))
+				.End(RInfo("tag", "NODE").Msg("loc", loc)
+					.Msg("descr", loc_s + "zombies are ok")
+					.Msg("msg"  , loc_l + "zombies are ok({zombies})")),
 
 			"notify_tmp_test_error" : Reaction()
 				.On("tmp_test_error")
 				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not access tmp")
 					.Msg("msg"  , loc_l + "could not access tmp"))
-				.End(Recover("tag", "NODE").Msg("loc", loc)
+				.End(RWarning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "tmp is accessible again")
 					.Msg("msg"  , loc_l + "tmp is accessible again")),
 
@@ -195,7 +201,7 @@ def NodeModule(timeout = Minutes(10)):
 				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not access home")
 					.Msg("msg"  , loc_l + "could not access home"))
-				.End(Recover("tag", "NODE").Msg("loc", loc)
+				.End(RWarning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "home is accessible again")
 					.Msg("msg"  , loc_l + "home is accessible again")),
 
@@ -204,7 +210,7 @@ def NodeModule(timeout = Minutes(10)):
 				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not remove file")
 					.Msg("msg"  , loc_l + "could not remove file"))
-				.End(Recover("tag", "NODE").Msg("loc", loc)
+				.End(RWarning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "remove file worked")
 					.Msg("msg"  , loc_l + "remove file worked")),
 
@@ -213,7 +219,7 @@ def NodeModule(timeout = Minutes(10)):
 				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "hopsa agent(nmond) not found")
 					.Msg("msg"  , loc_l + "hopsa agent(nmond) not found"))
-				.End(Recover("tag", "NODE").Msg("loc", loc)
+				.End(RWarning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "hopsa agent(nmond) found")
 					.Msg("msg"  , loc_l + "hopsa agent(nmond) found")),
 
@@ -222,7 +228,7 @@ def NodeModule(timeout = Minutes(10)):
 				.Begin(Warning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "ntpd drift is too big")
 					.Msg("msg"  , loc_l + "ntpd drift is too big: {ntpd_drift}"))
-				.End(Recover("tag", "NODE").Msg("loc", loc)
+				.End(RWarning("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "ntpd drift is ok")
 					.Msg("msg"  , loc_l + "ntpd drift is ok: {ntpd_drift}")),
 
@@ -231,7 +237,7 @@ def NodeModule(timeout = Minutes(10)):
 				.Begin(Info("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "bad system temp")
 					.Msg("msg"  , loc_l + "bad system temp"))
-				.End(Recover("tag", "NODE").Msg("loc", loc)
+				.End(RInfo("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "system temp is ok")
 					.Msg("msg"  , loc_l + "system temp is ok: {temp}")),
 
@@ -270,7 +276,7 @@ def CpuModule(timeout = Minutes(10)):
 				.Begin(Info("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "bad temp")
 					.Msg("msg"  , loc_l + "bad temp({temp})"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", loc)
+				.End(RInfo("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "temp is ok now ")
 					.Msg("msg"  , loc_l + "temp is ok: {temp}")),
 
@@ -313,7 +319,7 @@ def MemoryModule(timeout = Minutes(10)):
 			.Begin(Warning("tag", "MEM").Msg("loc", loc)
 				.Msg("descr", loc_s + "total mem reduced below check value")
 				.Msg("msg"  , loc_l + "total mem({total}) reduced below check value({req_mem})"))
-			.End(Recover("tag", "MEM").Msg("loc", loc)
+			.End(RWarning("tag", "MEM").Msg("loc", loc)
 				.Msg("descr", loc_s + "total mem is ok")
 				.Msg("msg"  , loc_l + "total mem({total}) is ok")),
 	}
@@ -412,13 +418,19 @@ def IBModule(timeout = Minutes(10)):
 				.On("state_error")
 				.Begin(Warning("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: state")
-					.Msg("msg"  , loc_l + "IB link problem: {state}")),
+					.Msg("msg"  , loc_l + "IB link problem: {state}"))
+				.End(RWarning("tag", "IB").Msg("loc", loc)
+					.Msg("descr", loc_s + "IB link state is ok")
+					.Msg("msg"  , loc_l + "IB link state is ok: {state}")),
 			
 			"notify_physical_state_error" : Reaction()
 				.On("physical_state_error")
 				.Begin(Warning("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: physical state")
-					.Msg("msg"  , loc_l + "IB link problem: {physical_state}")),
+					.Msg("msg"  , loc_l + "IB link problem: {physical_state}"))
+				.End(RWarning("tag", "IB").Msg("loc", loc)
+					.Msg("descr", loc_s + "IB link physical state is ok")
+					.Msg("msg"  , loc_l + "IB link physical state is ok: {physical_state}")),
 
 			"notify_SymbolErrors_error" : ErrorResponse("SymbolErrors"),
 			"notify_RcvErrors_error" : ErrorResponse("RcvErrors"),

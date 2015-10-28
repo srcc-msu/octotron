@@ -32,5 +32,9 @@ def CleoModule(timeout = Minutes(10)):
 					.Msg("loc", "{queue_name}")
 					.Msg("descr", "{type}: total tasks count is low")
 					.Msg("msg"  , "{type}({queue_name}): total tasks count is low({tasks_total})"))
+				.End(RWarning("tag", "QUEUE")
+					.Msg("loc", "{queue_name}")
+					.Msg("descr", "{type}: total tasks count is ok")
+					.Msg("msg"  , "{type}({queue_name}): total tasks count is ok({tasks_total})"))
 		}
 	}

@@ -1,6 +1,6 @@
 from octopy import *
 
-def PingModule(timeout = Minutes(10), key = "ip", status = Warning):
+def PingModule(timeout = Minutes(10), key = "ip", status = Warning, rstatus = RWarning):
 	return {
 		"sensor" : {
 			"ping" : Boolean(timeout),
@@ -16,13 +16,13 @@ def PingModule(timeout = Minutes(10), key = "ip", status = Warning):
 				.Begin(status("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: ping failed three times")
 					.Msg("msg"  , "{type}[{" + key + "}]: ping failed three times"))
-				.End(Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
+				.End(rstatus("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: ping ok")
 					.Msg("msg"  , "{type}[{" + key + "}]: ping ok")),
 		}
 	}
 
-def SshModule(timeout = Minutes(10), key = "ip", status = Warning):
+def SshModule(timeout = Minutes(10), key = "ip", status = Warning, rstatus = RWarning):
 	return {
 		"sensor" : {
 			"ssh" : Boolean(timeout),
@@ -38,13 +38,13 @@ def SshModule(timeout = Minutes(10), key = "ip", status = Warning):
 				.Begin(status("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: ssh failed three times")
 					.Msg("msg"  , "{type}[{" + key + "}]: ssh failed three times"))
-				.End(Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
+				.End(rstatus("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: ssh ok")
 					.Msg("msg"  , "{type}[{" + key + "}]: ssh ok")),
 		}
 	}
 
-def SnmpModule(timeout = Minutes(10), key = "ip", status = Warning):
+def SnmpModule(timeout = Minutes(10), key = "ip", status = Warning, rstatus = RWarning):
 	return {
 		"sensor" : {
 			"snmp" : Boolean(timeout),
@@ -60,7 +60,7 @@ def SnmpModule(timeout = Minutes(10), key = "ip", status = Warning):
 				.Begin(status("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: snmp failed three times")
 					.Msg("msg"  , "{type}[{" + key + "}]: snmp failed three times"))
-				.End(Recover("tag", "NETWORK").Msg("loc", "{" + key + "}")
+				.End(rstatus("tag", "NETWORK").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: snmp ok")
 					.Msg("msg"  , "{type}[{" + key + "}]: snmp ok")),
 		}

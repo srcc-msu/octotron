@@ -47,7 +47,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 1 is too high")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 1 is too high: {inlet_1}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 1 is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 1 is back to normal")),
 
@@ -56,7 +56,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 2 is too high")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 2 is too high: {inlet_2}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 2 is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 2 is back to normal")),
 
@@ -65,7 +65,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 3 is too high")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 3 is too high: {inlet_3}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air temperature 3 is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air temperature 3 is back to normal")),
 
@@ -74,7 +74,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_in is too high")
 					.Msg("msg"  , "{type}[{ip}]: air humidity_in is too high: {humidity_in}"))
-				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{ip}")
+				.End(RWarning("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_in is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air humidity_in is back to normal")),
 
@@ -83,7 +83,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_out is too high")
 					.Msg("msg"  , "{type}[{ip}]: air humidity_out is too high: {humidity_out}"))
-				.End(Recover("tag", "ENVIRONMENT").Msg("loc", "{ip}")
+				.End(RWarning("tag", "ENVIRONMENT").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air humidity_out is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air humidity_out is back to normal")),
 
@@ -92,7 +92,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_in temperature is too high")
 					.Msg("msg"  , "{type}[{ip}]: air_in temperature is too high: {air_in}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_in temperature is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air_in temperature is back to normal")),
 
@@ -101,7 +101,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_out temperature is too high")
 					.Msg("msg"  , "{type}[{ip}]: air_out temperature is too high: {air_out}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: air_out temperature is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: air_out temperature is back to normal")),
 
@@ -110,7 +110,7 @@ def FanSnmpModule(timeout = Minutes(1)):
 				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: fluid_in temperature is too high")
 					.Msg("msg"  , "{type}[{ip}]: fluid_in temperature is too high: {fluid_in}"))
-				.End(Recover("tag", "TEMPERATURE").Msg("loc", "{ip}")
+				.End(RWarning("tag", "TEMPERATURE").Msg("loc", "{ip}")
 					.Msg("descr", "{type}: fluid_in temperature is back to normal")
 					.Msg("msg"  , "{type}[{ip}]: fluid_in temperature is back to normal")),
 		}

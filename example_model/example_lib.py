@@ -40,7 +40,7 @@ my_module = {
 			.Begin(Danger("tag", "TEMPERATURE")
 				.Msg("msg", "very high cpu temperature: {temperature}"))
 			.Repeatable()
-			.End(Recover("tag", "TEMPERATURE")
+			.End(RDanger("tag", "TEMPERATURE")
 				.Msg("msg", "temperature is back to normal: {temperature}"))
 	}
 }

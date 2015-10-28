@@ -38,30 +38,45 @@ def DrmsModule(timeout = Minutes(10), key = "queue"):
 				.On("few_tasks_running")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: running tasks count is low")
-					.Msg("msg"  , "{type}({" + key + "}): running tasks count is low: {tasks_running}")),
+					.Msg("msg"  , "{type}({" + key + "}): running tasks count is low: {tasks_running}"))
+				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: running tasks count is ok")
+					.Msg("msg"  , "{type}({" + key + "}): running tasks count is ok: {tasks_running}")),
 
 			"notify_few_tasks_queued" : Reaction()
 				.On("few_tasks_queued")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: queued tasks count is low")
-					.Msg("msg"  , "{type}({" + key + "}): queued tasks count is low: {tasks_queued}")),
+					.Msg("msg"  , "{type}({" + key + "}): queued tasks count is low: {tasks_queued}"))
+				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: queued tasks count is ok")
+					.Msg("msg"  , "{type}({" + key + "}): queued tasks count is ok: {tasks_queued}")),
 
 			"notify_cpus_missing" : Reaction()
 				.On("cpus_missing")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: the queue has lost some cpus")
-					.Msg("msg"  , "{type}({" + key + "}): the queue has lost some cpus: {cpus_current} / {cpus_total}")),
+					.Msg("msg"  , "{type}({" + key + "}): the queue has lost some cpus: {cpus_current} / {cpus_total}"))
+				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: the queue cpus are ok")
+					.Msg("msg"  , "{type}({" + key + "}): the queue apus are ok: {cpus_current} / {cpus_total}")),
 
 			"notify_many_free" : Reaction()
 				.On("many_free")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: too many free cpus")
-					.Msg("msg"  , "{type}({" + key + "}): too many free cpus: {cpus_free} = {cpus_free_pct}%")),
+					.Msg("msg"  , "{type}({" + key + "}): too many free cpus: {cpus_free} = {cpus_free_pct}%"))
+				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: free cpus percent is ok")
+					.Msg("msg"  , "{type}({" + key + "}): free cpus percent is ok: {cpus_free} = {cpus_free_pct}%")),
 
 			"notify_many_blocked" : Reaction()
 				.On("many_blocked")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
 					.Msg("descr", "{type}: too many blocked cpus")
-					.Msg("msg"  , "{type}({" + key + "}): too many blocked cpus: {cpus_blocked} = {cpus_blocked_pct}%")),
+					.Msg("msg"  , "{type}({" + key + "}): too many blocked cpus: {cpus_blocked} = {cpus_blocked_pct}%"))
+				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
+					.Msg("descr", "{type}: blocked cpus percent is ok")
+					.Msg("msg"  , "{type}({" + key + "}): blocked cpus percent is ok: {cpus_blocked} = {cpus_blocked_pct}%")),
 		}
 	}
