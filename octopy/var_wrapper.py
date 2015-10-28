@@ -109,11 +109,19 @@ class Manual(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
+class GT(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
 class GTArg(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
-class GT(Rule):
+class GE(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class GEArg(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
@@ -130,6 +138,14 @@ class LT(Rule):
 		Rule.__init__(self, args)
 
 class LTArg(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LE(Rule):
+	def __init__(self, *args):
+		Rule.__init__(self, args)
+
+class LEArg(Rule):
 	def __init__(self, *args):
 		Rule.__init__(self, args)
 
