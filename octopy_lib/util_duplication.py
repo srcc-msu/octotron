@@ -39,5 +39,5 @@ def InitDuplication(host1, host2, timeout = Minutes(10)):
 			}
 		}
 
-	CreateObject(dup_module(host1, host2))
-	CreateObject(dup_module(host2, host1))
+	GenID(CreateObject(dup_module(host1, host2)))
+	GenID(CreateObject(dup_module(host2, host1)), n=1)
