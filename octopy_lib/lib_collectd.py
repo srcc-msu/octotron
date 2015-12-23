@@ -1,6 +1,6 @@
 from octopy import *
 
-def DiskModule(timeout = Minutes(10)):
+def DiskModule(timeout = Minutes(10), reaction = Warning):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
@@ -8,7 +8,7 @@ def DiskModule(timeout = Minutes(10)):
 	def ErrorResponse(name):
 		return (Reaction()
 			.On(name + "_error")
-			.Begin(Info("tag", "DISK").Msg("loc", loc)
+			.Begin(reaction("tag", "DISK").Msg("loc", loc)
 				.Msg("descr", loc_s + "disk error: %s" % (name))
 				.Msg("msg"  , loc_l + "disk error: %s = {%s}" % (name, name))))
 
@@ -64,10 +64,10 @@ def DiskModule(timeout = Minutes(10)):
 
 			"notify_bad_temperature" : Reaction()
 				.On("bad_temperature")
-				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
+				.Begin(reaction("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is above threshold")
 					.Msg("msg"  , loc_l + "disk temperature is above threshold: {temperature_celsius}"))
-				.End(RWarning("tag", "TEMPERATURE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "disk temperature is back to normal")
 					.Msg("msg"  , loc_l + "disk temperature is back to normal: {temperature_celsius}")),
 		}
@@ -78,25 +78,27 @@ def DiskProphecy():
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
-	def Prophecy(name, repeat = 0, delay = 0):
+	def GenProphecy(name, repeat = 0, delay = 0):
+		base_counter = name.replace("_error", "").replace("bad_temperature", "temperature_celsius") # :(
+
 		return (Reaction()
 			.On(name, repeat, delay)
-			.Begin(Info("tag", "DISK").Msg("loc", loc)
+			.Begin(Prophecy("tag", "DISK").Msg("loc", loc)
 				.Msg("descr", loc_s + "disk is doomed!")
-				.Msg("msg"  , loc_l + "disk is doomed!")))
+				.Msg("msg"  , loc_l + "errors growing: %s = {%s}"% (base_counter, base_counter))))
 
 	return {
 		"react" : {
-			"forecast_1" : Prophecy("offline_uncorrectable_error"),
-			"forecast_2" : Prophecy("reallocated_sector_ct_error"),
-			"forecast_3" : Prophecy("spin_retry_count_error", 3),
-			"forecast_4" : Prophecy("bad_temperature", 0, Minutes(30)),
+			"forecast_1" : GenProphecy("offline_uncorrectable_error"),
+			"forecast_2" : GenProphecy("reallocated_sector_ct_error"),
+			"forecast_3" : GenProphecy("spin_retry_count_error", 3),
+			"forecast_4" : GenProphecy("bad_temperature", 0, Minutes(30)),
 		}
 	}
 
 #// ----------------------------------------- NODE --------------------------------------------
 
-def ExperimentalNodeModule(timeout = Minutes(10)):
+def ExperimentalNodeModule(timeout = Minutes(10), reaction = Info):
 	loc = "{node}"
 	loc_s = "{type}: "
 	loc_l = "{node}: "
@@ -118,20 +120,20 @@ def ExperimentalNodeModule(timeout = Minutes(10)):
 			"notify_high_la_free" : Reaction()
 				.Off("task_present")
 				.On("high_la_free", 0, 1000)
-				.Begin(Info("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "LA exceeded 3.0 for last 1000 seconds, no running task")
 					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 3.0 for last 1000 seconds, no running task")),
 
 			"notify_high_la_busy" : Reaction()
 				.On("task_present")
 				.On("high_la_busy", 0, 1000)
-				.Begin(Info("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "LA exceeded 33.0 for last 1000 seconds, user task presents")
 					.Msg("msg"  , loc_l + "LA({la_1}) exceeded 33.0 for last 1000 seconds, user task presents")),
 		}
 """
 
-def NodeModule(timeout = Minutes(10)):
+def NodeModule(timeout = Minutes(10), reaction = Info):
 	loc = "{node}"
 	loc_s = "{type}: "
 	loc_l = "{node}: "
@@ -192,79 +194,79 @@ def NodeModule(timeout = Minutes(10)):
 		"react" : {
 			"notify_fork_rate" : Reaction()
 				.On("high_fork_rate", 0, 1000)
-				.Begin(Info("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "high fork rate on for last 1000 seconds")
 					.Msg("msg"  , loc_l + "high fork rate on for last 1000 seconds, forks: {forks}, fork_rate: {fork_rate}"))
-				.End(RInfo("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "fork rate is ok")
 					.Msg("msg"  , loc_l + "fork rate is ok, forks: {forks}, fork_rate: {fork_rate}")),
 
 			"notify_zombies_present" : Reaction()
 				.On("zombies_present", 0, 1000)
-				.Begin(Info("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "zombies present for last 1000 seconds")
 					.Msg("msg"  , loc_l + "({zombies}) zombies present for last 1000 seconds, run for your life!"))
-				.End(RInfo("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "zombies are ok")
 					.Msg("msg"  , loc_l + "zombies are ok({zombies})")),
 
 			"notify_tmp_test_error" : Reaction()
 				.On("tmp_test_error")
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not access tmp")
 					.Msg("msg"  , loc_l + "could not access tmp"))
-				.End(RWarning("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "tmp is accessible again")
 					.Msg("msg"  , loc_l + "tmp is accessible again")),
 
 			"notify_home_test_error" : Reaction()
 				.On("home_test_error")
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not access home")
 					.Msg("msg"  , loc_l + "could not access home"))
-				.End(RWarning("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "home is accessible again")
 					.Msg("msg"  , loc_l + "home is accessible again")),
 
 			"notify_clean_test_error" : Reaction()
 				.On("clean_test_error")
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "could not remove file")
 					.Msg("msg"  , loc_l + "could not remove file"))
-				.End(RWarning("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "remove file worked")
 					.Msg("msg"  , loc_l + "remove file worked")),
 
 			"notify_nmond_missing" : Reaction()
 				.On("nmond_missing")
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "hopsa agent(nmond) not found")
 					.Msg("msg"  , loc_l + "hopsa agent(nmond) not found"))
-				.End(RWarning("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "hopsa agent(nmond) found")
 					.Msg("msg"  , loc_l + "hopsa agent(nmond) found")),
 
 			"notify_high_nptd_drift" : Reaction()
 				.On("high_nptd_drift")
-				.Begin(Warning("tag", "NODE").Msg("loc", loc)
+				.Begin(reaction("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "ntpd drift is too big")
 					.Msg("msg"  , loc_l + "ntpd drift is too big: {ntpd_drift}"))
-				.End(RWarning("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "ntpd drift is ok")
 					.Msg("msg"  , loc_l + "ntpd drift is ok: {ntpd_drift}")),
 
 			"notify_high_temp" : Reaction()
 				.On("high_temp")
-				.Begin(Info("tag", "TEMPERATURE").Msg("loc", loc)
+				.Begin(reaction("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "bad system temp")
 					.Msg("msg"  , loc_l + "bad system temp"))
-				.End(RInfo("tag", "NODE").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", loc_s + "system temp is ok")
 					.Msg("msg"  , loc_l + "system temp is ok: {temp}")),
 
 			"notify_very_high_temp" : Reaction()
 				.On("very_high_temp")
-				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
+				.Begin(reaction("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "critical system temp")
 					.Msg("msg"  , loc_l + "critical system temp: {temp}")),
 		}
@@ -272,7 +274,7 @@ def NodeModule(timeout = Minutes(10)):
 
 #// ----------------------------------------- CPU --------------------------------------------
 
-def CpuModule(timeout = Minutes(10)):
+def CpuModule(timeout = Minutes(10), reaction1 = Info, reaction2 = Warning):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
@@ -294,16 +296,16 @@ def CpuModule(timeout = Minutes(10)):
 		"react" : {
 			"notify_high_temp" : Reaction()
 				.On("high_temp")
-				.Begin(Info("tag", "TEMPERATURE").Msg("loc", loc)
+				.Begin(reaction1("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "bad temp")
 					.Msg("msg"  , loc_l + "bad temp({temp})"))
-				.End(RInfo("tag", "TEMPERATURE").Msg("loc", loc)
+				.End(GenRStatus(reaction1)("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "temp is ok now ")
 					.Msg("msg"  , loc_l + "temp is ok: {temp}")),
 
 			"notify_very_high_temp" : Reaction()
 				.On("very_high_temp")
-				.Begin(Warning("tag", "TEMPERATURE").Msg("loc", loc)
+				.Begin(GenRStatus(reaction2)("tag", "TEMPERATURE").Msg("loc", loc)
 					.Msg("descr", loc_s + "critical temp")
 					.Msg("msg"  , loc_l + "critical temp: {temp}")),
 		}
@@ -311,7 +313,7 @@ def CpuModule(timeout = Minutes(10)):
 
 #// ----------------------------------------- MEMORY --------------------------------------------
 
-def MemoryModule(timeout = Minutes(10)):
+def MemoryModule(timeout = Minutes(10), reaction = Danger):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
@@ -337,10 +339,10 @@ def MemoryModule(timeout = Minutes(10)):
 	"react" : {
 		"notify_memory_reduced" : Reaction()
 			.On("memory_reduced")
-			.Begin(Warning("tag", "MEM").Msg("loc", loc)
+			.Begin(reaction("tag", "MEM").Msg("loc", loc)
 				.Msg("descr", loc_s + "total mem reduced below check value")
 				.Msg("msg"  , loc_l + "total mem({total}) reduced below check value({req_mem})"))
-			.End(RWarning("tag", "MEM").Msg("loc", loc)
+			.End(GenRStatus(reaction)("tag", "MEM").Msg("loc", loc)
 				.Msg("descr", loc_s + "total mem is ok")
 				.Msg("msg"  , loc_l + "total mem({total}) is ok")),
 	}
@@ -348,7 +350,7 @@ def MemoryModule(timeout = Minutes(10)):
 
 #// ----------------------------------------- ETH --------------------------------------------
 
-def IBModule(timeout = Minutes(10)):
+def IBModule(timeout = Minutes(10), reaction = Warning):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
@@ -356,7 +358,7 @@ def IBModule(timeout = Minutes(10)):
 	def ErrorResponse(name):
 		return (Reaction()
 			.On(name + "_error", 0, 1000)
-			.Begin(Info("tag", "IB").Msg("loc", loc)
+			.Begin(reaction("tag", "IB").Msg("loc", loc)
 				.Msg("descr", loc_s + "IB errros growing: %s" % (name))
 				.Msg("msg"  , loc_l + "IB errros growing: %s = {%s}"% (name, name))))
 
@@ -437,19 +439,19 @@ def IBModule(timeout = Minutes(10)):
 		"react" : {
 			"notify_state_error" : Reaction()
 				.On("state_error")
-				.Begin(Warning("tag", "IB").Msg("loc", loc)
+				.Begin(reaction("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: state")
 					.Msg("msg"  , loc_l + "IB link problem: {state}"))
-				.End(RWarning("tag", "IB").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link state is ok")
 					.Msg("msg"  , loc_l + "IB link state is ok: {state}")),
 			
 			"notify_physical_state_error" : Reaction()
 				.On("physical_state_error")
-				.Begin(Warning("tag", "IB").Msg("loc", loc)
+				.Begin(reaction("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link problem: physical state")
 					.Msg("msg"  , loc_l + "IB link problem: {physical_state}"))
-				.End(RWarning("tag", "IB").Msg("loc", loc)
+				.End(GenRStatus(reaction)("tag", "IB").Msg("loc", loc)
 					.Msg("descr", loc_s + "IB link physical state is ok")
 					.Msg("msg"  , loc_l + "IB link physical state is ok: {physical_state}")),
 
@@ -472,30 +474,32 @@ def IBProphecy():
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
-	def Prophecy(name, repeat = 0, delay = 0):
+	def GenProphecy(name, repeat = 0, delay = 0):
+		base_counter = name.replace("_error", "_speed")
+
 		return (Reaction()
 			.On(name, repeat, delay)
-			.Begin(Info("tag", "NODE").Msg("loc", loc)
-				.Msg("descr", loc_s + "ethernet is doomed!")
-				.Msg("msg"  , loc_l + "ethernet is doomed!")))
+			.Begin(Prophecy("tag", "IB").Msg("loc", loc)
+				.Msg("descr", loc_s + "IB is doomed!")
+				.Msg("msg"  , loc_l + "reason: %s = {%s}" % (base_counter, base_counter))))
 
 	return {
 		"react" : {
-			"forecast_ib1" : Prophecy("SymbolErrors_error", 0, Minutes(30)),
-			"forecast_ib2" : Prophecy("RcvErrors_error", 0, Minutes(30)),
-			"forecast_ib3" : Prophecy("RcvRemotePhysErrors_error", 0, Minutes(30)),
-			"forecast_ib4" : Prophecy("RcvSwRelayErrors_error", 0, Minutes(30)),
-			"forecast_ib5" : Prophecy("XmtDiscards_error", 0, Minutes(30)),
-			"forecast_ib6" : Prophecy("XmtConstraintErrors_error", 0, Minutes(30)),
-			"forecast_ib7" : Prophecy("RcvConstraintErrors_error", 0, Minutes(30)),
-			"forecast_ib8" : Prophecy("LinkIntegrityErrors_error", 0, Minutes(30)),
-			"forecast_ib9" : Prophecy("ExcBufOverrunErrors_error", 0, Minutes(30)),
-			"forecast_ib10" : Prophecy("VL15Dropped_error", 0, Minutes(30)),
+			"forecast_ib1" : GenProphecy("SymbolErrors_error", 0, Minutes(30)),
+			"forecast_ib2" : GenProphecy("RcvErrors_error", 0, Minutes(30)),
+			"forecast_ib3" : GenProphecy("RcvRemotePhysErrors_error", 0, Minutes(30)),
+			"forecast_ib4" : GenProphecy("RcvSwRelayErrors_error", 0, Minutes(30)),
+			"forecast_ib5" : GenProphecy("XmtDiscards_error", 0, Minutes(30)),
+			"forecast_ib6" : GenProphecy("XmtConstraintErrors_error", 0, Minutes(30)),
+			"forecast_ib7" : GenProphecy("RcvConstraintErrors_error", 0, Minutes(30)),
+			"forecast_ib8" : GenProphecy("LinkIntegrityErrors_error", 0, Minutes(30)),
+			"forecast_ib9" : GenProphecy("ExcBufOverrunErrors_error", 0, Minutes(30)),
+			"forecast_ib10" : GenProphecy("VL15Dropped_error", 0, Minutes(30)),
 		}
 	}
 
 
-def EthModule(timeout = Minutes(10)):
+def EthModule(timeout = Minutes(10), reaction = Warning):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
@@ -503,7 +507,7 @@ def EthModule(timeout = Minutes(10)):
 	def ErrorResponse(name):
 		return (Reaction()
 			.On(name + "_growing", 0, 1000)
-			.Begin(Info("tag", "ETH").Msg("loc", loc)
+			.Begin(reaction("tag", "ETH").Msg("loc", loc)
 				.Msg("descr", loc_s + "eth errors growing: %s" % (name))
 				.Msg("msg"  , loc_l + "eth errors growing: %s = {%s}"% (name, name))))
 
@@ -555,18 +559,20 @@ def EthProphecy():
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:node} {type}: "
 
-	def Prophecy(name, repeat = 0, delay = 0):
+	def GenProphecy(name, repeat = 0, delay = 0):
+		base_counter = name.replace("_growing", "_speed")
+
 		return (Reaction()
 			.On(name, repeat, delay)
-			.Begin(Info("tag", "NODE").Msg("loc", loc)
+			.Begin(Prophecy("tag", "NETWORK").Msg("loc", loc)
 				.Msg("descr", loc_s + "ethernet is doomed!")
-				.Msg("msg"  , loc_l + "ethernet is doomed!")))
+				.Msg("msg"  , loc_l + "reason: %s = {%s}" % (base_counter, base_counter))))
 
 	return {
 		"react" : {
-			"forecast_eth1" : Prophecy("rx_errors_growing", 0, Minutes(30)),
-			"forecast_eth2" : Prophecy("tx_errors_growing", 0, Minutes(30)),
-			"forecast_eth3" : Prophecy("tx_dropped_growing", 0, Minutes(30)),
-			"forecast_eth4" : Prophecy("collisions_growing", 0, Minutes(30)),
+			"forecast_eth1" : GenProphecy("rx_errors_growing", 0, Minutes(30)),
+			"forecast_eth2" : GenProphecy("tx_errors_growing", 0, Minutes(30)),
+			"forecast_eth3" : GenProphecy("tx_dropped_growing", 0, Minutes(30)),
+			"forecast_eth4" : GenProphecy("collisions_growing", 0, Minutes(30)),
 		}
 	}

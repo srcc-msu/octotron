@@ -43,6 +43,14 @@ def RDanger(tag, message):
 def RCritical(tag, message):
 	return Response("RECOVER_CRITICAL", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_critical")
 
+def GenRStatus(status):
+		return {
+			Info : RInfo
+			, Warning : RWarning
+			, Danger : RDanger
+			, Critical : RCritical
+		}[status]
+
 
 def Prophecy(tag, message):
 	return Response("PROPHECY", []).Msg(tag, message).Msg("_id", "{_id}").Exec("on_prophecy")
