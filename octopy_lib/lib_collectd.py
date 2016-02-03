@@ -96,7 +96,7 @@ def DiskProphecy():
 		}
 	}
 
-def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warning, threshold = 90):
+def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warning, threshold = MB(200), pct_threshold = 5):
 	loc = "{in_n:node}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:hostname} {mountpoint}: "
@@ -108,26 +108,30 @@ def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warn
 		},
 
 		"static" : {
-			"threshold_bytes-used" : threshold
+			"threshold_percent_free" : pct_threshold,
+			"threshold_bytes_free" : threshold
 		},
 
 		"sensor" : {
-			"percent_bytes-used" : Long(timeout)
+			"percent_free" : Long(timeout),
+			"bytes_free" : Long(timeout)
 		},
 
 		"trigger" : {
-			"high_bytes-used" : GTArg("percent_bytes-used", "threshold_bytes"),
+			"low_percent_free" : LTArg("percent_free", "threshold_percent_free"),
+			"low_bytes_free" : LTArg("bytes_free", "threshold_bytes_free"),
+			"low_space" : StrictLogicalOr("low_percent_free", "low_bytes_free")
 		},
 
 		"react" : {
-			"notify_high_bytes-used" : Reaction()
-				.On("high_bytes-used")
+			"notify_low_space" : Reaction()
+				.On("low_space")
 				.Begin(reaction("tag", "DISK").Msg("loc", loc)
 					.Msg("descr", loc_s + "free space is low")
-					.Msg("msg"  , loc_l + "free space is low: used {percent_bytes-used}%"))
+					.Msg("msg"  , loc_l + "free space is low: {percent_free}% / {bytes_free}B"))
 				.End(GenRStatus(reaction)("tag", "DISK").Msg("loc", loc)
 					.Msg("descr", loc_s + "free space is ok")
-					.Msg("msg"  , loc_l + "free space is ok: used {percent_bytes-used}%")),
+					.Msg("msg"  , loc_l + "free space is ok: {percent_free}% / {bytes_free}B")),
 		}
 	}
 

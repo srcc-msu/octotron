@@ -14,6 +14,21 @@ def Hours(t):
 def Days(t):
 	return Hours(t * 24)
 
+def KB(n):
+	return n * 1024
+
+def MB(n):
+	return KB(n) * 1024
+
+def GB(n):
+	return MB(n) * 1024
+
+def TB(n):
+	return GB(n) * 1024
+
+def PB(n):
+	return TB(n) * 1024
+
 class Sensor(object):
 	def __init__(self, time, value):
 		self.time = time
