@@ -6,7 +6,7 @@ JAVA_PARAM=-d64 -Dsun.net.httpserver.nodelay=true -cp lib/jersey-core-1.18.1.jar
 all: run
 
 run: $(OCTO_LIB) $(MODEL_CFG)
-	java $(JAVA_PARAM) $(USR_JAVA_PARAM) ru.parallel.octotron.exec.Start $(MODEL_CFG)
+	java -D_OCTOTRON_MAIN $(JAVA_PARAM) $(USR_JAVA_PARAM) ru.parallel.octotron.exec.Start $(MODEL_CFG)
 
 $(OCTO_LIB):
 	wget -O $(OCTO_LIB) 'https://github.com/srcc-msu/octotron_core/releases/download/v4.2.0/octotron.jar'
