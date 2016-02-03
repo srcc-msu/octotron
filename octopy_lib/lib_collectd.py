@@ -96,6 +96,42 @@ def DiskProphecy():
 		}
 	}
 
+def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warning, threshold = 90):
+	loc = "{in_n:node}"
+	loc_s = "{in_n:type} {type}: "
+	loc_l = "{in_n:hostname} {mountpoint}: "
+
+	return {
+		"const" : {
+			"mountpoint" : mountpoint,
+			"type" : "mountpoint"
+		},
+
+		"static" : {
+			"threshold_bytes-used" : threshold
+		},
+
+		"sensor" : {
+			"percent_bytes-used" : Long(timeout)
+		},
+
+		"trigger" : {
+			"high_bytes-used" : GTArg("percent_bytes-used", "threshold_bytes"),
+		},
+
+		"react" : {
+			"notify_high_bytes-used" : Reaction()
+				.On("high_bytes-used")
+				.Begin(reaction("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "free space is low")
+					.Msg("msg"  , loc_l + "free space is low: used {percent_bytes-used}%"))
+				.End(GenRStatus(reaction)("tag", "DISK").Msg("loc", loc)
+					.Msg("descr", loc_s + "free space is ok")
+					.Msg("msg"  , loc_l + "free space is ok: used {percent_bytes-used}%")),
+		}
+	}
+
+
 #// ----------------------------------------- NODE --------------------------------------------
 
 def ExperimentalNodeModule(timeout = Minutes(10), reaction = Info):
