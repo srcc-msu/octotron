@@ -190,7 +190,7 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 		new_paths = []
 
 		if debug:
-			print "paths: ", map(lambda y: map(lambda x: x.GetID(), y), paths)
+			print "paths: ", map(lambda y: map(lambda x: x.GetConstOrNull("_id"), y), paths)
 
 		for path in paths:
 			neighbor_list = ModelObjectList()
@@ -212,10 +212,10 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 				new_paths.append(ext_path)
 
 				if debug:
-					print "added neighbor: ", neighbor.GetID()
+					print "added neighbor: ", neighbor.GetConstOrNull("_id")
 
 		if debug:
-			print "new paths: ", map(lambda y: map(lambda x: x.GetID(), y), new_paths)
+			print "new paths: ", map(lambda y: map(lambda x: x.GetConstOrNull("_id"), y), new_paths)
 
 		return new_paths
 
@@ -275,7 +275,7 @@ def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute
 				result.add(connect_function(path[0], path[-1], link_type))
 
 				if debug:
-					print "added for: ", map(lambda x: x.GetID(), path)
+					print "added for: ", map(lambda x: x.GetConstOrNull("_id"), path)
 
 		paths = unfinished_paths
 
