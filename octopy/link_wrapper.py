@@ -166,15 +166,18 @@ def DiscoverConnect(sources, target_attributes, allowed_links, chain_attribute, 
 
 	example: DiscoverConnect(list_of_switches, [("type", "ib_switch"), ("type", "node")], [("type", "ib")], "type", ["^.*-ib_port-ib_port-[^p]*$"], "logical_ib")
 	"""
+	result = ModelLinkList()
 
 	for source in sources:
-		DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, max_length, connect_function, debug)
+		result = result.append(DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, max_length, connect_function, debug))
+
+	return result
 
 import re
 from ru.parallel.octotron.core.collections import ModelLinkList
 
 def DiscoverConnectOne(source, target_attributes, allowed_links, chain_attribute, chain_filters, link_type, max_length, connect_function = None, debug = None):
-	debug = debug is not None
+	debug = debug if debug is not None else False
 
 	if connect_function is None:
 		connect_function = OneWithOne
