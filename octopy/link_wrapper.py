@@ -41,7 +41,7 @@ def CallFactoryMethod(factory, name, args):
 			elif isinstance(args[i], int):arg_types.append(java.lang.Integer.TYPE)
 			elif isinstance(args[i], float): arg_types.append(java.lang.Float.TYPE)
 			elif isinstance(args[i], str): arg_types.append(java.lang.String.TYPE)
-			else: arg_types.append(args[i].class)
+			else: arg_types.append(args[i].getClass())
 
 	method = factory.getClass().getMethod(name, arg_types)
 
