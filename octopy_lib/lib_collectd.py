@@ -1,9 +1,9 @@
 from octopy import *
 
 def DiskModule(timeout = Minutes(10), reaction = Warning):
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	def ErrorResponse(name):
 		return (Reaction()
@@ -74,9 +74,9 @@ def DiskModule(timeout = Minutes(10), reaction = Warning):
 	}
 
 def DiskProphecy():
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	def GenProphecy(name, repeat = 0, delay = 0):
 		base_counter = name.replace("_error", "").replace("bad_temperature", "temperature_celsius") # :(
@@ -97,7 +97,7 @@ def DiskProphecy():
 	}
 
 def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warning, threshold = MB(200), pct_threshold = 5):
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
 	loc_l = "{in_n:hostname} {mountpoint}: "
 
@@ -139,9 +139,9 @@ def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warn
 #// ----------------------------------------- NODE --------------------------------------------
 
 def ExperimentalNodeModule(timeout = Minutes(10), reaction = Info):
-	loc = "{node}"
+	loc = "{hostname}"
 	loc_s = "{type}: "
-	loc_l = "{node}: "
+	loc_l = "{hostname}: "
 
 	return {
 		"var" : {
@@ -174,9 +174,9 @@ def ExperimentalNodeModule(timeout = Minutes(10), reaction = Info):
 """
 
 def NodeModule(timeout = Minutes(10), reaction = Info):
-	loc = "{node}"
+	loc = "{hostname}"
 	loc_s = "{type}: "
-	loc_l = "{node}: "
+	loc_l = "{hostname}: "
 
 	return {
 		"static" : {
@@ -315,9 +315,9 @@ def NodeModule(timeout = Minutes(10), reaction = Info):
 #// ----------------------------------------- CPU --------------------------------------------
 
 def CpuModule(timeout = Minutes(10), reaction1 = Info, reaction2 = Warning):
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	return {
 		"sensor" : {
@@ -354,9 +354,9 @@ def CpuModule(timeout = Minutes(10), reaction1 = Info, reaction2 = Warning):
 #// ----------------------------------------- MEMORY --------------------------------------------
 
 def MemoryModule(timeout = Minutes(10), reaction = Danger):
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	return {
 	"sensor" : {
@@ -391,9 +391,9 @@ def MemoryModule(timeout = Minutes(10), reaction = Danger):
 #// ----------------------------------------- ETH --------------------------------------------
 
 def IBModule(timeout = Minutes(10), reaction = Warning):
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	def ErrorResponse(name):
 		return (Reaction()
@@ -510,9 +510,9 @@ def IBModule(timeout = Minutes(10), reaction = Warning):
 
 
 def IBProphecy():
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	def GenProphecy(name, repeat = 0, delay = 0):
 		base_counter = name.replace("_error", "_speed")
@@ -540,9 +540,9 @@ def IBProphecy():
 
 
 def EthModule(timeout = Minutes(10), reaction = Warning):
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	def ErrorResponse(name):
 		return (Reaction()
@@ -595,9 +595,9 @@ def EthModule(timeout = Minutes(10), reaction = Warning):
 	}
 
 def EthProphecy():
-	loc = "{in_n:node}"
+	loc = "{in_n:hostname}"
 	loc_s = "{in_n:type} {type}: "
-	loc_l = "{in_n:node} {type}: "
+	loc_l = "{in_n:hostname} {type}: "
 
 	def GenProphecy(name, repeat = 0, delay = 0):
 		base_counter = name.replace("_growing", "_speed")
