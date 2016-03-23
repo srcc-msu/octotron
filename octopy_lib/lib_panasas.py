@@ -63,18 +63,18 @@ def PanasasBladeModule(timeout = Minutes(10)):
 		},
 
 		"react" : {
-			"blade_warning" : Reaction()
+			"notify_blade_warning" : Reaction()
 				.On("blade_warning")
 				.Begin(Warning("tag", "STORAGE").Msg("loc", "{uid}")
 					.Msg("descr", "{type}: {status}")
 					.Msg("msg"  , "{type}[{uid}]: {status}")),
 
-			"blade_offline" : Reaction()
+			"notify_blade_offline" : Reaction()
 				.On("blade_offline")
 				.Begin(Danger("tag", "STORAGE").Msg("loc", "{uid}")
 					.Msg("descr", "{type}: {status}")
 					.Msg("msg"  , "{type}[{uid}]: {status}"))
-				.End(Recover("tag", "STORAGE").Msg("loc", "{uid}")
+				.End(RDanger("tag", "STORAGE").Msg("loc", "{uid}")
 					.Msg("descr", "{type}: {status}")
 					.Msg("msg"  , "{type}[{uid}]: {status}")),
 		}
@@ -100,7 +100,7 @@ def PanasasVolumeModule(timeout = Minutes(10)):
 				.Begin(Danger("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "{type}: info changed")
 					.Msg("msg"  , "{type}[{mount}]: info changed: {info}"))
-				.End(Recover("tag", "STORAGE").Msg("loc", "{mount}")
+				.End(RDanger("tag", "STORAGE").Msg("loc", "{mount}")
 					.Msg("descr", "{type}: is ok")
 					.Msg("msg"  , "{type}[{mount}]: is ok: {info}")),
 		}

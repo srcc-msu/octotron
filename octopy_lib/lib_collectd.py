@@ -104,7 +104,6 @@ def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warn
 	return {
 		"const" : {
 			"mountpoint" : mountpoint,
-			"type" : "mountpoint"
 		},
 
 		"static" : {

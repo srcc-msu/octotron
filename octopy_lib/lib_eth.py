@@ -40,7 +40,7 @@ def __PortsDefaultMessages(loc, loc_s, loc_l):
 
 	return (loc, loc_s, loc_l)
 
-def PortModule(timeout = UPDATE_TIME_NOT_SPECIFIED, loc = None, loc_s = None, loc_l = None):
+def PortModule(timeout = Minutes(10), loc = None, loc_s = None, loc_l = None):
 	"""requires user to define 'speed_req'"""
 
 	loc, loc_s, loc_l = __PortsDefaultMessages(loc, loc_s, loc_l)

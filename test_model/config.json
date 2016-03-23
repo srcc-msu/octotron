@@ -1,0 +1,48 @@
+{
+	"model" :
+	{
+		"name" : "test",
+		"path" : "test_model",
+		"main" : "all.py"
+	},
+
+	"system" :
+	{
+		"path" : "",
+		"log_dir" : "log/"
+	},
+
+	"db_no" :
+	{
+		"path" : "dbs/",
+		"port" : 7477
+	},
+
+	"scripts" :
+	{
+		"on_start" : "scripts/octotron_start.sh",
+		"on_finish" : "scripts/octotron_finish.sh",
+		"on_crash" : "scripts/octotron_crash.sh",
+
+		"on_critical" : "scripts/react_mail.sh",
+		"on_danger" : "scripts/react_mail.sh",
+		"on_warning" : "scripts/react_mail.sh",
+		"on_info" : "scripts/react_mail.sh",
+		"on_recover" : "scripts/react_mail.sh"
+	},
+
+	"graph" :
+	{
+		"object_index" : ["type", "node", "ip"],
+		"link_index" : ["type", "source", "target"]
+	},
+
+	"http" :
+	{
+		"port" : 4449,
+
+		"view" : { "user" : "", "password" : "" },
+		"modify" : { "user" : "", "password" : "" },
+		"control" : { "user" : "", "password" : "" }
+	}
+}
