@@ -104,6 +104,7 @@ def MountPointModule(timeout = Minutes(10), mountpoint = "root", reaction = Warn
 	return {
 		"const" : {
 			"mountpoint" : mountpoint,
+			"type" : "mountpoint"
 		},
 
 		"static" : {
@@ -461,7 +462,6 @@ def IBModule(timeout = Minutes(10), reaction = Warning):
 		"trigger" : {
 			"state_error" : NotMatch("state", "Active"),
 			"physical_state_error" : NotMatch("physical_state", "LinkUp"),
-			"ib_errors" : NotMatch("cd_ib_total_warnings", 0),
 
 			"SymbolErrors_error" : GTArg("SymbolErrors_speed", "static_ib_err_speed_thr"),
 			"RcvErrors_error" : GTArg("RcvErrors_speed", "static_ib_err_speed_thr"),
@@ -614,4 +614,20 @@ def EthProphecy():
 			"forecast_eth3" : GenProphecy("tx_dropped_growing", 0, Minutes(30)),
 			"forecast_eth4" : GenProphecy("collisions_growing", 0, Minutes(30)),
 		}
+	}
+
+def CDErrorAccumulator():
+	return {
+		"node_components_warnings" : ASoftLongSum("out_n"
+			, "cd_disk_total_warnings"
+			, "cd_ib_total_warnings"
+			, "cd_eth_total_warnings"),
+
+		"node_components_errors" : ASoftLongSum("out_n"
+			, "cd_disk_total_errors"
+			, "cd_memory_total_errors"
+			, "cd_ib_total_errors"),
+
+		"node_total_errors" : ASoftLongSum("self", "cd_node_total_errors", "node_components_errors"),
+		"node_total_warnings" : ASoftLongSum("self", "cd_node_total_warnings", "node_components_warnings"),
 	}

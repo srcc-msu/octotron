@@ -65,3 +65,32 @@ def SnmpModule(timeout = Minutes(10), key = "ip", status = Warning, rstatus = RW
 					.Msg("msg"  , "{type}[{" + key + "}]: snmp ok")),
 		}
 	}
+
+def GroupPingModule(group_name, total_count, threshold = 20, status = Danger, rstatus = RDanger):
+	# TODO: update after adding entity_count rule
+	return {
+		"const" : {
+			"group_name" : group_name,
+			"failed_threshold" : threshold,
+		},
+
+		"var" : {
+			"failed_ping" : ASoftMatchCount(False, "out_n", "ping"),
+			"failed_pct_ping" : ToPct("failed_ping", total_count),
+		},
+
+		"trigger" : {
+			"many_failed_ping" : GTArg("failed_pct_ping", "failed_threshold"),
+		},
+
+		"react" : {
+			"notify_many_failed_ping" : Reaction()
+				.On("many_failed_ping")
+				.Begin(status("tag", "SYSTEM").Msg("loc", "{id}")
+					.Msg("descr", "too many unavailable hosts")
+					.Msg("msg"  , "{group_name}: too many unavailable hosts: {failed_ping} = {failed_pct_ping}%"))
+				.End(rstatus("tag", "SYSTEM").Msg("loc", "{id}")
+					.Msg("descr", "enough hosts are available again")
+					.Msg("msg"  , "{group_name}: enough hosts are available again: {failed_ping} = {failed_pct_ping}%"))
+		}
+	}

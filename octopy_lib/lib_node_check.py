@@ -51,16 +51,12 @@ def ChassisNodeCheck(failed_nodes = 8, loc = "{id}"):
 			"mpi_check_failed_count" : ASoftMatchCount(EDependecyType.OUT, "mpi_check_failed"),
 			"ib_check_failed_count" : ASoftMatchCount(EDependecyType.OUT, "ib_check_failed"),
 			"ib_visibility_check_failed_count" : ASoftMatchCount(EDependecyType.OUT, "ib_visibility_check_failed"),
-
-			"ping_failed_count" : ASoftMatchCount(EDependecyType.OUT, "ping_failed"),
 		},
 
 		"trigger" : {
 			"many_mpi_check_failed" : GT("mpi_check_failed_count", failed_nodes),
 			"many_ib_check_failed" : GT("ib_check_failed_count", failed_nodes),
 			"many_ib_visibility_check_failed" : GT("ib_visibility_check_failed_count", failed_nodes),
-
-			"many_ping_failed" : GT("ping_failed_count", failed_nodes),
 		},
 
 		"react" : {
@@ -91,14 +87,5 @@ def ChassisNodeCheck(failed_nodes = 8, loc = "{id}"):
 				.End(RDanger("tag", "NODE").Msg("loc", loc)
 					.Msg("descr", "{type}: nodes ib visibility check is mostly ok")
 					.Msg("msg", loc + ": nodes ib visibility check is mostly ok")),
-
-			"notify_many_ping_failed" : Reaction()
-				.On("many_ping_failed")
-				.Begin(Danger("tag", "NODE").Msg("loc", loc)
-					.Msg("descr", "{type}: many nodes failed ping check")
-					.Msg("msg", loc + ": many nodes failed ping check"))
-				.End(RDanger("tag", "NODE").Msg("loc", loc)
-					.Msg("descr", "{type}: nodes ping check is mostly ok")
-					.Msg("msg", loc + ": nodes ping check is mostly ok")),
 		}
 	}
