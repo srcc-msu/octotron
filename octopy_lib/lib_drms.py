@@ -5,32 +5,32 @@ def DrmsModule(timeout = Minutes(10), key = "queue"):
 		"const" : {
 #			"tasks_running_min" # user provided
 #			"tasks_queued_min" # user provided
-#			"cpus_total" # user provided
-#			"cpus_free_max_pct" # user provided
-#			"cpus_blocked_max_pct" # user provided
+#			"nodes_total" # user provided
+#			"nodes_free_max_pct" # user provided
+#			"nodes_blocked_max_pct" # user provided
 		},
 
 		"sensor" : {
 			"tasks_running" : Long(timeout),
 			"tasks_queued"  : Long(timeout),
 
-			"cpus_current"  : Long(timeout),
+			"nodes_current"  : Long(timeout),
 
-			"cpus_free"    : Long(timeout),
-			"cpus_blocked" : Long(timeout),
+			"nodes_free"    : Long(timeout),
+			"nodes_blocked" : Long(timeout),
 		},
 
 		"var" : {
-			"cpus_free_pct"    : ToArgPct("cpus_free", "cpus_total"),
-			"cpus_blocked_pct" : ToArgPct("cpus_blocked", "cpus_total"),
+			"nodes_free_pct"    : ToArgPct("nodes_free", "nodes_total"),
+			"nodes_blocked_pct" : ToArgPct("nodes_blocked", "nodes_total"),
 		},
 
 		"trigger" : {
 			"few_tasks_running" : LTArg("tasks_running", "tasks_running_min"),
 			"few_tasks_queued" : LTArg("tasks_queued", "tasks_queued_min"),
-			"cpus_missing" : NotMatchArg("cpus_current", "cpus_total"),
-			"many_free" : GTArg("cpus_free_pct", "cpus_free_max_pct"),
-			"many_blocked" : GTArg("cpus_blocked_pct", "cpus_blocked_max_pct"),
+			"nodes_missing" : NotMatchArg("nodes_current", "nodes_total"),
+			"many_free" : GTArg("nodes_free_pct", "nodes_free_max_pct"),
+			"many_blocked" : GTArg("nodes_blocked_pct", "nodes_blocked_max_pct"),
 		},
 
 		"react" : {
@@ -52,31 +52,31 @@ def DrmsModule(timeout = Minutes(10), key = "queue"):
 					.Msg("descr", "{type}: queued tasks count is ok")
 					.Msg("msg"  , "{type}({" + key + "}): queued tasks count is ok: {tasks_queued}")),
 
-			"notify_cpus_missing" : Reaction()
-				.On("cpus_missing")
+			"notify_nodes_missing" : Reaction()
+				.On("nodes_missing")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: the queue has lost some cpus")
-					.Msg("msg"  , "{type}({" + key + "}): the queue has lost some cpus: {cpus_current} / {cpus_total}"))
+					.Msg("descr", "{type}: the queue has lost some nodes")
+					.Msg("msg"  , "{type}({" + key + "}): the queue has lost some nodes: {nodes_current} / {nodes_total}"))
 				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: the queue cpus are ok")
-					.Msg("msg"  , "{type}({" + key + "}): the queue apus are ok: {cpus_current} / {cpus_total}")),
+					.Msg("descr", "{type}: the queue nodes are ok")
+					.Msg("msg"  , "{type}({" + key + "}): the queue apus are ok: {nodes_current} / {nodes_total}")),
 
 			"notify_many_free" : Reaction()
 				.On("many_free")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: too many free cpus")
-					.Msg("msg"  , "{type}({" + key + "}): too many free cpus: {cpus_free} = {cpus_free_pct}%"))
+					.Msg("descr", "{type}: too many free nodes")
+					.Msg("msg"  , "{type}({" + key + "}): too many free nodes: {nodes_free} = {nodes_free_pct}%"))
 				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: free cpus percent is ok")
-					.Msg("msg"  , "{type}({" + key + "}): free cpus percent is ok: {cpus_free} = {cpus_free_pct}%")),
+					.Msg("descr", "{type}: free nodes percent is ok")
+					.Msg("msg"  , "{type}({" + key + "}): free nodes percent is ok: {nodes_free} = {nodes_free_pct}%")),
 
 			"notify_many_blocked" : Reaction()
 				.On("many_blocked")
 				.Begin(Danger("tag", "QUEUE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: too many blocked cpus")
-					.Msg("msg"  , "{type}({" + key + "}): too many blocked cpus: {cpus_blocked} = {cpus_blocked_pct}%"))
+					.Msg("descr", "{type}: too many blocked nodes")
+					.Msg("msg"  , "{type}({" + key + "}): too many blocked nodes: {nodes_blocked} = {nodes_blocked_pct}%"))
 				.End(RDanger("tag", "QUEUE").Msg("loc", "{" + key + "}")
-					.Msg("descr", "{type}: blocked cpus percent is ok")
-					.Msg("msg"  , "{type}({" + key + "}): blocked cpus percent is ok: {cpus_blocked} = {cpus_blocked_pct}%")),
+					.Msg("descr", "{type}: blocked nodes percent is ok")
+					.Msg("msg"  , "{type}({" + key + "}): blocked nodes percent is ok: {nodes_blocked} = {nodes_blocked_pct}%")),
 		}
 	}

@@ -24,28 +24,27 @@ disks = GenID(CreateObjects(NODES
 	, lib_collectd.DiskModule()
 	, lib_collectd.DiskProphecy()
 	, {"const" : {"type" : "disk"}}))
-EveryToEvery(nodes, disks, lib_links.link_contain, lib_links.link_cooling)
+EveryToEvery(nodes, disks, [lib_links.link_contain, lib_links.link_cooling])
 
 mountpoints = GenID(CreateObjects(NODES
-	, lib_collectd.MountPointModule()
-	, {"const" : {"type" : "mountpoint"}}))
+	, lib_collectd.MountPointModule()))
 EveryToEvery(nodes, mountpoints, lib_links.link_include)
 
 cpus = GenID(CreateObjects(NODES
 	, lib_collectd.CpuModule()
 	, {"const" : {"type" : "cpu"}}))
-EveryToEvery(nodes, cpus, lib_links.link_contain, lib_links.link_cooling)
+EveryToEvery(nodes, cpus, [lib_links.link_contain, lib_links.link_cooling])
 
 memories = GenID(CreateObjects(NODES
 	, lib_collectd.MemoryModule()
 	, {"const" : {"type" : "memory", "req_mem" : 100}}))
-EveryToEvery(nodes, memories, lib_links.link_contain, lib_links.link_cooling)
+EveryToEvery(nodes, memories, [lib_links.link_contain, lib_links.link_cooling])
 
 ib_cards = GenID(CreateObjects(NODES
 	, lib_collectd.IBModule()
 	, lib_collectd.IBProphecy()
 	, {"const" : {"type" : "ib_card"}}))
-EveryToEvery(nodes, ib_cards, lib_links.link_contain, lib_links.link_cooling)
+EveryToEvery(nodes, ib_cards, [lib_links.link_contain, lib_links.link_cooling])
 
 eth_cards = GenID(CreateObjects(NODES
 	, lib_collectd.EthModule()
@@ -53,7 +52,7 @@ eth_cards = GenID(CreateObjects(NODES
 	, lib_eth.PortModule()
 	, lib_eth.PortSpeedModule()
 	, {"const" : {"type" : "eth_card", "speed_req" : 100}}))
-EveryToEvery(nodes, eth_cards, lib_links.link_contain, lib_links.link_cooling)
+EveryToEvery(nodes, eth_cards, [lib_links.link_contain, lib_links.link_cooling])
 
 queue = GenID(CreateObject(lib_drms.DrmsModule()
 	, lib_network.GroupPingModule("queue_nodes", NODES)
@@ -61,9 +60,9 @@ queue = GenID(CreateObject(lib_drms.DrmsModule()
 		{
 			"tasks_running_min" : 1,
 			"tasks_queued_min" : 1,
-			"cpus_total" : 2,
-			"cpus_free_max_pct" : 10,
-			"cpus_blocked_max_pct": 10,
+			"nodes_total" : 2,
+			"nodes_free_max_pct" : 10,
+			"nodes_blocked_max_pct": 10,
 			"type" : "queue"
 		}}))
 OneToEvery(queue, nodes, lib_links.link_include)
